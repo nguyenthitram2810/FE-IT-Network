@@ -48,7 +48,6 @@
 
 <script>
 import axios from "axios";
-const Cookie = process.client ? require('js-cookie') : undefined
 
 export default {
   layout: 'fullpage',
@@ -96,11 +95,18 @@ export default {
       this.$refs.loginForm.validate(async valid => {
         if (valid) {
           this.isDisabled = true
-          console.log(this.loginForm)
-          // Khi rules đúng hết => dispatch store để gọi API và xử lý
-          // Store sẽ mất dữ liệu khi F5 -> cần cập nhật lại dữ liệu cho store ở middleware
-          // Store lưu một vài thông tin cần thiết
-          // Store k dùng localStorage => Store. thay đổi state trong store
+          try {
+            
+            
+          }
+          catch(e) {
+            this.isDisabled = false
+            this.$notification["error"]({
+              message: 'LOGIN ERROR',
+              description:
+                e.message
+            });
+          }
         } else {
           return false;
         }
