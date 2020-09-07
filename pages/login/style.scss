@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@200&display=swap");
+
 /* -----------------------------------
     1 - General Styles
 ------------------------------------*/
@@ -39,10 +40,6 @@ html, body {
 
 .website-logo img {
     width: 300px;
-}
-
-.website-logo a {
-    display: inline-block;
 }
 
 .website-logo .logo {
@@ -134,27 +131,6 @@ html, body {
     color: #DEDBDB;
 }
 
-.form-control:focus {
-    -webkit-box-shadow: none;
-    box-shadow: none;
-}
-
-.form-control ::-webkit-input-placeholder {
-    color: #526489;
-}
-
-.form-control :-moz-placeholder {
-    color: #526489;
-}
-
-.form-control ::-moz-placeholder {
-    color: #526489;
-}
-
-.form-control :-ms-input-placeholder {
-    color: #526489;
-}
-
 .form-content {
     position: relative;
     background-color: #23394A;
@@ -186,14 +162,6 @@ html, body {
     margin-bottom: 30px;
 }
 
-.form-content label {
-    color: #fff;
-    text-align: left;
-    font-size: 15px;
-    font-weight: 300;
-    line-height: 20px;
-    margin-bottom: 10px;
-}
 
 .form-content .page-links {
     margin-bottom: 34px;
@@ -289,73 +257,6 @@ html, body {
     user-select: none;
 }
 
-.form-content input[type="checkbox"]:checked + label{
-    color: #fff;
-}
-
-.form-content input[type="checkbox"]:checked + label:before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 2px;
-    width: 15px;
-    height: 15px;
-    background: #fff;
-    border: 0px solid #fff;
-    border-radius: 50px;
-    -webkit-transition: all 0.3s ease;
-    transition: all 0.3s ease;
-}
-
-.form-content input[type="checkbox"]:not(:checked) + label:before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 2px;
-    width: 15px;
-    height: 15px;
-    background: transparent;
-    border-radius: 50px;
-    border: 2px solid #fff;
-    -webkit-transition: all 0.3s ease;
-    transition: all 0.3s ease;
-}
-
-.form-content input[type="checkbox"]:not(:checked) + label:after {
-    opacity: 0;
-    -webkit-transform: scale(0);
-    -moz-transform: scale(0);
-    -ms-transform: scale(0);
-    transform: scale(0);
-}
-
-.form-content input[type="checkbox"]:disabled + label {
-    opacity: 0.6;
-}
-
-.form-content input[type="checkbox"]:checked + label:after, .form-content input[type="checkbox"]:not(:checked) + label:after {
-    content: '\f00c';
-    font-family: "Font Awesome 5 Free";
-    font-style: normal;
-    font-weight: 600;
-    position: absolute;
-    top: 3px;
-    left: 3px;
-    font-size: 9px;
-    color: #23394A;
-    line-height: 14px;
-    -webkit-transition: all 0.2s ease;
-    transition: all 0.2s ease;
-}
-
-.form-content input[type="checkbox"]:checked + label:before {
-    border-radius: 4px;
-}
-
-.form-content input[type="checkbox"]:not(:checked) + label:before {
-    border-radius: 4px;
-}
-
 .form-content .form-button {
     margin-top: 30px;
     margin-bottom: 25px;
@@ -397,72 +298,6 @@ html, body {
     margin-bottom: 30px;
 }
 
-.form-content .other-links span {
-    font-size: 12px;
-    font-weight: 300;
-    color: #fff;
-    margin-right: 20px;
-}
-
-.form-content .other-links a {
-    font-size: 12px;
-    font-weight: 700;
-    color: #fff;
-    margin-right: 10px;
-}
-
-.form-content .other-links a:last-child {
-    margin-right: 0;
-}
-
-.form-content .other-links a i {
-    display: inline-block;
-    width: 25px;
-    height: 25px;
-    background-color: #000;
-    color: #fff;
-    border-radius: 25px;
-    text-align: center;
-    padding-top: 5px;
-    font-size: 15px;
-    margin: 0 5px;
-    -webkit-transition: all 0.3s ease;
-    transition: all 0.3s ease;
-}
-
-.form-content .other-links a i[class*="fa-twitter"] {
-    background-color: #00aced;
-}
-
-.form-content .other-links a i[class*="fa-facebook"] {
-    background-color: #3b5998;
-}
-
-.form-content .other-links a i[class*="fa-youtube"] {
-    background-color: #bb0000;
-}
-
-.form-content .other-links a i[class*="fa-google"] {
-    background-color: #dd4b39;
-}
-
-.form-content .other-links a i[class*="fa-linkedin"] {
-    background-color: #007bb6;
-}
-
-.form-content .other-links a i[class*="fa-instagram"] {
-    background-color: #517fa4;
-}
-
-.form-content .other-links a i:hover, .form-content .other-links a i:focus {
-    opacity: 0.8;
-}
-
-.form-content .row {
-    margin-right: -6px;
-    margin-left: -6px;
-}
-
 /* -----------------------------------
     2 - Responsive Styles
 ------------------------------------*/
@@ -477,25 +312,19 @@ html, body {
 
     .form-holder .form-content {
         padding: 0px 60px 60px;
+        display: block;
     }
 
     .website-logo {
         position: relative;
-        top: 50px;
-        left: 50px;
+        left: 50%;
+        transform: translateX(-50%);
         right: initial;
         bottom: initial;
     }
 
     .website-logo .logo {
         background-image: url("/images/logo_career_network.png");
-    }
-}
-
-@media (max-width: 575px) {
-    .form-content .row.top-padding .form-button {
-        text-align: left !important;
-        margin-top: 30px;
     }
 }
 
@@ -512,3 +341,6 @@ html, body {
     margin-bottom: 10px;
 }
 
+.test {
+    color: $colorRed;
+}

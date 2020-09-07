@@ -25,8 +25,8 @@
               </div>
 
               <a-form-model ref="loginForm" :model="loginForm" :rules="rules">
-                <a-form-model-item has-feedback prop="username"  class="m-0 form-validate">
-                  <a-input :disabled="isDisabled" v-model="loginForm.username" autocomplete="off" placeholder="Địa chỉ Email"/>
+                <a-form-model-item has-feedback prop="email"  class="m-0 form-validate">
+                  <a-input :disabled="isDisabled" v-model="loginForm.email" autocomplete="off" placeholder="Địa chỉ Email"/>
                 </a-form-model-item>
 
                 <a-form-model-item has-feedback prop="password" class="m-0 form-validate" >
@@ -64,11 +64,11 @@ export default {
       isDisabled: false,
       error: '',
       loginForm: {
-        username: '',
+        email: '',
         password: '',
       },
       rules: {
-        username:  [
+        email:  [
           {
             type: 'email',
             message: 'Email không hợp lệ',
@@ -95,6 +95,8 @@ export default {
     async loginSubmit(event) {
       this.$refs.loginForm.validate(async valid => {
         if (valid) {
+          this.isDisabled = true
+          console.log(this.loginForm)
           // Khi rules đúng hết => dispatch store để gọi API và xử lý
           // Store sẽ mất dữ liệu khi F5 -> cần cập nhật lại dữ liệu cho store ở middleware
           // Store lưu một vài thông tin cần thiết
@@ -110,4 +112,5 @@ export default {
 
 <style lang='scss' scoped>
 @import url("./style.scss");
+
 </style>
