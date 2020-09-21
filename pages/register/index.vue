@@ -1,5 +1,5 @@
 <template>
-  <div class="form-body">
+  <div class="form-body height-bg-auth">
       <div class="website-logo">
         <nuxt-link to="/">
           <div class="logo">
@@ -26,7 +26,7 @@
 
               <a-form-model ref="registerForm" :model="registerForm" :rules="rules">
                 <a-form-model-item class="form-validate">
-                  <a-radio-group v-model="type" @change="changeType">
+                  <a-radio-group v-model="type">
                     <a-radio value="employee">
                       Người xin việc
                     </a-radio>
@@ -143,7 +143,8 @@ export default {
         if (valid) {
           this.isDisabled = true
           try {
-            
+            console.log(this.registerForm);
+            console.log(this.type);
           }
           catch(e) {
             this.isDisabled = false
@@ -157,12 +158,6 @@ export default {
           return false;
         }
       });
-    },
-
-    changeType(e) {
-      if(e.target.value == "company") {
-        this.$router.push('/register/company')
-      }
     },
   },
 }

@@ -102,11 +102,6 @@ html, body {
 .form-holder .form-content {
     position: relative;
     text-align: center;
-    display: -webkit-box;
-    display: -moz-box;
-    display: -ms-flexbox;
-    display: -webkit-flex;
-    display: flex;
     -webkit-justify-content: center;
     justify-content: center;
     -webkit-align-items: center;
@@ -309,4 +304,8 @@ html, body {
 
 .form-validate >>> .ant-select-selection--multiple {
     height: 40px;
+}
+
+.height-bg-auth {
+    min-height: 750px;
 }
