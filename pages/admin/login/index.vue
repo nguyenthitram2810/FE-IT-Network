@@ -1,5 +1,5 @@
 <template>
-  <div class="form-body">
+  <div class="form-body height-bg-auth">
       <div class="website-logo">
         <nuxt-link to="/">
           <div class="logo">
