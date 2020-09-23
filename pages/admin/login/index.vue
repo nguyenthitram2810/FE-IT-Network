@@ -50,6 +50,7 @@ import axios from "axios";
 
 export default {
   layout: 'fullpage',
+  middleware: 'adminNotAuth',
   data() {
     let validatePass = (rule, value, callback) => {
       if (value.trim() === '') {
@@ -80,10 +81,6 @@ export default {
           { 
             required: true,
             validator: validatePass, 
-          },
-          {
-            min: 6,
-            message: 'Độ dài mật khẩu > 6 ký tự(không kể ký tự trắng)'
           }
         ],
       }
@@ -95,8 +92,20 @@ export default {
         if (valid) {
           this.isDisabled = true
           try {
-            
-            
+            const response = await this.$axios.post('/auth', this.loginForm)
+            console.log(response)
+            //chỗ này đáng phải có status trả về là thành công hay lỗi nhưng hiện tại thấy k có status bọc kèm nếu lỗi hoặc thành công á
+            //nên làm tiếp theo kiểu thành công
+            if(response.data.data.role == "Admin" || response.data.data.role == "Moderator") {
+              localStorage.setItem('currentUser', JSON.stringify(response.data.data))
+              this.$store.commit('auth/SET_CURRENT_USER', JSON.parse(localStorage.getItem('currentUser')))
+              this.$router.push('/admin/user')
+            }
+            else {
+              throw {
+                message: "Bạn không có quyền vào trang quản lý!"
+              }
+            }
           }
           catch(e) {
             this.isDisabled = false
