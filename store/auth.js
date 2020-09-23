@@ -9,13 +9,5 @@ export const mutations = {
 }
 
 export const actions = {
-  setCurrent({ commit }, { currentUser }) {
-    try {
-      commit('SET_CURRENT_USER', currentUser)
-    }
-    catch(e) {
-      throw e
-    }
-  }
 }
   

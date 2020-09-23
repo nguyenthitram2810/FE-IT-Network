@@ -81,10 +81,6 @@ export default {
           { 
             required: true,
             validator: validatePass, 
-          },
-          {
-            min: 6,
-            message: 'Độ dài mật khẩu > 6 ký tự(không kể ký tự trắng)'
           }
         ],
       }

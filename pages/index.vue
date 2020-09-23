@@ -8,6 +8,9 @@
         Start NuxtJS from scratch
       </h2>
       <nuxt-link to="/posts">Posts</nuxt-link>
+      <a-button type="primary" @click="logOut">
+        Primary
+      </a-button>
     </div>
   </div>
 </template>
@@ -18,6 +21,11 @@
 export default {
   components: {
     // Logo
+  }, 
+  methods: {
+    logOut() {
+      localStorage.removeItem('currentUser')
+    }
   }
 }
 </script>

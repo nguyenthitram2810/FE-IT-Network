@@ -47,8 +47,8 @@
                 <a-form-model-item has-feedback prop="password" class="m-0 form-validate" >
                   <a-input :disabled="isDisabled" type="password" v-model="registerForm.password" autocomplete="off" placeholder="Mật khẩu"/>
                 </a-form-model-item>
-                <a-form-model-item has-feedback prop="confirmPass" class="m-0 form-validate" >
-                  <a-input :disabled="isDisabled" type="password" v-model="registerForm.confirmPass" autocomplete="off" placeholder="Xác nhận mật khẩu"/>
+                <a-form-model-item has-feedback prop="confirmPassword" class="m-0 form-validate" >
+                  <a-input :disabled="isDisabled" type="password" v-model="registerForm.confirmPassword" autocomplete="off" placeholder="Xác nhận mật khẩu"/>
                 </a-form-model-item>
 
                 <a-form-model-item  class="form-button mb-0 mt-2">
@@ -103,7 +103,7 @@ export default {
         name: '',
         email: '',
         password: '',
-        confirmPass: '',
+        confirmPassword: '',
       },
       rules: {
         name:  [{ required: true, validator: validateName }],
@@ -121,14 +121,10 @@ export default {
           { 
             required: true,
             validator: validatePass, 
-          },
-          {
-            min: 6,
-            message: 'Độ dài mật khẩu > 6 ký tự(không kể ký tự trắng)'
           }
         ],
 
-        confirmPass: [
+        confirmPassword: [
           {
             required: true,
             validator: validatePassConfirm
@@ -143,8 +139,8 @@ export default {
         if (valid) {
           this.isDisabled = true
           try {
-            console.log(this.registerForm);
-            console.log(this.type);
+            const response = await this.$axios.post('/auth/register', this.registerForm)
+            console.log(response)
           }
           catch(e) {
             this.isDisabled = false
