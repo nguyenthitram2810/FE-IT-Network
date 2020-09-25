@@ -9,12 +9,16 @@
           <a-icon type="user" /> 
           <span>User</span>
         </a-menu-item>
+
+        <a-menu-item key="/admin/category">
+          <a-icon type="appstore" />
+          <span>Category</span>
+        </a-menu-item>
       </a-menu>
     </a-layout-sider>
 </template>
 
 <script>
-import collapse from 'ant-design-vue/lib/collapse'
 export default {
   props: ["collapsed"],
   computed: {
@@ -41,7 +45,7 @@ export default {
   },
   methods: {
     handleClick(e) {
-      this.$router.push({path: e.key, query: { page: 1, amount: 10}})
+      this.$router.push({path: e.key, query: { page: 1, limit: 10}})
     }
   }
 }
