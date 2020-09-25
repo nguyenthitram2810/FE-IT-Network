@@ -92,7 +92,7 @@ export default {
         if (valid) {
           this.isDisabled = true
           try {
-            const response = await this.$axios.post('/auth', this.loginForm)
+            const response = await this.$axios.post('/auth', this.loginForm.email)
             console.log(response)
             //chỗ này đáng phải có status trả về là thành công hay lỗi nhưng hiện tại thấy k có status bọc kèm nếu lỗi hoặc thành công á
             //nên làm tiếp theo kiểu thành công
@@ -102,18 +102,29 @@ export default {
               this.$router.push('/admin/user')
             }
             else {
-              throw {
-                message: "Bạn không có quyền vào trang quản lý!"
-              }
+                this.$notification["error"]({
+                message: 'LOGIN ERROR',
+                description:
+                  "Bạn không có quyền vào trang quản lý!"
+              });
             }
           }
           catch(e) {
             this.isDisabled = false
-            this.$notification["error"]({
-              message: 'LOGIN ERROR',
-              description:
-                e.message
-            });
+            if(e.response) {
+              this.$notification["error"]({
+                message: 'LOGIN ERROR',
+                description:
+                  e.response.data.message
+              });
+            }
+            else {
+              this.$notification["error"]({
+                message: 'LOGIN ERROR',
+                description:
+                  e.message
+              });
+            }
           }
         } else {
           return false;
