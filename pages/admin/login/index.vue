@@ -92,7 +92,7 @@ export default {
         if (valid) {
           this.isDisabled = true
           try {
-            const response = await this.$axios.post('/auth', this.loginForm.email)
+            const response = await this.$axios.post('/auth', this.loginForm)
             console.log(response)
             //chỗ này đáng phải có status trả về là thành công hay lỗi nhưng hiện tại thấy k có status bọc kèm nếu lỗi hoặc thành công á
             //nên làm tiếp theo kiểu thành công
