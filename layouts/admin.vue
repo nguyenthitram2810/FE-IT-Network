@@ -2,7 +2,7 @@
   <a-layout>
     <SidebarAdmin :collapsed="collapsed"/>
     <AdminHeader :collapsed="collapsed" @toggleSidebar="collapsed = !collapsed" :breadcrumb="getBreadcrumb">
-      <nuxt/>
+      <nuxt keep-alive />
     </AdminHeader>
   </a-layout>
 </template>
