@@ -69,6 +69,7 @@ import axios from "axios";
 
 export default {
   layout: 'fullpage',
+  middleware: 'notAuth',
   data() {
     let validatePass = (rule, value, callback) => {
       if (value.trim() === '') {
