@@ -16,6 +16,7 @@
 <script>
 export default {
   layout: "admin",
+  middleware: "adminAuth",
   data() {
     return {
       columns: [
@@ -51,7 +52,21 @@ export default {
     };
   }, 
   created() {
+    this.getQueryParams()
     this.$store.commit("admin/SET_BREADCRUMB", ["User", "List"]);
+  }, 
+  methods: {
+    getQueryParams() {
+      const query = this.$route.query
+      let queryParams = {...this.$route.query}
+      if(!query.page) {
+        queryParams.page = "1"
+      }
+      if(!query.limit) {
+        queryParams.limit = "10"
+      }
+      this.$router.push({name: this.$route.name, query: {...queryParams} })
+    }
   }
 };
 </script>

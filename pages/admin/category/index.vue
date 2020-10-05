@@ -45,6 +45,7 @@
 import moment from 'moment'
 export default {
   layout: "admin",
+  middleware: 'adminAuth',
   data() {
     return {
       columns: [
@@ -102,10 +103,13 @@ export default {
       pagination: {
         total: 0,
         current: 1,
+        pageSize: 10,
       },
+      params: {},
     };
   }, 
   created() {
+    this.getQueryParams()
     this.$store.commit("admin/SET_BREADCRUMB", ["Category", "List"]);
     this.getListCategory();
   },
@@ -122,64 +126,54 @@ export default {
     },
     async getListCategory() {
       try {
-        const response  = await this.$axios.get('/categories')
-        console.log(response.data.data)
-        this.data = response.data.data
-      } catch (error) {
-        console.log(error)
-      }
-    },
-    async getAllproduct(params) {
-      try {
-        const response = await this.$axios.get('/categories',
-        {
-          params: params,
-          headers: {
-            Authorization: 'Bearer ' + this.token,
-          }
-        })
-        if(response.data.status == "200") {
-          this.data = response.data.data.rows
-          let pagination = { ...this.pagination }
-          pagination.total = response.data.data.count
-          pagination.current = params.page
-          this.pagination = pagination
-          console.log(this.pagination)
+        this.loading = true
+        const response  = await this.$axios.get('/categories', {params: this.params})
+        //console.log(response)
+        this.data = response.data.data.data
+        this.loading = false
+        this.pagination.total = response.data.data.total
+        this.pagination.current = response.data.data.page
+        this.pagination.pageSize = response.data.data.count
+      } catch (e) {
+        if(e.response) {
+          this.$notification["error"]({
+            message: 'GET CATEGORY ERROR',
+            description:
+              e.response.data.message
+          });
         }
         else {
           this.$notification["error"]({
-            message: 'GET INFORMATION ERROR',
+            message: 'GET CATEGORY',
             description:
-              response.data.message
+              e.message
           });
         }
-      }
-      catch(e) {
-        this.$notification["error"]({
-          message: 'GET INFORMATION ERROR',
-          description:
-            e.message
-        });
       }
     },
     changeStringToTime(valueToChange){
       return moment(String(valueToChange)).format('MM/DD/YYYY hh:mm')
     },
     handleTableChange(pagination, filters, sorter) {
-      // this.loading = true
-      // let pager = { ...this.pagination }
-      // pager.current = pagination.current
-      // this.pagination = pager
-      // let params = this.$route.query
-      // params.page = this.pagination.current
-      // console.log(this.pagination);
-      
-      // this.$router.push({ query: params })
-      // this.getAllproduct(params)
-      // this.loading = false
-      console.log(pagination)
+      //console.log(pagination)  
+      let temp = {...this.params, page: pagination.current}
+      console.log(temp)
+      this.params = {...temp}
+      this.$router.push({name: this.$route.name, query: {...this.params} })
+      this.getListCategory()
+    },
+    getQueryParams() {
+      const query = this.$route.query
+      let queryParams = {...this.$route.query}
+      if(!query.page) {
+        queryParams.page = "1"
+      }
+      if(!query.limit) {
+        queryParams.limit = "10"
+      }
+      this.params = {...queryParams}
+      this.$router.push({name: this.$route.name, query: {...this.params} })
     }
-  },
   // async fetch(){
   //   //Nap du lieu tu api
   //   try {
@@ -189,9 +183,10 @@ export default {
   //     console.log(error)
   //   }
   // },
-};
+  }
+}
 </script>
 
 <style lang="scss" scoped>
 @import url("./style.scss");
-</style>>
+</style>
