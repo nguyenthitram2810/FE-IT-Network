@@ -91,10 +91,6 @@ export default {
       ],
       data: [],
       loading: false,
-      pagination: {
-        curent: 1,
-        total: 0,
-      },
       visible: false, 
       formEdit: {
         id: '',
