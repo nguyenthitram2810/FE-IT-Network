@@ -91,10 +91,6 @@ export default {
       ],
       data: [],
       loading: false,
-      pagination: {
-        curent: 1,
-        total: 0,
-      },
       visible: false, 
       formEdit: {
         id: '',
@@ -128,12 +124,12 @@ export default {
       try {
         this.loading = true
         const response  = await this.$axios.get('/categories', {params: this.params})
-        //console.log(response)
+        console.log(response)
         this.data = response.data.data.data
         this.loading = false
         this.pagination.total = response.data.data.total
         this.pagination.current = response.data.data.page
-        this.pagination.pageSize = response.data.data.count
+        this.pagination.pageSize = parseInt(this.params.limit)
       } catch (e) {
         if(e.response) {
           this.$notification["error"]({
@@ -154,10 +150,8 @@ export default {
     changeStringToTime(valueToChange){
       return moment(String(valueToChange)).format('MM/DD/YYYY hh:mm')
     },
-    handleTableChange(pagination, filters, sorter) {
-      //console.log(pagination)  
+    handleTableChange(pagination, filters, sorter) { 
       let temp = {...this.params, page: pagination.current}
-      console.log(temp)
       this.params = {...temp}
       this.$router.push({name: this.$route.name, query: {...this.params} })
       this.getListCategory()
@@ -166,23 +160,14 @@ export default {
       const query = this.$route.query
       let queryParams = {...this.$route.query}
       if(!query.page) {
-        queryParams.page = "1"
+        queryParams.page = 1
       }
       if(!query.limit) {
-        queryParams.limit = "10"
+        queryParams.limit = 10
       }
       this.params = {...queryParams}
       this.$router.push({name: this.$route.name, query: {...this.params} })
     }
-  // async fetch(){
-  //   //Nap du lieu tu api
-  //   try {
-  //     const response  = await this.$axios.get('/categories')
-  //     console.log(response)
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // },
   }
 }
 </script>
