@@ -10,7 +10,7 @@
 									<div class="widget d-flex flex-column">
 										<h4 class="widget-title">Tạo bài đăng</h4>
                     <div class="d-flex mb-3">
-                      <a-button type="primary" class="m-auto" @click="logOut">
+                      <a-button type="primary" class="m-auto">
                       Tuyển dụng
                       </a-button>
                     <a-button type="primary" class="m-auto">
@@ -274,13 +274,11 @@
 // import Logo from '~/components/Logo.vue'
 
 export default {
+  middleware: 'updateState',
   components: {
     // Logo
   }, 
   methods: {
-    logOut() {
-      localStorage.removeItem('currentUser')
-    }
   }
 }
 </script>
