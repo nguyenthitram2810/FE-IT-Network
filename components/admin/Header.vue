@@ -19,7 +19,8 @@
         </a-col>
 
         <!-- User dropdown -->
-        <a-col class="pr-3">
+
+        <a-col>
           <template>
             <a-dropdown>
               <a-menu slot="overlay" @click="handleMenuClick">
@@ -33,6 +34,7 @@
             </a-dropdown>
           </template>
         </a-col>
+
       </a-row>
     </a-layout-header>
     <nuxt/>

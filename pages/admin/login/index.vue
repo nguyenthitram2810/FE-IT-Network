@@ -29,7 +29,7 @@
                 </a-form-model-item>
 
                 <a-form-model-item has-feedback prop="password" class="m-0 form-validate" >
-                  <a-input :disabled="isDisabled" type="password" v-model="loginForm.password" autocomplete="off" placeholder="Mật khẩu"/>
+                  <a-input :disabled="isDisabled" type="password" v-model="loginForm.password" autocomplete="off" placeholder="Mật khẩu" @pressEnter="loginSubmit"/>
                 </a-form-model-item>
 
                 <a-form-model-item  class="form-button mb-0 mt-2">
@@ -96,7 +96,7 @@ export default {
             console.log(response)
             //chỗ này đáng phải có status trả về là thành công hay lỗi nhưng hiện tại thấy k có status bọc kèm nếu lỗi hoặc thành công á
             //nên làm tiếp theo kiểu thành công
-            if(response.data.data.role == "Admin" || response.data.data.role == "Moderator") {
+            if(response.data.data.role == "ADMIN" || response.data.data.role == "MODERATOR") {
               localStorage.setItem('currentUser', JSON.stringify(response.data.data))
               this.$store.commit('auth/SET_CURRENT_USER', JSON.parse(localStorage.getItem('currentUser')))
               this.$router.push('/admin/user')
