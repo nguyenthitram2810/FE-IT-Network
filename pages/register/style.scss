@@ -24,7 +24,7 @@ html, body {
     position: relative;
     margin-left: 0;
     margin-right: 0;
-    height: 100%;
+    min-height: 100%;
 }
 
 .website-logo {
@@ -102,33 +102,12 @@ html, body {
 .form-holder .form-content {
     position: relative;
     text-align: center;
-    display: -webkit-box;
-    display: -moz-box;
-    display: -ms-flexbox;
-    display: -webkit-flex;
-    display: flex;
     -webkit-justify-content: center;
     justify-content: center;
     -webkit-align-items: center;
     align-items: center;
     padding: 60px;
     min-height: 100%;
-}
-
-.form-holder .form-content ::-webkit-input-placeholder {
-    color: #DEDBDB;
-}
-
-.form-holder .form-content :-moz-placeholder {
-    color: #DEDBDB;
-}
-
-.form-holder .form-content ::-moz-placeholder {
-    color: #DEDBDB;
-}
-
-.form-holder .form-content :-ms-input-placeholder {
-    color: #DEDBDB;
 }
 
 .form-content {
@@ -229,34 +208,6 @@ html, body {
     color: #000;
 }
 
-.form-content input[type="checkbox"] {
-    width: auto;
-}
-
-.form-content input[type="checkbox"]:not(:checked), .form-content input[type="checkbox"]:checked {
-    position: absolute;
-    left: -9999px;
-}
-
-.form-content input[type="checkbox"]:not(:checked) + label, .form-content input[type="checkbox"]:checked + label {
-    position: relative;
-    padding-left: 23px;
-    cursor: pointer;
-    display: inline;
-    color: #fff;
-    font-size: 15px;
-    font-weight: 700;
-    margin-left: 0;
-    -webkit-transition: all 0.3s ease;
-    transition: all 0.3s ease;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
 .form-content .form-button {
     margin-top: 30px;
     margin-bottom: 25px;
@@ -339,6 +290,20 @@ html, body {
 
 .form-validate >>> .ant-form-explain {
     margin-bottom: 10px;
+}
+
+.form-validate >>> .ant-select-selection {
+    padding-top: 5px;
+    border: none;
+    background-color: #445867;
+    margin-bottom: 10px;
+    padding-left: 9px;
+    font-size: 15px;
+    color: #DEDBDB;
+}
+
+.form-validate >>> .ant-select-selection--multiple {
+    height: 40px;
 }
 
 .height-bg-auth {

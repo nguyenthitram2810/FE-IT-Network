@@ -1,0 +1,88 @@
+<template>
+  <a-layout>
+    <a-layout-header id="admin-header">
+      <a-row type="flex" class="justify-content-between">
+
+        <!-- Icon trigger sidebar -->
+        <a-col class="d-flex justify-content-center align-items-center">
+          <a-icon
+            class="trigger"
+            :type="collapsed ? 'menu-unfold' : 'menu-fold'"
+            @click="toggleSidebar"
+          />
+
+          <a-breadcrumb>
+            <a-breadcrumb-item class="font--18" v-for="(item, index) in breadcrumb" :key="index">
+              {{ item }}
+            </a-breadcrumb-item>  
+          </a-breadcrumb>
+        </a-col>
+
+        <!-- User dropdown -->
+        <a-col class="pr-3">
+          <template>
+            <a-dropdown>
+              <a-menu slot="overlay" @click="handleMenuClick">
+                <a-menu-item key="2"> <a-icon type="user" />Trang cá nhân</a-menu-item>
+                <a-menu-item key="1"> <a-icon type="logout" />Đăng xuất </a-menu-item>
+              </a-menu>
+               <div>
+                 <a-avatar style="border: 1.5px solid purple;" size="large" src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+                 <a-icon type="down" />
+               </div>
+            </a-dropdown>
+          </template>
+        </a-col>
+      </a-row>
+    </a-layout-header>
+    <nuxt/>
+  </a-layout>
+</template>
+
+<script>
+
+export default {
+  props: ["collapsed", "breadcrumb"],
+  data() {
+    return {
+    }
+  },
+  methods: {
+    toggleSidebar() {
+      this.$emit('toggleSidebar')
+    },
+    search() {
+
+    },
+    change() {
+
+    },
+    handleMenuClick() {
+      
+    }
+  },
+}
+</script>
+
+<style lang="scss" scoped>
+.sub-dropdown {
+  width: 100px;
+}
+
+#admin-header .trigger {
+  font-size: 18px;
+  line-height: 64px;
+  padding: 0 24px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+#admin-header .trigger:hover {
+  color: #1890ff;
+}
+
+#admin-header {
+  background: #fff;
+  padding: 0
+}
+</style>

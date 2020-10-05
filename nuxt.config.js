@@ -74,7 +74,10 @@ export default {
   styleResources: {
     // your settings here
     sass: [],
-    scss: [],
+    scss: [
+      '@/assets/scss/main.scss', 
+      '@/assets/scss/_variables.scss'
+    ],
    },
 
   /*
@@ -82,12 +85,12 @@ export default {
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
-    baseURL: process.env.API_URL || 'http://localhost:3002/api'
+    baseURL:'http://careernetwork.ml/api/v1/'
   },
 
-  env: {
-    API_BASE_URL: process.env.API_BASE_URL || 'http://localhost:3009'
-  },
+  // env: {
+  //   API_BASE_URL: process.env.API_BASE_URL || 'http://localhost:3009'
+  // },
 
   /*
   ** Toast configuration

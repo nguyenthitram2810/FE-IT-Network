@@ -17,11 +17,10 @@
           <div class="form-content">
             <div class="form-items">
               <h3>Đăng nhập với Career Network</h3>
-              <p>Tìm kiếm cơ hội công việc</p>
+              <p>Đăng nhập vào trang quản lý</p>
 
               <div class="page-links">
-                  <nuxt-link to="/login" class="active">Đăng nhập</nuxt-link>
-                  <nuxt-link to="/register">Đăng ký</nuxt-link>
+                  <nuxt-link to="/admin/login" class="active">Đăng nhập</nuxt-link>
               </div>
 
               <a-form-model ref="loginForm" :model="loginForm" :rules="rules">
@@ -51,7 +50,7 @@ import axios from "axios";
 
 export default {
   layout: 'fullpage',
-  middleware: 'notAuth',
+  middleware: 'adminNotAuth',
   data() {
     let validatePass = (rule, value, callback) => {
       if (value.trim() === '') {
@@ -95,17 +94,37 @@ export default {
           try {
             const response = await this.$axios.post('/auth', this.loginForm)
             console.log(response)
-            localStorage.setItem('currentUser', JSON.stringify(response.data.data)) 
-            this.$store.commit('auth/SET_CURRENT_USER', JSON.parse(localStorage.getItem('currentUser')))
-            this.$router.push('/')
+            //chỗ này đáng phải có status trả về là thành công hay lỗi nhưng hiện tại thấy k có status bọc kèm nếu lỗi hoặc thành công á
+            //nên làm tiếp theo kiểu thành công
+            if(response.data.data.role == "Admin" || response.data.data.role == "Moderator") {
+              localStorage.setItem('currentUser', JSON.stringify(response.data.data))
+              this.$store.commit('auth/SET_CURRENT_USER', JSON.parse(localStorage.getItem('currentUser')))
+              this.$router.push('/admin/user')
+            }
+            else {
+                this.$notification["error"]({
+                message: 'LOGIN ERROR',
+                description:
+                  "Bạn không có quyền vào trang quản lý!"
+              });
+            }
           }
           catch(e) {
             this.isDisabled = false
-            this.$notification["error"]({
-              message: 'LOGIN ERROR',
-              description:
-                e.message
-            });
+            if(e.response) {
+              this.$notification["error"]({
+                message: 'LOGIN ERROR',
+                description:
+                  e.response.data.message
+              });
+            }
+            else {
+              this.$notification["error"]({
+                message: 'LOGIN ERROR',
+                description:
+                  e.message
+              });
+            }
           }
         } else {
           return false;
