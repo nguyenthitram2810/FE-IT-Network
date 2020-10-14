@@ -49,7 +49,7 @@
                 </a-form-model-item>
 
                 <a-form-model-item has-feedback prop="city" class="m-0 form-validate">
-                  <a-select size="large" class="city-select" :disabled="isDisabled" v-model="registerForm.city" placeholder="Thành phố">
+                  <a-select mode="multiple" size="large" class="city-select" :disabled="isDisabled" v-model="registerForm.city" placeholder="Thành phố">
                     <a-select-option value="shanghai">
                       Zone one
                     </a-select-option>
@@ -98,7 +98,7 @@ export default {
         name: '',
         email: '',
         phone: '',
-        city: undefined,
+        city: [],
         website: undefined,
       },
       rules: {
@@ -110,11 +110,14 @@ export default {
           },
           {
             required: true,
-            message: 'Nhập địa chỉ email',
+            message: 'Nhập địa chỉ email công ty',
           },
         ],
         phone: [{
-          required: true, message: ''
+          required: true, message: 'Nhập số điện thoại công ty'
+        }],
+        city: [{
+          required: true, message: 'Chọn thành phố trụ sở công ty'
         }]
       }
     }
@@ -125,7 +128,7 @@ export default {
         if (valid) {
           this.isDisabled = true
           try {
-            const response = await this.$axios.post('/auth/register', this.registerForm)
+            const response = await this.$axios.post('/auth/newlead', this.registerForm)
             console.log(response)
           }
           catch(e) {
