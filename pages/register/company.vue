@@ -37,18 +37,30 @@
                 </a-form-model-item>
 
                 <a-form-model-item  has-feedback prop="name" class="m-0 form-validate">
-                  <a-input :disabled="isDisabled" v-model="registerForm.name" autocomplete="off" placeholder="Tên người dùng"/>
+                  <a-input :disabled="isDisabled" v-model="registerForm.name" autocomplete="off" placeholder="Tên công ty"/>
                 </a-form-model-item>
 
                 <a-form-model-item has-feedback prop="email"  class="m-0 form-validate">
                   <a-input :disabled="isDisabled" v-model="registerForm.email" autocomplete="off" placeholder="Địa chỉ Email"/>
                 </a-form-model-item>
 
-                <a-form-model-item has-feedback prop="password" class="m-0 form-validate" >
-                  <a-input :disabled="isDisabled" type="password" v-model="registerForm.password" autocomplete="off" placeholder="Mật khẩu"/>
+                <a-form-model-item has-feedback prop="phone"  class="m-0 form-validate">
+                  <a-input :disabled="isDisabled" v-model="registerForm.phone" autocomplete="off" placeholder="Điện thoại"/>
                 </a-form-model-item>
-                <a-form-model-item has-feedback prop="confirmPassword" class="m-0 form-validate" >
-                  <a-input :disabled="isDisabled" type="password" v-model="registerForm.confirmPassword" autocomplete="off" placeholder="Xác nhận mật khẩu"/>
+
+                <a-form-model-item has-feedback prop="city" class="m-0 form-validate">
+                  <a-select size="large" class="city-select" :disabled="isDisabled" v-model="registerForm.city" placeholder="Thành phố">
+                    <a-select-option value="shanghai">
+                      Zone one
+                    </a-select-option>
+                    <a-select-option value="beijing">
+                      Zone two
+                    </a-select-option>
+                  </a-select>
+                </a-form-model-item>
+
+                <a-form-model-item has-feedback prop="website"  class="m-0 form-validate">
+                  <a-input :disabled="isDisabled" v-model="registerForm.website" autocomplete="off" placeholder="Website"/>
                 </a-form-model-item>
 
                 <a-form-model-item  class="form-button mb-0 mt-2">
@@ -71,14 +83,6 @@ export default {
   layout: 'fullpage',
   middleware: 'notAuth',
   data() {
-    let validatePass = (rule, value, callback) => {
-      if (value.trim() === '') {
-        callback(new Error('Nhập mật khẩu'));
-      } else {
-        callback();
-      }
-    };
-
     let validateName = (rule, value, callback) => {
       if (value.trim() === '') {
         callback(new Error('Nhập tên người dùng'));
@@ -87,24 +91,15 @@ export default {
       }
     };
 
-    let validatePassConfirm = (rule, value, callback) => {
-      if (value.trim() === '') {
-        callback(new Error('Nhập xác nhận mật khẩu'));
-      } else if (value !== (this.registerForm.password)) {
-        callback(new Error("Mật khẩu xác nhận sai"));
-      } else {
-        callback();
-      }
-    };
-
     return {
       isDisabled: false,
-      type: 'employee',
+      type: 'company',
       registerForm: {
         name: '',
         email: '',
-        password: '',
-        confirmPassword: '',
+        phone: '',
+        city: undefined,
+        website: undefined,
       },
       rules: {
         name:  [{ required: true, validator: validateName }],
@@ -118,19 +113,9 @@ export default {
             message: 'Nhập địa chỉ email',
           },
         ],
-        password: [
-          { 
-            required: true,
-            validator: validatePass, 
-          }
-        ],
-
-        confirmPassword: [
-          {
-            required: true,
-            validator: validatePassConfirm
-          }
-        ], 
+        phone: [{
+          required: true, message: ''
+        }]
       }
     }
   },
