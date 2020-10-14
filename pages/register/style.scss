@@ -293,17 +293,12 @@ html, body {
 }
 
 .form-validate >>> .ant-select-selection {
-    padding-top: 5px;
     border: none;
     background-color: #445867;
     margin-bottom: 10px;
     padding-left: 9px;
     font-size: 15px;
     color: #DEDBDB;
-}
-
-.form-validate >>> .ant-select-selection--multiple {
-    height: 40px;
 }
 
 .height-bg-auth {
