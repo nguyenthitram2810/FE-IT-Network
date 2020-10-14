@@ -5,5 +5,11 @@ export default function ({ store, redirect }) {
     if (store.state.auth.currentUser == null) {
       return redirect('/admin/login');
     }
+    else {
+      let user = store.state.auth.currentUser
+      if(user.roleId == 3) {
+        return redirect('/')
+      }
+    }
   }
   

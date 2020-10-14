@@ -141,15 +141,26 @@ export default {
           this.isDisabled = true
           try {
             const response = await this.$axios.post('/auth/register', this.registerForm)
-            console.log(response)
+            localStorage.setItem('currentUser', JSON.stringify(response.data.data))
+            this.$store.commit('auth/SET_CURRENT_USER', JSON.parse(localStorage.getItem('currentUser')))
+            this.$router.push('/')
           }
           catch(e) {
             this.isDisabled = false
-            this.$notification["error"]({
-              message: 'REGISTER ERROR',
-              description:
-                e.message
-            });
+            if(e.response) {
+              this.$notification["error"]({
+                message: 'REGISTER ERROR',
+                description:
+                  e.response.data.message
+              });
+            }
+            else {
+              this.$notification["error"]({
+                message: 'REGISTER ERROR',
+                description:
+                  e.message
+              });
+            }
           }
         } else {
           return false;
