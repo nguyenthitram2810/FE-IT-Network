@@ -50,11 +50,8 @@
 
                 <a-form-model-item has-feedback prop="city" class="m-0 form-validate">
                   <a-select mode="multiple" size="large" class="city-select" :disabled="isDisabled" v-model="registerForm.city" placeholder="Thành phố">
-                    <a-select-option value="shanghai">
-                      Zone one
-                    </a-select-option>
-                    <a-select-option value="beijing">
-                      Zone two
+                    <a-select-option v-for="(el, index) in listCity" :key="index" :value="`${el.province_id}`">
+                      {{ el.province_name }}
                     </a-select-option>
                   </a-select>
                 </a-form-model-item>
@@ -94,6 +91,7 @@ export default {
     return {
       isDisabled: false,
       type: 'company',
+      listCity: [],
       registerForm: {
         name: '',
         email: '',
@@ -122,22 +120,67 @@ export default {
       }
     }
   },
+  created() {
+    this.getListCity();
+  },
   methods: {
+    async getListCity() {
+      try {
+        const response = await this.$axios.get('https://vapi.vnappmob.com/api/province');
+        this.listCity = response.data.results
+      }
+      catch(e) {
+        if(e.response) {
+          this.$notification["error"]({
+            message: 'GET CITY ERROR',
+            description:
+              e.response.data.message
+          });
+        }
+        else {
+          this.$notification["error"]({
+            message: 'GET CITY ERROR',
+            description:
+              e.message
+          });
+        }
+      }
+    },
+
     async registerSubmit(event) {
       this.$refs.registerForm.validate(async valid => {
         if (valid) {
           this.isDisabled = true
           try {
+            if(this.registerForm.city == undefined) {
+              delete this.registerForm.city
+            }
+            console.log(this.registerForm)
             const response = await this.$axios.post('/auth/newlead', this.registerForm)
             console.log(response)
+            this.$notification["success"]({
+              message: 'REGISTER',
+              description:
+                "Tài khoản sẽ được tiến hành xác nhận và phản hồi sớm đến quý công ty"
+            });
+            this.$router.push("/")
           }
           catch(e) {
             this.isDisabled = false
-            this.$notification["error"]({
-              message: 'REGISTER ERROR',
-              description:
-                e.message
-            });
+            if(e.response) {
+              this.$notification["error"]({
+                message: 'REGISTER ERROR',
+                description:
+                  e.response.data.message
+              });
+            }
+            else {
+              this.$notification["error"]({
+                message: 'REGISTER ERROR',
+                description:
+                  e.message
+              });
+            }
           }
         } else {
           return false;
