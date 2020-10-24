@@ -140,7 +140,7 @@ export default {
         }
         else {
           this.$notification["error"]({
-            message: 'GET CATEGORY',
+            message: 'GET CATEGORY ERROR',
             description:
               e.message
           });
