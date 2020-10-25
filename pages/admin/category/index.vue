@@ -81,7 +81,6 @@ export default {
             title: 'Name',
             dataIndex: 'name',
             key: 'name',
-            sorter: true,
           },
           {
             title: 'Slug',
@@ -251,7 +250,7 @@ export default {
         }
         else {
           this.$notification["error"]({
-            message: 'GET CATEGORY',
+            message: 'GET CATEGORY ERROR',
             description:
               e.message
           });
@@ -287,8 +286,9 @@ export default {
 @import url("./style.scss");
 
 .create-button {
-  background-color: #520339;
-  border-color: #520339;
-  width: 150px;
+  background-color: #6B5B95;
+  border-color: #6B5B95;
+  width: 200px;
+  height: 40px;
 }
 </style>

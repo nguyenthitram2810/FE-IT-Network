@@ -101,11 +101,20 @@ export default {
           }
           catch(e) {
             this.isDisabled = false
-            this.$notification["error"]({
-              message: 'LOGIN ERROR',
-              description:
-                e.message
-            });
+            if(e.response) {
+              this.$notification["error"]({
+                message: 'LOGIN ERROR',
+                description:
+                  e.response.data.message
+              });
+            }
+            else {
+              this.$notification["error"]({
+                message: 'LOGIN ERROR',
+                description:
+                  e.message
+              });
+            }
           }
         } else {
           return false;

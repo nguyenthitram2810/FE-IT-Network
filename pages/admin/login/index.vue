@@ -95,8 +95,7 @@ export default {
             const response = await this.$axios.post('/auth', this.loginForm)
             //chỗ này đáng phải có status trả về là thành công hay lỗi nhưng hiện tại thấy k có status bọc kèm nếu lỗi hoặc thành công á
             //nên làm tiếp theo kiểu thành công
-            //console.log(response.data.data)
-            if(response.data.data.role == "ADMIN") {
+            if(response.data.data.roleId == 1 || response.data.data.roleId == 2) {
               localStorage.setItem('currentUser', JSON.stringify(response.data.data))
               this.$store.commit('auth/SET_CURRENT_USER', JSON.parse(localStorage.getItem('currentUser')))
               this.$router.push('/admin/user')
