@@ -85,7 +85,7 @@ export default {
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
-    baseURL:'http://careernetwork.ml/api/v1/'
+    baseURL:'http://35.222.61.214/api/v1/'
   },
 
   // env: {

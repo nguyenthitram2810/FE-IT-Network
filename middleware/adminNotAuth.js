@@ -4,7 +4,7 @@ export default function ({ store, redirect }) {
   }
   if (store.state.auth.currentUser != null) {
     let user = store.state.auth.currentUser
-    if(user.role == "Admin" || user.role == "Moderator") {
+    if(user.role == "ADMIN") {
       return redirect('/admin/user')
     }
     else {
