@@ -93,7 +93,6 @@ export default {
           this.isDisabled = true
           try {
             const response = await this.$axios.post('/auth', this.loginForm)
-            console.log(response)
             //chỗ này đáng phải có status trả về là thành công hay lỗi nhưng hiện tại thấy k có status bọc kèm nếu lỗi hoặc thành công á
             //nên làm tiếp theo kiểu thành công
             if(response.data.data.roleId == 1 || response.data.data.roleId == 2) {
