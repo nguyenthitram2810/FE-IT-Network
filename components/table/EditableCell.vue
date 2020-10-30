@@ -1,11 +1,19 @@
 <template>
     <div class="editable-cell">
       <div v-if="editable" class="editable-cell-input-wrapper">
-        <a-input :value="value.role" @change="handleChange" @pressEnter="check" /><a-icon
-          type="check"
-          class="editable-cell-icon-check"
-          @click="check"
-        />
+          <a-select v-model="value.id">
+            <template v-for="(role, index) in permisson">
+              <a-select-option v-if="(user.roleId == 1) || (user.roleId != 1 && role.id != 1 && role.id != 2)" :key="index" :value="`${role.id}`">
+                {{role.role}}
+              </a-select-option> 
+            </template> 
+          </a-select>
+
+          <a-icon
+            type="check"
+            class="editable-cell-icon-check"
+            @click="check"
+          />
       </div>
       
       <div v-else class="editable-cell-text-wrapper d-flex">
@@ -21,26 +29,32 @@ export default {
   props: {
     text: Object,
     permisson: Array,
+    user: Object,
 	},
 	data() {
     return {
-      value: this.text,
+      value: {
+        id: String(this.text.id), 
+        role: this.text.role
+      },
       editable: false,
     };
-	},
+  },
+  
+  watch: {
+    'text': function(value) {
+      this.value = value
+    }
+  },
 	
 	methods: {
-    handleChange(e) {
-      const value = e.target.value;
-      this.value = value;
-    },
     check() {
       this.editable = false;
-      this.$emit('change', this.value);
+      this.$emit('change', this.value.id);
     },
     editUser() {
+      console.log(this.value)
       this.editable = true;
-      console.log(this.permisson)
     },
   },
 }

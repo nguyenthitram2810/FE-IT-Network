@@ -4,11 +4,23 @@
         <img src="/images/logo_career_network2.png" :width="getWidthLogo" alt="" height="100%">
         <div v-if="showNameCompany" class="pl-3 font--bold color-white font---text text-spacing">CAREER NETWORK</div>
       </div>
-      <a-menu theme="dark" mode="inline" :defaultSelectedKeys= [getSelectedKey] @click="handleClick">
-        <a-menu-item key="/admin/user">
-          <a-icon type="user" /> 
-          <span>User</span>
-        </a-menu-item>
+      <a-menu theme="dark" mode="inline" :defaultSelectedKeys= [getSelectedKey] @click="handleClick" >
+        
+        
+        <a-sub-menu key="user">
+          <span slot="title"><a-icon type="user" /> <span>User</span></span>
+          <a-menu-item key="/admin/user">
+            <span>List User</span>
+          </a-menu-item>
+
+          <a-menu-item key="/admin/user/request">
+            <span>Company Request</span>
+          </a-menu-item>
+
+          <a-menu-item key="/admin/user/deleted">
+            <span>Deleted User</span>
+          </a-menu-item>
+        </a-sub-menu>
 
         <a-menu-item key="/admin/category">
           <a-icon type="appstore" />
