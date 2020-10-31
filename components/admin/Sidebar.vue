@@ -67,7 +67,7 @@ export default {
   },
   methods: {
     handleClick(e) {
-      this.$router.push({path: e.key, query: { page: 1, limit: 10}})
+      this.$router.push({path: e.key })
     }
   }
 }

@@ -108,9 +108,8 @@ export default {
       loading: false,
       columns: [
           {
-            title: 'Name',
-            key: 'name',
-            scopedSlots: { customRender: 'name' },
+            title: 'ID',
+            key: 'id',
           },
           {
             title: 'Email',
@@ -183,6 +182,7 @@ export default {
             Authorization: 'Bearer ' + this.user.token,
           }
         })
+        console.log(response)
         this.data = response.data.data.data
         this.loading = false
         this.pagination.total = response.data.data.total
