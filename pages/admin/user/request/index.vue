@@ -63,7 +63,7 @@
               <p class="col-8"> {{ profile.name }}</p>
             </div>
 
-            <div class="row">
+            <div v-if="profile.phone" class="row">
               <p class="col-4 font--bold">Phone:</p>
               <p class="col-8"> {{ profile.phone }}</p>
             </div>
