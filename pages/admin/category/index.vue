@@ -8,14 +8,11 @@
     <a-modal v-model="visibleCreate" title="CREATE ONE USER" @ok="handleOkCreate" :ok-button-props="{ props: { disabled: disabledCreateOK } }">
       <template>
         <a-form-model :model="formCreate">
-          <a-form-model-item label="ID">
+          <a-form-model-item label="Parent ID">
             <a-input v-model="formCreate.id" @change="displayCreateOk"/>
           </a-form-model-item>
           <a-form-model-item label="Name">
             <a-input v-model="formCreate.name" @change="displayCreateOk"/>
-          </a-form-model-item>
-          <a-form-model-item label="Slug">
-            <a-input v-model="formCreate.slug" @change="displayCreateOk"/>
           </a-form-model-item>
         </a-form-model>
       </template>
@@ -28,24 +25,22 @@
             <template slot="title">
               <p><b>Are you sure to DELETE this?</b></p>
             </template>
-            <a-button type="danger" shape="round">DEL</a-button>
+            <a-button type="danger">DEL</a-button>
           </a-popconfirm>
-
-          <a-divider type="vertical" />
           
           <!-- Edit button -->
-          <a-button @click="showModal" type="primary" shape="round">EDIT</a-button>
+          <a-button @click="showModal(record)" type="primary">EDIT</a-button>
           <a-modal v-model="visible" title="Edit Infomation" @ok="handleOkEdit(record.slug)">
             <template>
-              <a-form-model :model="formEdit">
-                <a-form-model-item label="ID">
-                  <a-input :disabled="true" v-model="formEdit.id"/>
-                </a-form-model-item>
+              <a-form-model :model="formEdit">      
                 <a-form-model-item label="Name">
                   <a-input v-model="formEdit.name"/>
                 </a-form-model-item>
-                <a-form-model-item label="Slug">
-                  <a-input v-model="formEdit.slug"/>
+
+                <a-form-model-item has-feedback label="Parent ID">
+                  <template>
+                    <a-cascader :options="parentOptions" change-on-select @change="onChooseParent" />
+                  </template>
                 </a-form-model-item>
               </a-form-model>
             </template>
@@ -116,14 +111,13 @@ export default {
       visible: false, 
       visibleCreate: false,
       formEdit: {
-        id: '',
         name: '',
-        slug: '',
+        parentId:'',
       },
+      parentOptions: [],
       formCreate: {
-        id: '',
+        parentID: '',
         name: '',
-        slug: '',
       },
       disabledCreateOK: true,
       pagination: {
@@ -137,7 +131,7 @@ export default {
   created() {
     this.getQueryParams()
     this.$store.commit("admin/SET_BREADCRUMB", ["Category", "List"]);
-    this.getListCategory();
+    this.getListCategory()
   },
   methods: {
     async confirmDelete(slug) {
@@ -176,9 +170,34 @@ export default {
         }
       }
     },
-    showModal() {
+    async showModal(record) {
+      this.formEdit.id = record.id;
+      this.formEdit.name = record.name;
+      this.formEdit.slug = record.slug;
+      const response  = await this.$axios.get("/categories/all")
+      // this.parentOptions = response.data.data
+      const categories = response.data.data;
+      this.parentOptions = this.mappingData(response.data.data)
+        //console.log(this.parentOptions)
       this.visible = true;
     },
+    
+    mappingData(data) {
+      var reformattedArray = data.map(obj =>{ 
+        var rObj = {};
+        rObj["value"] = obj.id
+        rObj["label"] = obj.name
+        if(rObj["label"] == this.formEdit.name){
+          rObj["disabled"] = true
+        }
+        if(obj.children) {
+          rObj["children"] = this.mappingData(obj.children)
+        }
+        return rObj;
+      });
+      return reformattedArray
+    },
+
     showCreateModal() {
       this.visibleCreate = true;
     },
@@ -198,6 +217,9 @@ export default {
       for(var key in this.formEdit){
         this.formEdit[key] = null;
       }
+    },
+    handleChangePEdit(e){
+      console.log("ok")
     },
     handleOkCreate(e) {
       this.visibleCreate = false;
@@ -232,9 +254,9 @@ export default {
             Authorization: 'Bearer ' + JSON.parse(localStorage.getItem('currentUser')).token,
           }
         })
-        console.log(this.params)
         
         this.data = response.data.data.data
+
         this.loading = false
         this.pagination.total = response.data.data.total
         this.pagination.current = response.data.data.page
@@ -277,6 +299,10 @@ export default {
       }
       this.params = {...queryParams}
       this.$router.push({name: this.$route.name, query: {...this.params} })
+    },
+
+    onChooseParent() {
+
     }
   },
 }
