@@ -4,18 +4,18 @@
       :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '100vh' }"
     >
     <!-- Button Create -->
-    <a-button class="create-button" @click="showCreateModal" type="primary">+ CREATE</a-button>
+    <a-button class="create-button" @click="showCreateModal" type="primary"><a-icon type="plus" /> CREATE</a-button>
     <a-modal v-model="visibleCreate" title="CREATE ONE USER" @ok="handleOkCreate" :ok-button-props="{ props: { disabled: disabledCreateOK } }">
       <template>
         <a-form-model :model="formCreate">
-          <a-form-model-item label="ID">
-            <a-input v-model="formCreate.id" @change="displayCreateOk"/>
+          <a-form-model-item has-feedback label="Parent ID">
+            <template>
+              <a-cascader :options="parentOptions" :default-value="[null]" change-on-select @change="onChooseParentInCreate" />
+            </template>
           </a-form-model-item>
+
           <a-form-model-item label="Name">
             <a-input v-model="formCreate.name" @change="displayCreateOk"/>
-          </a-form-model-item>
-          <a-form-model-item label="Slug">
-            <a-input v-model="formCreate.slug" @change="displayCreateOk"/>
           </a-form-model-item>
         </a-form-model>
       </template>
@@ -28,24 +28,22 @@
             <template slot="title">
               <p><b>Are you sure to DELETE this?</b></p>
             </template>
-            <a-button type="danger" shape="round">DEL</a-button>
+            <a-button type="danger">DEL</a-button>
           </a-popconfirm>
-
-          <a-divider type="vertical" />
           
           <!-- Edit button -->
-          <a-button @click="showModal" type="primary" shape="round">EDIT</a-button>
+          <a-button @click="showModalEdit(record)" type="primary">EDIT</a-button>
           <a-modal v-model="visible" title="Edit Infomation" @ok="handleOkEdit(record.slug)">
             <template>
-              <a-form-model :model="formEdit">
-                <a-form-model-item label="ID">
-                  <a-input :disabled="true" v-model="formEdit.id"/>
-                </a-form-model-item>
+              <a-form-model :model="formEdit">      
                 <a-form-model-item label="Name">
                   <a-input v-model="formEdit.name"/>
                 </a-form-model-item>
-                <a-form-model-item label="Slug">
-                  <a-input v-model="formEdit.slug"/>
+
+                <a-form-model-item has-feedback label="Parent ID">
+                  <template>
+                    <a-cascader :options="parentOptions" change-on-select @change="onChooseParentInEdit" />
+                  </template>
                 </a-form-model-item>
               </a-form-model>
             </template>
@@ -116,14 +114,13 @@ export default {
       visible: false, 
       visibleCreate: false,
       formEdit: {
-        id: '',
         name: '',
-        slug: '',
+        parentId:'',
       },
+      parentOptions: [],
       formCreate: {
-        id: '',
+        parentId: '',
         name: '',
-        slug: '',
       },
       disabledCreateOK: true,
       pagination: {
@@ -137,92 +134,9 @@ export default {
   created() {
     this.getQueryParams()
     this.$store.commit("admin/SET_BREADCRUMB", ["Category", "List"]);
-    this.getListCategory();
+    this.getListCategory()
   },
   methods: {
-    async confirmDelete(slug) {
-      try {
-        const response  = await this.$axios.delete(`/categories/${slug}`, {
-          headers: {
-            Authorization: 'Bearer ' + JSON.parse(localStorage.getItem('currentUser')).token,
-          }
-        })
-
-        //Nếu delete thành công
-        this.$notification.open({
-          message: 'Notification',
-          description:
-            'Deleted Successfully!',
-          icon: <a-icon type="smile" style="color: #FA41CC" />,
-        });
-
-        this.getListCategory();
-
-      } catch (e) {
-        if(e.response) {
-          this.$notification["error"]({ 
-            message: 'DELETE CATEGORY ERROR',
-            description:
-              e.response.data.message
-          });
-          console.log(response)
-        }
-        else {
-          this.$notification["error"]({
-            message: 'DELETE CATEGORY',
-            description:
-              e.message
-          });
-        }
-      }
-    },
-    showModal() {
-      this.visible = true;
-    },
-    showCreateModal() {
-      this.visibleCreate = true;
-    },
-    handleOkEdit(slug) {
-      //take du lieu da edit
-      this.visible = false;
-
-      //Nếu edit thành công
-      this.$notification.open({
-        message: 'Notification',
-        description:
-          'Edited Successfully!',
-        icon: <a-icon type="smile" style="color: #FA41CC" />,
-      });
-      
-      //Set form về rỗng sau khi edit thành công
-      for(var key in this.formEdit){
-        this.formEdit[key] = null;
-      }
-    },
-    handleOkCreate(e) {
-      this.visibleCreate = false;
-
-      //Nếu create thành công
-      this.$notification.open({
-        message: 'Notification',
-        description:
-          'Created Successfully!',
-        icon: <a-icon type="smile" style="color: #FA41CC" />,
-      });
-      //Thông báo thất bại nếu create thất bại
-
-      //Set form về rỗng sau khi add thành công
-      for(var key in this.formCreate){
-        this.formCreate[key] = null;
-      }
-    },
-    displayCreateOk(e){
-      if(this.formCreate.id != '' && this.formCreate.name != '' && this.formCreate.slug != ''){
-        this.disabledCreateOK = false;
-      }else{
-        this.disabledCreateOK = true;
-      }
-    },
     async getListCategory() {
       try {
         this.loading = true
@@ -232,9 +146,10 @@ export default {
             Authorization: 'Bearer ' + JSON.parse(localStorage.getItem('currentUser')).token,
           }
         })
-        console.log(this.params)
         
         this.data = response.data.data.data
+        
+
         this.loading = false
         this.pagination.total = response.data.data.total
         this.pagination.current = response.data.data.page
@@ -277,6 +192,136 @@ export default {
       }
       this.params = {...queryParams}
       this.$router.push({name: this.$route.name, query: {...this.params} })
+    },
+    async confirmDelete(slug) {
+      try {
+        const response  = await this.$axios.delete(`/categories/${slug}`, {
+          headers: {
+            Authorization: 'Bearer ' + JSON.parse(localStorage.getItem('currentUser')).token,
+          }
+        })
+
+        //Nếu delete thành công
+        this.$notification.open({
+          message: 'Notification',
+          description:
+            'Deleted Successfully!',
+          icon: <a-icon type="smile" style="color: #FA41CC" />,
+        });
+
+        this.getListCategory();
+
+      } catch (e) {
+        if(e.response) {
+          this.$notification["error"]({ 
+            message: 'DELETE CATEGORY ERROR',
+            description:
+              e.response.data.message
+          });
+          console.log(response)
+        }
+        else {
+          this.$notification["error"]({
+            message: 'DELETE CATEGORY',
+            description:
+              e.message
+          });
+        }
+      }
+    },
+    async showModalEdit(record) {
+      this.formEdit.id = record.id;
+      this.formEdit.name = record.name;
+      this.formEdit.slug = record.slug;
+      this.getListParent();
+      this.visible = true;
+    },
+    async getListParent(){
+      const response  = await this.$axios.get("/categories/all")
+      const categories = response.data.data;
+      this.parentOptions = this.mappingData(response.data.data)
+      this.parentOptions.unshift({
+        value: null, 
+        label: "None", 
+        children: []
+      });
+    },
+    mappingData(data) {
+      var reformattedArray = data.map(obj =>{ 
+        var rObj = {};
+        rObj["value"] = obj.id
+        rObj["label"] = obj.name
+        if(rObj["label"] == this.formEdit.name){
+          rObj["disabled"] = true
+        }
+        if(obj.children) {
+          rObj["children"] = this.mappingData(obj.children)
+        }
+        return rObj;
+      });
+      return reformattedArray
+    },
+
+    onChooseParentInEdit(id) {
+      console.log(id)
+    },
+
+    handleOkEdit(slug) {
+      //take du lieu da edit
+      this.visible = false;
+
+      //Nếu edit thành công
+      this.$notification.open({
+        message: 'Notification',
+        description:
+          'Edited Successfully!',
+        icon: <a-icon type="smile" style="color: #FA41CC" />,
+      });
+      
+      //Set form về rỗng sau khi edit thành công
+      for(var key in this.formEdit){
+        this.formEdit[key] = null;
+      }
+    },
+    handleChangePEdit(e){
+      console.log("ok")
+    },
+
+    async showCreateModal() {
+      this.visibleCreate = true;
+      this.formCreate.parentId = ''
+      this.formCreate.name = ''
+      this.getListParent()
+    },
+
+    handleOkCreate(e) {
+      this.visibleCreate = false;
+
+      //Nếu create thành công
+      this.$notification.open({
+        message: 'Notification',
+        description:
+          'Created Successfully!',
+        icon: <a-icon type="smile" style="color: #FA41CC" />,
+      });
+      //Thông báo thất bại nếu create thất bại
+
+      //Set form về rỗng sau khi add thành công
+      for(var key in this.formCreate){
+        this.formCreate[key] = null;
+      }
+    },
+    displayCreateOk(e){
+      if(this.formCreate.name != ''){
+        this.disabledCreateOK = false;
+      }else{
+        this.disabledCreateOK = true;
+      }
+    },
+    onChooseParentInCreate(id)
+    {
+      this.formCreate.parentId = id
+      this.displayCreateOk()
     }
   },
 }

@@ -31,6 +31,11 @@
           <a-icon type="key" />
           <span>Permisson</span>
         </a-menu-item>
+
+        <a-menu-item key="/admin/jobs">
+          <a-icon type="profile" />
+          <span>Jobs</span>
+        </a-menu-item>
       </a-menu>
     </a-layout-sider>
 </template>
