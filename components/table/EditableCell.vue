@@ -2,7 +2,7 @@
     <div class="editable-cell">
       <div v-if="editable" class="editable-cell-input-wrapper">
           <a-select v-model="value.id">
-            <template v-for="(role, index) in permisson">
+            <template v-for="(role, index) in role">
               <a-select-option v-if="(user.roleId == 1) || (user.roleId != 1 && role.id != 1 && role.id != 2)" :key="index" :value="`${role.id}`">
                 {{role.role}}
               </a-select-option> 
@@ -28,7 +28,7 @@ export default {
 	name: 'EditableCell',
   props: {
     text: Object,
-    permisson: Array,
+    role: Array,
     user: Object,
 	},
 	data() {

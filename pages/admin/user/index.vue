@@ -15,7 +15,7 @@
         </span>
 
         <span slot="role" slot-scope="text, record">
-           <editable-cell :user="user" :permisson="listPermisson" :text="record.role" @change="changeRole(record, $event)"></editable-cell>
+           <editable-cell :user="user" :role="listRole" :text="record.role" @change="changeRole(record, $event)"></editable-cell>
         </span>
 
         <span slot="active" slot-scope="text, record">
@@ -134,7 +134,7 @@
 
           <a-form-model-item has-feedback prop="roleId" class="mb-2  form-validate">
             <a-select v-model="formCreate.roleId" placeholder="Role">
-              <template v-for="(role, index) in listPermisson">
+              <template v-for="(role, index) in listRole">
                 <a-select-option v-if="(user.roleId == 1 && role.id != 1) || (user.roleId != 1 && role.id != 1 && role.id != 2)" :key="index" :value="`${role.id}`">
                   {{role.role}}
                 </a-select-option> 
@@ -248,7 +248,7 @@ export default {
       profile: {},
       visible: false, 
       visibleDrawerCreate: false,
-      listPermisson: [],
+      listRole: [],
       formCreate: {
         email: '',
         password: '',
@@ -256,7 +256,6 @@ export default {
         roleId: undefined,
       },
       loadingCreate: false,
-      editAble: false,
       rules: {
         roleId: [{ required: true, message: 'Chọn vai trò của người dùng', trigger: 'change'}],
         email:  [
@@ -289,7 +288,7 @@ export default {
     this.getQueryParams()
     this.$store.commit("admin/SET_BREADCRUMB", ["User", "List"]);
     this.getListUser()
-    this.getListPermisson()
+    this.getlistRole()
   }, 
   methods: {
     getQueryParams() {
@@ -308,26 +307,26 @@ export default {
       this.$router.push({name: this.$route.name, query: {...this.params} })
     }, 
 
-    async getListPermisson() {
+    async getlistRole() {
       try {
         const response = await this.$axios.get('permission/role/all', {
           headers: {
             Authorization: 'Bearer ' + this.user.token,
           }
         })
-        this.listPermisson = response.data.data
+        this.listRole = response.data.data
       }
       catch(e) {
         if(e.response) {
           this.$notification["error"]({
-            message: 'GET LIST PERMISSION ERROR',
+            message: 'GET LIST ROLE ERROR',
             description:
               e.response.data.message
           });
         }
         else {
           this.$notification["error"]({
-            message: 'GET LIST PERMISSION ERROR',
+            message: 'GET LIST ROLE ERROR',
             description:
               e.message
           });
@@ -468,12 +467,38 @@ export default {
       }
     }, 
 
-    editUser(role) {
-      this.editAble = true
-    }, 
-
-    changeRole(object, value) {
-      console.log(object)
+    async changeRole(object, value) {
+      try {
+        this.loading = true
+        const response = await this.$axios.put(`/users/${object.id}`,{ 
+          roleId: value
+          }, 
+          {
+          headers: {
+            Authorization: 'Bearer ' + this.user.token,
+          }
+        })
+        console.log(response)
+        this.params.page = 1
+        this.getListUser()
+      }
+      catch(e) {
+        this.loading = false
+        if(e.response) {
+          this.$notification["error"]({
+            message: 'CHANGE ROLE USER ERROR',
+            description:
+              e.response.data.message
+          });
+        }
+        else {
+          this.$notification["error"]({
+            message: 'CHANGE ROLE USER ERROR',
+            description:
+              e.message
+          });
+        }
+      }
     },
 
     onSearch(value) {
