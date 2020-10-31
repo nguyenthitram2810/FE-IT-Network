@@ -26,6 +26,11 @@
           <a-icon type="appstore" />
           <span>Category</span>
         </a-menu-item>
+
+        <a-menu-item key="/admin/permisson">
+          <a-icon type="key" />
+          <span>Permisson</span>
+        </a-menu-item>
       </a-menu>
     </a-layout-sider>
 </template>

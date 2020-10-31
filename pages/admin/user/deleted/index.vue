@@ -63,7 +63,7 @@
               <p class="col-8"> {{ profile.name }}</p>
             </div>
 
-            <div class="row">
+            <div v-if="profile.phone" class="row">
               <p class="col-4 font--bold">Phone:</p>
               <p class="col-8"> {{ profile.phone }}</p>
             </div>
@@ -167,9 +167,9 @@ export default {
       if(!query.limit) {
         queryParams.limit = 10
       }
-      if(!query.sort) {
-        queryParams.sort = "updatedat,DESC"
-      }
+      // if(!query.sort) {
+      //   queryParams.sort = "updatedat,DESC"
+      // }
       this.params = {...queryParams}
       this.$router.push({name: this.$route.name, query: {...this.params} })
     }, 
@@ -177,7 +177,7 @@ export default {
     async getListUser() {
       try {
         this.loading = true
-        const response = await this.$axios.get('/users', {
+        const response = await this.$axios.get('/users/inactive', {
           params: this.params,
           headers: {
             Authorization: 'Bearer ' + this.user.token,

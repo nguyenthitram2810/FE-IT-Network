@@ -3,7 +3,11 @@
     <a-layout-content
       :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '100vh' }"
     >
-      <a-button type="primary" @click="showDrawerCreate"> <a-icon type="plus" /> New User </a-button>
+      <div class="d-flex justify-content-between">
+        <a-input-search placeholder="Search name, email" style="width: 300px" allow-clear @search="onSearch" :loading="loading" />
+      
+        <a-button type="primary" @click="showDrawerCreate"> <a-icon type="plus" /> New User </a-button>
+      </div>
 
       <a-table class="pt-4 admin-table" @change="handleTableChange" :columns="columns" :data-source="data" :loading="loading" :pagination="pagination" bordered>
         <span v-if="record.profile && record.profile.name" slot="name" slot-scope="text, record">
@@ -79,7 +83,7 @@
               <p class="col-8"> {{ profile.name }}</p>
             </div>
 
-            <div class="row">
+            <div v-if="profile.phone" class="row">
               <p class="col-4 font--bold">Phone:</p>
               <p class="col-8"> {{ profile.phone }}</p>
             </div>
@@ -471,6 +475,19 @@ export default {
     changeRole(object, value) {
       console.log(object)
     },
+
+    onSearch(value) {
+      if(value != '') {
+        this.params.filter = `profile.name||$contL||${value}`
+        this.params.or = `email||$contL||${value}`
+      }
+      else {
+        delete this.params.filter
+        delete this.params.or
+      }
+      this.$router.push({name: this.$route.name, query: {...this.params} })
+      this.getListUser()
+    }, 
   }
 };
 </script>
