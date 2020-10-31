@@ -14,6 +14,11 @@
           <a-icon type="appstore" />
           <span>Category</span>
         </a-menu-item>
+
+        <a-menu-item key="/admin/jobs">
+          <a-icon type="table" />
+          <span>Jobs</span>
+        </a-menu-item>
       </a-menu>
     </a-layout-sider>
 </template>
