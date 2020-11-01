@@ -7,7 +7,7 @@
     <a-button class="create-button" @click="showCreateModal" type="primary"><a-icon type="plus" /> CREATE</a-button>
     <a-modal v-model="visibleCreate" title="CREATE ONE USER" @ok="handleOkCreate" :ok-button-props="{ props: { disabled: disabledCreateOK } }">
       <template>
-        <a-form-model :model="formCreate">
+        <a-form-model :model="formE">
           <a-form-model-item has-feedback label="Parent ID">
             <template>
               <a-cascader :options="parentOptions" :default-value="[null]" change-on-select @change="onChooseParentInCreate" />
@@ -15,7 +15,7 @@
           </a-form-model-item>
 
           <a-form-model-item label="Name">
-            <a-input v-model="formCreate.name" @change="displayCreateOk"/>
+            <a-input v-model="formE.name" @change="displayCreateOk"/>
           </a-form-model-item>
         </a-form-model>
       </template>
@@ -35,9 +35,9 @@
           <a-button @click="showModalEdit(record)" type="primary">EDIT</a-button>
           <a-modal v-model="visible" title="Edit Infomation" @ok="handleOkEdit(record.slug)">
             <template>
-              <a-form-model :model="formEdit">      
+              <a-form-model :model="formE">      
                 <a-form-model-item label="Name">
-                  <a-input v-model="formEdit.name"/>
+                  <a-input v-model="formE.name"/>
                 </a-form-model-item>
 
                 <a-form-model-item has-feedback label="Parent ID">
@@ -113,15 +113,11 @@ export default {
       loading: false,
       visible: false, 
       visibleCreate: false,
-      formEdit: {
+      formE: {
         name: '',
         parentId:'',
       },
       parentOptions: [],
-      formCreate: {
-        parentId: '',
-        name: '',
-      },
       disabledCreateOK: true,
       pagination: {
         total: 0,
@@ -129,6 +125,7 @@ export default {
         pageSize: 10,
       },
       params: {},
+      slug: ''
     };
   }, 
   created() {
@@ -230,9 +227,10 @@ export default {
       }
     },
     async showModalEdit(record) {
-      this.formEdit.id = record.id;
-      this.formEdit.name = record.name;
-      this.formEdit.slug = record.slug;
+      this.formE.parentId = record.parentId;
+      this.formE.name = record.name;
+      this.slug = record.slug
+      //console.log(record.slug)
       this.getListParent();
       this.visible = true;
     },
@@ -241,8 +239,8 @@ export default {
       const categories = response.data.data;
       this.parentOptions = this.mappingData(response.data.data)
       this.parentOptions.unshift({
-        value: null, 
-        label: "None", 
+        value: '', 
+        label: "NULL", 
         children: []
       });
     },
@@ -251,7 +249,7 @@ export default {
         var rObj = {};
         rObj["value"] = obj.id
         rObj["label"] = obj.name
-        if(rObj["label"] == this.formEdit.name){
+        if(rObj["label"] == this.formE.name){
           rObj["disabled"] = true
         }
         if(obj.children) {
@@ -263,56 +261,118 @@ export default {
     },
 
     onChooseParentInEdit(id) {
-      console.log(id)
+      this.formE.parentId = id[id.length-1]
     },
 
-    handleOkEdit(slug) {
+    async handleOkEdit(slug) {
       //take du lieu da edit
       this.visible = false;
+      // console.log(this.slug)
+      // console.log(this.formE)
+      try{
+        if(this.formE.parentId != ''){
+          const response  = await this.$axios.patch(`/categories/${this.slug}`, 
+          this.formE,
+          {
+            headers: {
+              Authorization: 'Bearer ' + JSON.parse(localStorage.getItem('currentUser')).token,
+            }
+          })
+        }else{
+          const response  = await this.$axios.patch(`/categories/${this.slug}`, 
+          {name: this.formE.name},
+          {
+            headers: {
+              Authorization: 'Bearer ' + JSON.parse(localStorage.getItem('currentUser')).token,
+            }
+          })
+        }
 
-      //Nếu edit thành công
-      this.$notification.open({
-        message: 'Notification',
-        description:
-          'Edited Successfully!',
-        icon: <a-icon type="smile" style="color: #FA41CC" />,
-      });
-      
-      //Set form về rỗng sau khi edit thành công
-      for(var key in this.formEdit){
-        this.formEdit[key] = null;
+        this.getListCategory();
+        
+        //Nếu edit thành công
+        this.$notification.open({
+          message: 'Notification',
+          description:
+            'Edited Successfully!',
+          icon: <a-icon type="smile" style="color: #FA41CC" />,
+        });
+        
+      }catch(e){
+        if(e.response) {
+          this.$notification["error"]({ 
+            message: 'UPDATE CATEGORY ERROR',
+            description:
+              e.response.data.message
+          });
+        }
+        else {
+          this.$notification["error"]({
+            message: 'UPDATE CATEGORY',
+            description:
+              e.message
+          });
+        }
       }
-    },
-    handleChangePEdit(e){
-      console.log("ok")
     },
 
     async showCreateModal() {
       this.visibleCreate = true;
-      this.formCreate.parentId = ''
-      this.formCreate.name = ''
+      this.formE.parentId = ''
+      this.formE.name = ''
       this.getListParent()
     },
 
-    handleOkCreate(e) {
+    async handleOkCreate(e) {
       this.visibleCreate = false;
+      try{
+        if(this.formE.parentId != ''){
+          const response  = await this.$axios.post('/categories', 
+          this.formE,
+          {
+            headers: {
+              Authorization: 'Bearer ' + JSON.parse(localStorage.getItem('currentUser')).token,
+            }
+          })
+        }else{
+          const response  = await this.$axios.post('/categories', 
+          {name: this.formE.name},
+          {
+            headers: {
+              Authorization: 'Bearer ' + JSON.parse(localStorage.getItem('currentUser')).token,
+            }
+          })
+        }
 
-      //Nếu create thành công
-      this.$notification.open({
-        message: 'Notification',
-        description:
-          'Created Successfully!',
-        icon: <a-icon type="smile" style="color: #FA41CC" />,
-      });
-      //Thông báo thất bại nếu create thất bại
-
-      //Set form về rỗng sau khi add thành công
-      for(var key in this.formCreate){
-        this.formCreate[key] = null;
+        this.getListCategory();
+        
+        //Nếu create thành công
+        this.$notification.open({
+          message: 'Notification',
+          description:
+            'Created Successfully!',
+          icon: <a-icon type="smile" style="color: #FA41CC" />,
+        });
+        
+      }catch(e){
+        if(e.response) {
+          this.$notification["error"]({ 
+            message: 'CREATE CATEGORY ERROR',
+            description:
+              e.response.data.message
+          });
+        }
+        else {
+          this.$notification["error"]({
+            message: 'CREATE CATEGORY',
+            description:
+              e.message
+          });
+        }
       }
     },
     displayCreateOk(e){
-      if(this.formCreate.name != ''){
+      if(this.formE.name != ''){
         this.disabledCreateOK = false;
       }else{
         this.disabledCreateOK = true;
@@ -320,7 +380,7 @@ export default {
     },
     onChooseParentInCreate(id)
     {
-      this.formCreate.parentId = id
+      this.formE.parentId = id[id.length-1]
       this.displayCreateOk()
     }
   },
