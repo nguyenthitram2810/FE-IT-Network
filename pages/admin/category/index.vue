@@ -23,16 +23,18 @@
     
     <!-- Table -->
       <a-table class="pt-4 admin-table" @change="handleTableChange" :columns="columns" :data-source="data" :loading="loading" :pagination="pagination" bordered>
+        <!-- Slot action -->
         <span slot="action" slot-scope="text, record">
+          <!-- Delete button  -->
           <a-popconfirm placement="top" ok-text="Yes" cancel-text="No" @confirm="confirmDelete(record.slug)">
             <template slot="title">
               <p><b>Are you sure to DELETE this?</b></p>
             </template>
-            <a-button type="danger">DEL</a-button>
+            <a-button type="danger"><a-icon type="delete" /></a-button>
           </a-popconfirm>
-          
+
           <!-- Edit button -->
-          <a-button @click="showModalEdit(record)" type="primary">EDIT</a-button>
+          <a-button @click="showModalEdit(record)" type="primary"><a-icon type="edit" /></a-button>
           <a-modal v-model="visible" title="Edit Infomation" @ok="handleOkEdit(record.slug)">
             <template>
               <a-form-model :model="formE">      
@@ -125,7 +127,7 @@ export default {
         pageSize: 10,
       },
       params: {},
-      slug: ''
+      slug: '',
     };
   }, 
   created() {
@@ -186,6 +188,9 @@ export default {
       }
       if(!query.limit) {
         queryParams.limit = 10
+      }
+      if(!query.sort) {
+        queryParams.sort = "id,ASC"
       }
       this.params = {...queryParams}
       this.$router.push({name: this.$route.name, query: {...this.params} })
