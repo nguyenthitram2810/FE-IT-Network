@@ -60,7 +60,7 @@
       </a-table>
 
       <div>
-        <a-modal width="450px" v-model="visible" title="Profile Detail" cancelText="">
+        <a-modal width="450px" v-model="visible" title="Profile Detail">
           <template slot="header" style="background-color: black;">
 
           </template>
@@ -300,6 +300,7 @@ export default {
       if(!query.limit) {
         queryParams.limit = 10
       }
+      console.log(query)
       if(!query.sort) {
         queryParams.sort = "updatedat,DESC"
       }
