@@ -40,19 +40,8 @@
 
           <!-- Edit button -->
           <a-button @click="showModalEdit(record)" type="primary"><a-icon type="edit" /></a-button>
-        </span><!-- slot action here -->
-
-        <span slot="createdat" slot-scope="text, record">
-          {{ changeStringToTime(record.createdat) }}
-        </span><!-- slot createAt is here -->
-
-        <span slot="updatedat" slot-scope="text, record">
-          {{ changeStringToTime(record.updatedat) }}
-        </span><!-- slot createAt is here -->
-      </a-table>
-
-      <!-- modal edit  -->
-      <a-modal v-model="visible" title="Edit Infomation" @ok="handleOkEdit(record.slug)">
+          <!-- modal edit  -->
+          <a-modal v-model="visible" title="Edit Infomation" @ok="handleOkEdit(record.slug)">
             <template>
               <a-form-model :model="formE">      
                 <a-form-model-item label="Name">
@@ -67,6 +56,18 @@
               </a-form-model>
             </template>
           </a-modal>
+        </span><!-- slot action here -->
+
+        <span slot="createdat" slot-scope="text, record">
+          {{ changeStringToTime(record.createdat) }}
+        </span><!-- slot createAt is here -->
+
+        <span slot="updatedat" slot-scope="text, record">
+          {{ changeStringToTime(record.updatedat) }}
+        </span><!-- slot createAt is here -->
+      </a-table>
+
+      
     </a-layout-content>
   </div>
 </template>
@@ -215,11 +216,10 @@ export default {
         })
 
         //Nếu delete thành công
-        this.$notification.open({
+        this.$notification["success"]({
           message: 'Notification',
           description:
             'Deleted Successfully!',
-          icon: <a-icon type="smile" style="color: #FA41CC" />,
         });
 
         this.getListCategory();
@@ -307,11 +307,10 @@ export default {
         this.getListCategory();
         
         //Nếu edit thành công
-        this.$notification.open({
+        this.$notification["success"]({
           message: 'Notification',
           description:
             'Edited Successfully!',
-          icon: <a-icon type="smile" style="color: #FA41CC" />,
         });
         
       }catch(e){

@@ -213,11 +213,10 @@ export default {
         })
 
         //Nếu delete thành công
-        this.$notification.open({
+        this.$notification['success']({
           message: 'Notification',
           description:
             'Deleted Successfully!',
-          icon: <a-icon type="smile" style="color: #FA41CC" />,
         });
 
         this.getListJobs();
