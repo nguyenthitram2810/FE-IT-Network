@@ -3,8 +3,13 @@
     <a-layout-content
       :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '100vh' }"
     >
-    <!-- Button Create -->
-    <a-button class="create-button" @click="showCreateModal" type="primary"><a-icon type="plus" /> CREATE</a-button>
+    <div class="d-flex justify-content-between">
+      <!-- Button Create -->
+      <a-button class="create-button" @click="showCreateModal" type="primary"><a-icon type="plus" /> CREATE</a-button>
+      <!-- Search infomation   -->
+      <a-input-search placeholder="Search name" style="width: 300px" allow-clear @search="onSearch" :loading="loading" />
+    </div>
+
     <a-modal v-model="visibleCreate" title="CREATE ONE USER" @ok="handleOkCreate" :ok-button-props="{ props: { disabled: disabledCreateOK } }">
       <template>
         <a-form-model :model="formE">
@@ -35,7 +40,19 @@
 
           <!-- Edit button -->
           <a-button @click="showModalEdit(record)" type="primary"><a-icon type="edit" /></a-button>
-          <a-modal v-model="visible" title="Edit Infomation" @ok="handleOkEdit(record.slug)">
+        </span><!-- slot action here -->
+
+        <span slot="createdat" slot-scope="text, record">
+          {{ changeStringToTime(record.createdat) }}
+        </span><!-- slot createAt is here -->
+
+        <span slot="updatedat" slot-scope="text, record">
+          {{ changeStringToTime(record.updatedat) }}
+        </span><!-- slot createAt is here -->
+      </a-table>
+
+      <!-- modal edit  -->
+      <a-modal v-model="visible" title="Edit Infomation" @ok="handleOkEdit(record.slug)">
             <template>
               <a-form-model :model="formE">      
                 <a-form-model-item label="Name">
@@ -50,16 +67,6 @@
               </a-form-model>
             </template>
           </a-modal>
-        </span><!-- slot action here -->
-
-        <span slot="createdat" slot-scope="text, record">
-          {{ changeStringToTime(record.createdat) }}
-        </span><!-- slot createAt is here -->
-
-        <span slot="updatedat" slot-scope="text, record">
-          {{ changeStringToTime(record.updatedat) }}
-        </span><!-- slot createAt is here -->
-      </a-table>
     </a-layout-content>
   </div>
 </template>
@@ -81,6 +88,7 @@ export default {
             title: 'Name',
             dataIndex: 'name',
             key: 'name',
+            sorter: true,
           },
           {
             title: 'Slug',
@@ -91,18 +99,21 @@ export default {
             title: 'Parent ID',
             dataIndex: 'parentId',
             key: 'parentId',
+            sorter: true,
             scopedSlots: { customRender: 'parentId' },
           },
           {
             title: 'Created At',
             dataIndex: 'createdat',
             key: 'createdat',
+            sorter: true,
             scopedSlots: { customRender: 'createdat' },
           }, 
           {
             title: 'Updated At',
             dataIndex: 'updatedat',
             key: 'updatedat',
+            sorter: true,
             scopedSlots: { customRender: 'updatedat' },
           },
           {
@@ -387,7 +398,17 @@ export default {
     {
       this.formE.parentId = id[id.length-1]
       this.displayCreateOk()
-    }
+    },
+    onSearch(value) {
+      if(value != '') {
+        this.params.filter = `name||$contL||${value}`
+      }
+      else {
+        delete this.params.filter
+      }
+      this.$router.push({name: this.$route.name, query: {...this.params} })
+      this.getListCategory()
+    }, 
   },
 }
 </script>
