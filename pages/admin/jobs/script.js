@@ -149,5 +149,20 @@ export default {
       this.detailInfo = record
       this.visible = true
     },
+    handleCancel(){
+      this.visible = false;
+    },
+    onSearch(value) {
+      if(value != '') {
+        this.params.filter = `name||$contL||${value}`
+        this.params.or = `user.email||$contL||${value}`
+      }
+      else {
+        delete this.params.filter
+        delete this.params.or
+      }
+      this.$router.push({name: this.$route.name, query: {...this.params} })
+      this.getListJobs()
+    }, 
   },
 }

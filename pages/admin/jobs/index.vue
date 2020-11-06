@@ -3,7 +3,7 @@
     <a-layout-content
       :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '100vh' }"
     >
-    
+    <a-input-search placeholder="Search name, email" style="width: 300px" allow-clear @search="onSearch" :loading="loading" />
     <!-- Table -->
       <a-table class="pt-4 admin-table" @change="handleTableChange" :columns="columns" :data-source="data" :loading="loading" :pagination="pagination" bordered>
       <!-- Slot action -->
@@ -15,7 +15,7 @@
             </template>
             <a-button type="danger"><a-icon type="delete" /></a-button>
           </a-popconfirm>
-          <!-- profile button -->
+          <!-- detail button -->
           <a-button @click="viewDetail(record)"  type="primary">
             View Detail
           </a-button>
@@ -32,13 +32,13 @@
       
       <!-- modal detail information-->
       <div>
-        <a-modal width="450px" v-model="visible" title="Detail information">
+        <a-modal width="1000px" v-model="visible" title="Detail information">
           <template slot="header" style="background-color: black;">
 
           </template>
           <template slot="footer">
             <a-button key="close" @click="handleCancel">
-              Back
+              Close
             </a-button>
             <a-button key="submit" type="primary" style="display: none;">
               Submit

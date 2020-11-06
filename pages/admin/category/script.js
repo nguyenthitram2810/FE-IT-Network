@@ -13,6 +13,7 @@ export default {
             title: 'Name',
             dataIndex: 'name',
             key: 'name',
+            sorter: true,
           },
           {
             title: 'Slug',
@@ -23,18 +24,21 @@ export default {
             title: 'Parent ID',
             dataIndex: 'parentId',
             key: 'parentId',
+            sorter: true,
             scopedSlots: { customRender: 'parentId' },
           },
           {
             title: 'Created At',
             dataIndex: 'createdat',
             key: 'createdat',
+            sorter: true,
             scopedSlots: { customRender: 'createdat' },
           }, 
           {
             title: 'Updated At',
             dataIndex: 'updatedat',
             key: 'updatedat',
+            sorter: true,
             scopedSlots: { customRender: 'updatedat' },
           },
           {
@@ -319,6 +323,16 @@ export default {
     {
       this.formE.parentId = id[id.length-1]
       this.displayCreateOk()
-    }
+    },
+    onSearch(value) {
+      if(value != '') {
+        this.params.filter = `name||$contL||${value}`
+      }
+      else {
+        delete this.params.filter
+      }
+      this.$router.push({name: this.$route.name, query: {...this.params} })
+      this.getListCategory()
+    }, 
   },
 }
