@@ -1,5 +1,5 @@
 import EditableCell from '@/components/table/EditableCell';
-import {mapState} from 'vuex'
+import { mapState } from 'vuex'
 export default {
   components: {
     EditableCell,

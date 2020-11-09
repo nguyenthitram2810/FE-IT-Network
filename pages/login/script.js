@@ -1,3 +1,5 @@
+import { mapState, mapActions } from 'vuex'
+
 export default {
     layout: 'fullpage',
     middleware: 'notAuth',
@@ -11,8 +13,6 @@ export default {
         }
       };
       return {
-        isDisabled: false,
-        error: '',
         loginForm: {
           email: '',
           password: '',
@@ -38,20 +38,23 @@ export default {
       }
     },
 
+    computed: {
+      ...mapState ({
+        isDisabled: (state) => state.auth.isDisabled,
+      }),
+    },
+    
     methods: {
+      ...mapActions('auth', ['login']),
+
       async loginSubmit(event) {
         this.$refs.loginForm.validate(async valid => {
           if (valid) {
-            this.isDisabled = true
             try {
-              const response = await this.$axios.post('/auth', this.loginForm)
-              console.log(response)
-              localStorage.setItem('currentUser', JSON.stringify(response.data.data))
-              this.$store.commit('auth/SET_CURRENT_USER', JSON.parse(localStorage.getItem('currentUser')))
+              await this.login(this.loginForm)
               this.$router.push('/')
             }
             catch(e) {
-              this.isDisabled = false
               if(e.response) {
                 this.$notification["error"]({
                   message: 'LOGIN ERROR',
