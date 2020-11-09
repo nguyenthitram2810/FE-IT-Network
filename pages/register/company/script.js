@@ -1,6 +1,31 @@
+import {mapActions, mapState} from 'vuex'
+
 export default {
     layout: 'fullpage',
     middleware: 'notAuth',
+    
+    async fetch({store}) {
+      try {
+        await store.dispatch('city/getCity')
+      }
+      catch(err) {
+        if(e.response) {
+          this.$notification["error"]({
+            message: 'GET CITY ERROR',
+            description:
+              e.response.data.message
+          });
+        }
+        else {
+          this.$notification["error"]({
+            message: 'GET CITY ERROR',
+            description:
+              e.message
+          });
+        }
+      }
+    },
+
     data() {
       let validateName = (rule, value, callback) => {
         if (value.trim() === '') {
@@ -11,9 +36,7 @@ export default {
       };
   
       return {
-        isDisabled: false,
         type: 'company',
-        listCity: [],
         registerForm: {
           name: '',
           email: '',
@@ -42,44 +65,25 @@ export default {
         }
       }
     },
-    created() {
-      this.getListCity();
+
+    computed: {
+      ...mapState ({
+        listCity: (state) => state.city.listCity,
+        isDisabled: (state) => state.auth.isDisabled,
+      }),
     },
+
     methods: {
-      async getListCity() {
-        try {
-          const response = await this.$axios.get('https://vapi.vnappmob.com/api/province');
-          this.listCity = response.data.results
-        }
-        catch(e) {
-          if(e.response) {
-            this.$notification["error"]({
-              message: 'GET CITY ERROR',
-              description:
-                e.response.data.message
-            });
-          }
-          else {
-            this.$notification["error"]({
-              message: 'GET CITY ERROR',
-              description:
-                e.message
-            });
-          }
-        }
-      },
-  
-      async registerSubmit(event) {
+      ...mapActions('auth', ['registerCompany']),
+
+      registerSubmit(event) {
         this.$refs.registerForm.validate(async valid => {
           if (valid) {
-            this.isDisabled = true
             try {
               if(this.registerForm.city == undefined) {
                 delete this.registerForm.city
               }
-              console.log(this.registerForm)
-              const response = await this.$axios.post('/auth/newlead', this.registerForm)
-              console.log(response)
+              await this.registerCompany(this.registerForm)
               this.$notification["success"]({
                 message: 'REGISTER',
                 description:
@@ -88,7 +92,6 @@ export default {
               this.$router.push("/")
             }
             catch(e) {
-              this.isDisabled = false
               if(e.response) {
                 this.$notification["error"]({
                   message: 'REGISTER ERROR',
