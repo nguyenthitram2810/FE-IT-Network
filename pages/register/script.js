@@ -1,3 +1,5 @@
+import { mapActions, mapState } from 'vuex'
+
 export default {
     layout: 'fullpage',
     middleware: 'notAuth',
@@ -29,7 +31,6 @@ export default {
       };
   
       return {
-        isDisabled: false,
         type: 'employee',
         registerForm: {
           name: '',
@@ -65,19 +66,24 @@ export default {
         }
       }
     },
+
+    computed: {
+      ...mapState ({
+        isDisabled: (state) => state.auth.isDisabled,
+      }),
+    },
+
     methods: {
+      ...mapActions('auth', ['register']),
+
       async registerSubmit(event) {
         this.$refs.registerForm.validate(async valid => {
           if (valid) {
-            this.isDisabled = true
             try {
-              const response = await this.$axios.post('/auth/register', this.registerForm)
-              localStorage.setItem('currentUser', JSON.stringify(response.data.data))
-              this.$store.commit('auth/SET_CURRENT_USER', JSON.parse(localStorage.getItem('currentUser')))
+              await this.register(this.registerForm)
               this.$router.push('/')
             }
             catch(e) {
-              this.isDisabled = false
               if(e.response) {
                 this.$notification["error"]({
                   message: 'REGISTER ERROR',
