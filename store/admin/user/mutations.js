@@ -1,11 +1,21 @@
 export default {
-    SET_DATA(state, data) {
-        state.data = data
-    },
-    SET_TOTAL(state, total) {
-        state.total = total
-    },
-    SET_QUERY(state, query) {
-        state.query = {...state.query, ...query}
-    },
+  SET_LIST(state, data) {
+    state.list = data
+  },
+
+  SET_LOADING(state, status) {
+    state.loading = status
+  },
+
+  SET_LOADING_CREATE(state, status) {
+    state.loadingCreate = status
+  },
+
+  SET_PAGINATION(state, data) {
+    state.pagination = { ...state.pagination, ...data}
+  },
+
+  SET_QUERY(state, query) {
+    state.query = { ...state.query, ...query }
+  },
 }

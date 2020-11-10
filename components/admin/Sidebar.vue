@@ -43,6 +43,17 @@
 <script>
 export default {
   props: ["collapsed"],
+  data() {
+    return {
+      query: {
+        page: "1", 
+        limit: "10", 
+        sort: [
+          'updatedat,DESC'
+        ]
+      }
+    }
+  },
   computed: {
     getSelectedKey() {
       return this.$route.path
@@ -67,7 +78,7 @@ export default {
   },
   methods: {
     handleClick(e) {
-      this.$router.push({path: e.key })
+      this.$router.push({path: e.key, query: { ...this.query } })
     }
   }
 }

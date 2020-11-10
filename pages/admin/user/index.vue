@@ -4,7 +4,7 @@
       :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '100vh' }"
     >
       <div class="d-flex justify-content-between">
-        <a-input-search placeholder="Search name, email" style="width: 300px" allow-clear @search="onSearch" :loading="loading" />
+        <a-input-search placeholder="Search name, email" style="width: 300px" allow-clear @search="onSearch" />
       
         <a-button type="primary" @click="showDrawerCreate"> <a-icon type="plus" /> New User </a-button>
       </div>
@@ -24,7 +24,7 @@
         </span>
 
         <span slot="role" slot-scope="text, record">
-           <editable-cell :user="user" :role="listRole" :text="record.role" @change="changeRole(record, $event)"></editable-cell>
+           <editable-cell :text="record.role" @change="changeRole(record, $event)"></editable-cell>
         </span>
 
         <span slot="active" slot-scope="text, record">
