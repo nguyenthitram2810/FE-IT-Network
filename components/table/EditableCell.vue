@@ -24,12 +24,12 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
 	name: 'EditableCell',
   props: {
     text: Object,
-    role: Array,
-    user: Object,
 	},
 	data() {
     return {
@@ -40,10 +40,17 @@ export default {
       editable: false,
     };
   },
+
+  computed: {
+    ...mapState({
+      user: (state) => state.auth.currentUser,
+      role: (state) => state.admin.role.list, 
+    }),
+  },
   
   watch: {
     'text': function(value) {
-      this.value = value
+      this.value = { ...value, id: String(value.id)}
     }
   },
 	
@@ -53,7 +60,6 @@ export default {
       this.$emit('change', this.value.id);
     },
     editUser() {
-      console.log(this.value)
       this.editable = true;
     },
   },
