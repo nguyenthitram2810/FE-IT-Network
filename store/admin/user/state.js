@@ -1,4 +1,5 @@
 export default () => ({
+  url: null,
   loading: false,
   loadingCreate: false,
   list: [],

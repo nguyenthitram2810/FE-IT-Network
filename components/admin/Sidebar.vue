@@ -50,8 +50,15 @@ export default {
         limit: "10", 
         sort: [
           'updatedat,DESC'
-        ]
-      }
+        ], 
+        or: undefined, 
+        filter: undefined
+      }, 
+      pagination: {
+        total: 0,
+        current: 1,
+        pageSize: 10,
+      },
     }
   },
   computed: {
@@ -78,6 +85,8 @@ export default {
   },
   methods: {
     handleClick(e) {
+      this.$store.commit('admin/user/RESET_PAGINATION', this.pagination)
+      this.$store.commit('admin/user/RESET_QUERY', this.query)
       this.$router.push({path: e.key, query: { ...this.query } })
     }
   }

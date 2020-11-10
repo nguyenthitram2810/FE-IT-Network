@@ -7,6 +7,7 @@ export default {
   layout: "admin",
 
   middleware({store, query}) {
+    store.commit('admin/user/SET_URL', '/users?')
     store.commit('admin/user/SET_QUERY', query)
   },
 

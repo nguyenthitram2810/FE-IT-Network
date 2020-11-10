@@ -5,14 +5,15 @@ export default {
     try {
       commit('SET_LOADING', true)
       const queryString = qs.stringify(state.query, {arrayFormat: 'repeat', encode: false})
-      const response = await this.$axios.get('/users?' + queryString, {
+      const response = await this.$axios.get(state.url + queryString, {
         headers: {
           Authorization: 'Bearer ' + rootState.auth.currentUser.token,
         }
       })
+      console.log(response);
       commit('SET_PAGINATION', {
         total: response.data.data.total, 
-        current: response.data.data.page, 
+        current: parseInt(state.query.page), 
         pageSize: parseInt(state.query.limit)
       })
       commit('SET_LIST', response.data.data.data)
@@ -86,9 +87,22 @@ export default {
     }
   },
 
-  async identify({state, commit, rootState, dispatch }, id) {
+  async identify({rootState, dispatch }, id) {
     try {
       const response = await this.$axios.put(`/users/identify/${id}`, {id}, {
+        headers: {
+          Authorization: 'Bearer ' + rootState.auth.currentUser.token,
+        }
+      })
+      dispatch('fetchListData');
+    } catch (err) {
+      throw err
+    }
+  },
+
+  async restore({rootState, dispatch }, id) {
+    try {
+      const response = await this.$axios.put(`/users/restore/${id}`, { id: id,} ,{
         headers: {
           Authorization: 'Bearer ' + rootState.auth.currentUser.token,
         }
