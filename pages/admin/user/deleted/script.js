@@ -110,7 +110,7 @@ export default {
         this.$notification["success"]({
           message: 'SUCCESS',
           description:
-          `Khôi phục thành công!`
+          `Restored successfully!`
         });
       } catch (error) {
         this.handleError(error)

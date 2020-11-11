@@ -20,8 +20,8 @@
       <a-divider type="vertical" style="height: 2rem"/>
       <a-dropdown>
         <a-menu slot="overlay">
-          <a-menu-item key="2"> <a-icon type="user" />Trang cá nhân</a-menu-item>
-          <a-menu-item key="1" @click="logOut"> <a-icon type="logout" />Đăng xuất </a-menu-item>
+          <a-menu-item key="2"> <a-icon type="user" />Profile</a-menu-item>
+          <a-menu-item key="1" @click="logOut"> <a-icon type="logout" />Log out </a-menu-item>
         </a-menu>
           <div>
             <a-avatar style="border: 1.5px solid purple;" size="large" src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
@@ -33,13 +33,13 @@
     <div v-else class="d-flex justify-content-between align-items-center">
       <div>
         <i class="fas fa-sign-in-alt mx-1" style="color: #513F83;"></i>
-        <nuxt-link to="/login"  class="al-text-color">Đăng nhập</nuxt-link>
+        <nuxt-link to="/login"  class="al-text-color">Sign in</nuxt-link>
       </div>
 
       <a-divider type="vertical" style="height: 2rem"/>
 
       <div>
-        <nuxt-link to="/register"  class="al-text-color">Đăng ký</nuxt-link>
+        <nuxt-link to="/register"  class="al-text-color">Sign up</nuxt-link>
       </div>
     </div>
   </header>

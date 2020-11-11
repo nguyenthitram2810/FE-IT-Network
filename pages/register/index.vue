@@ -16,44 +16,44 @@
         <div class="form-holder">
           <div class="form-content">
             <div class="form-items">
-              <h3>Đăng ký với Career Network</h3>
-              <p>Tìm kiếm cơ hội công việc</p>
+              <h3>Sign up with Career Network</h3>
+              <p>Looking for job opportunities</p>
 
               <div class="page-links">
-                  <nuxt-link to="/login">Đăng nhập</nuxt-link>
-                  <nuxt-link to="/register" class="active">Đăng ký</nuxt-link>
+                  <nuxt-link to="/login">Sign in</nuxt-link>
+                  <nuxt-link to="/register" class="active">Sign up</nuxt-link>
               </div>
 
               <a-form-model ref="registerForm" :model="registerForm" :rules="rules">
                 <a-form-model-item class="form-validate">
                   <a-radio-group v-model="type" @change="changeType">
                     <a-radio value="employee">
-                      Người xin việc
+                      Employee
                     </a-radio>
                     <a-radio value="company">
-                      Nhà tuyển dụng
+                      Company
                     </a-radio>
                   </a-radio-group>
                 </a-form-model-item>
 
                 <a-form-model-item  has-feedback prop="name" class="m-0 form-validate">
-                  <a-input :disabled="isDisabled" v-model="registerForm.name" autocomplete="off" placeholder="Tên người dùng"/>
+                  <a-input :disabled="isDisabled" v-model="registerForm.name" autocomplete="off" placeholder="Name"/>
                 </a-form-model-item>
 
                 <a-form-model-item has-feedback prop="email"  class="m-0 form-validate">
-                  <a-input :disabled="isDisabled" v-model="registerForm.email" autocomplete="off" placeholder="Địa chỉ Email"/>
+                  <a-input :disabled="isDisabled" v-model="registerForm.email" autocomplete="off" placeholder="Email"/>
                 </a-form-model-item>
 
                 <a-form-model-item has-feedback prop="password" class="m-0 form-validate" >
-                  <a-input :disabled="isDisabled" type="password" v-model="registerForm.password" autocomplete="off" placeholder="Mật khẩu"/>
+                  <a-input :disabled="isDisabled" type="password" v-model="registerForm.password" autocomplete="off" placeholder="Password"/>
                 </a-form-model-item>
                 <a-form-model-item has-feedback prop="confirmPassword" class="m-0 form-validate" >
-                  <a-input :disabled="isDisabled" type="password" v-model="registerForm.confirmPassword" autocomplete="off" placeholder="Xác nhận mật khẩu"/>
+                  <a-input :disabled="isDisabled" type="password" v-model="registerForm.confirmPassword" autocomplete="off" placeholder="Confirm password"/>
                 </a-form-model-item>
 
                 <a-form-model-item  class="form-button mb-0 mt-2">
                   <a-button  :loading="isDisabled" class="ibtn" @click="registerSubmit">
-                   Đăng ký
+                   Sign up
                   </a-button>
                 </a-form-model-item>
               </a-form-model>

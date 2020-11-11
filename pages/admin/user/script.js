@@ -18,7 +18,7 @@ export default {
   data() {
     let validatePass = (rule, value, callback) => {
       if (value.trim() === '') {
-        callback(new Error('Nhập mật khẩu'));
+        callback(new Error('Please input password'));
       } else {
         callback();
       }
@@ -26,9 +26,9 @@ export default {
 
     let validatePassConfirm = (rule, value, callback) => {
       if (value.trim() === '') {
-        callback(new Error('Nhập xác nhận mật khẩu'));
+        callback(new Error('Please confirm password'));
       } else if (value !== (this.formCreate.password)) {
-        callback(new Error("Mật khẩu xác nhận sai"));
+        callback(new Error("Invalid confirm password"));
       } else {
         callback();
       }
@@ -79,15 +79,15 @@ export default {
         roleId: undefined,
       },
       rules: {
-        roleId: [{ required: true, message: 'Chọn vai trò của người dùng', trigger: 'change'}],
+        roleId: [{ required: true, message: 'Please select role', trigger: 'change'}],
         email:  [
           {
             type: 'email',
-            message: 'Email không hợp lệ',
+            message: 'Invalid email',
           },
           {
             required: true,
-            message: 'Nhập địa chỉ email',
+            message: 'Please input email',
           },
         ],
         password: [
@@ -145,6 +145,14 @@ export default {
     async fetchData() {
       try {
         await this.$store.dispatch('admin/user/fetchListData')
+      }
+      catch(error) {
+        this.handleError(error)
+      }
+    },
+
+    async fetchRole() {
+      try {
         await this.$store.dispatch('admin/role/fetchListData')
       }
       catch(error) {
@@ -176,19 +184,21 @@ export default {
         this.$notification["success"]({
           message: 'SUCCESS',
           description:
-          `Đã xóa thành công!`
+          `Deleted successfully!`
         });
       } catch (error) {
         this.handleError(error)
       }
     }, 
 
-    showDrawerCreate() {
+    async showDrawerCreate() {
       this.visibleDrawerCreate = true;
+      this.fetchRole()
     }, 
 
     onCloseCreate() {
       this.visibleDrawerCreate = false;
+      this.$refs.formCreate.resetFields();
     },
 
     async confirmContributor(id) {
@@ -207,6 +217,7 @@ export default {
               delete this.formCreate.confirmPassword
               await this.$store.dispatch('admin/user/create', this.formCreate)
               this.visibleDrawerCreate = false;
+              this.$refs.formCreate.resetFields();
             }
             else {
               throw {
