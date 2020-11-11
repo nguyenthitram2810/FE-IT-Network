@@ -10,11 +10,6 @@
           <a-avatar :size="50" src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
           <div class="d-flex flex-column pl-2 justify-content-between">
             <h4>Username is here</h4>
-            <nuxt-link to="/admin/profile">
-              <a-button class="mt-1" size="small">
-                Chỉnh sửa
-              </a-button>
-            </nuxt-link>
           </div>
         </div>
 
@@ -30,14 +25,11 @@
               <nuxt-link to="/admin/profile"> Resume</nuxt-link>
             </a-menu-item>
             <a-menu-item key="2">
-              <nuxt-link to="/admin/profile"> Email</nuxt-link>
-            </a-menu-item>
-            <a-menu-item key="3">
               Change password
             </a-menu-item>
           </a-sub-menu>
 
-          <a-menu-item key="4">
+          <a-menu-item key="3">
             <nuxt-link to="/admin/profile"> <a-icon type="logout" /> Logout</nuxt-link>
           </a-menu-item>
         </a-menu>
@@ -51,7 +43,6 @@
         >
           <div class="al-border-bottom">
             <h3>My Profile</h3>
-            <p>Quản lý thông tin hồ sơ để bảo mật tài khoản</p>
           </div>
           <a-form-model
             class="pt-3"
@@ -63,7 +54,7 @@
           >
             <div class="d-flex mb-5">
               <div class="profile-author-thumb m-auto">
-                <img alt="author" :size="50" src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png">
+                <img alt="author" style="width: 150px; height: 150px;" src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png">
                 <div class="edit-dp">
                   <label class="fileContainer">
                     <i v-if="upload" class="fa fa-camera"></i>
@@ -86,10 +77,18 @@
               <a-input v-model="form.name"/>
             </a-form-model-item>
 
-            <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }">
+            <a-form-model-item label="Created at" prop="createdat">
+              <a-input disabled v-model="form.createdat"/>
+            </a-form-model-item>
+
+            <a-form-model-item label="Updated at" prop="updatedat">
+              <a-input disabled v-model="form.updatedat"/>
+            </a-form-model-item>
+
+            <a-form-model-item >
               <!-- @click="onSubmit" -->
               <a-button :loading="isLoading" :disabled="isDisabled" type="primary">
-                Lưu
+                Save
               </a-button>
             </a-form-model-item>
           </a-form-model>

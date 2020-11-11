@@ -1,18 +1,20 @@
 import EditableCell from '@/components/table/EditableCell';
-import {mapState} from 'vuex'
+import { mapState } from 'vuex'
 export default {
   components: {
     EditableCell,
   },
   layout: "admin",
-  // middleware({store, query}) {
-  //   if (Object.keys(query).length > 0) {
-  //     store.commit('admin/user/SET_QUERY', query)
-  //   }
-  // },
-  // async fetch({store}) {
-  //   await store.dispatch('admin/user/fetchData')
-  // },
+
+  middleware({store, query}) {
+    store.commit('admin/user/SET_URL', '/users?')
+    store.commit('admin/user/SET_QUERY', query)
+  },
+
+  async fetch() {
+    this.fetchData()
+  },
+
   data() {
     let validatePass = (rule, value, callback) => {
       if (value.trim() === '') {
@@ -32,7 +34,6 @@ export default {
       }
     };
     return {
-      loading: false,
       columns: [
           {
             title: 'Name',
@@ -68,24 +69,15 @@ export default {
             scopedSlots: { customRender: 'action' },
           },
       ],
-      data: [],
-      pagination: {
-        total: 0,
-        current: 1,
-        pageSize: 10,
-      }, 
-      params: {},
       profile: {},
       visible: false, 
       visibleDrawerCreate: false,
-      listRole: [],
       formCreate: {
         email: '',
         password: '',
         confirmPassword: '',
         roleId: undefined,
       },
-      loadingCreate: false,
       rules: {
         roleId: [{ required: true, message: 'Chọn vai trò của người dùng', trigger: 'change'}],
         email:  [
@@ -114,103 +106,59 @@ export default {
       },
     };
   },
+
   computed: {
     ...mapState({
       user: (state) => state.auth.currentUser,
-      // users: (state) => state.admin.user.data
+      params: (state) => state.admin.user.query, 
+      listRole: (state) => state.admin.role.list, 
+      data: (state) => state.admin.user.list, 
+      loading: (state) => state.admin.user.loading, 
+      pagination: (state) => state.admin.user.pagination, 
+      loadingCreate: (state) => state.admin.user.loadingCreate
     }),
   },
-  created() {
-    this.getQueryParams()
-    this.$store.commit("admin/SET_BREADCRUMB", ["User", "List"]);
-    this.getListUser()
-    this.getlistRole()
-  },
-  methods: {
-    getQueryParams() {
-      const query = this.$route.query
-      let queryParams = {...this.$route.query}
-      if(!query.page) {
-        queryParams.page = 1
-      }
-      if(!query.limit) {
-        queryParams.limit = 10
-      }
-      console.log(query)
-      if(!query.sort) {
-        queryParams.sort = "updatedat,DESC"
-      }
-      this.params = {...queryParams}
-      this.$router.push({name: this.$route.name, query: {...this.params} })
-    }, 
 
-    async getlistRole() {
-      try {
-        const response = await this.$axios.get('permission/role/all', {
-          headers: {
-            Authorization: 'Bearer ' + this.user.token,
-          }
-        })
-        this.listRole = response.data.data
+  created() {
+    this.$store.commit("admin/SET_BREADCRUMB", ["User", "List"]);
+    this.$router.push({name: this.$route.name, query: {...this.params} })
+  },
+
+  methods: {
+    handleError(err) {
+      if(err.response) {
+        this.$notification["error"]({
+          message: 'ERROR',
+          description:
+            err.response.data.message
+        });
       }
-      catch(e) {
-        if(e.response) {
-          this.$notification["error"]({
-            message: 'GET LIST ROLE ERROR',
-            description:
-              e.response.data.message
-          });
-        }
-        else {
-          this.$notification["error"]({
-            message: 'GET LIST ROLE ERROR',
-            description:
-              e.message
-          });
-        }
+      else {
+        this.$notification["error"]({
+          message: 'ERROR',
+          description:
+            err.message
+        });
       }
     },
 
-    async getListUser() {
+    async fetchData() {
       try {
-        this.loading = true
-        const response = await this.$axios.get('/users', {
-          params: this.params,
-          headers: {
-            Authorization: 'Bearer ' + this.user.token,
-          }
-        })
-        this.data = response.data.data.data
-        this.loading = false
-        this.pagination.total = response.data.data.total
-        this.pagination.current = response.data.data.page
-        this.pagination.pageSize = parseInt(this.params.limit)
+        await this.$store.dispatch('admin/user/fetchListData')
+        await this.$store.dispatch('admin/role/fetchListData')
       }
-      catch(e) {
-        this.loading = false
-        if(e.response) {
-          this.$notification["error"]({
-            message: 'GET USERS ERROR',
-            description:
-              e.response.data.message
-          });
-        }
-        else {
-          this.$notification["error"]({
-            message: 'GET USERS ERROR',
-            description:
-              e.message
-          });
-        }
+      catch(error) {
+        this.handleError(error)
       }
-    }, 
+    },
 
-    handleTableChange(pagination, filters, sorter) {
-      console.log(sorter)
-      let temp = {...this.params, page: pagination.current}
-      this.params = {...temp}
-      this.$router.push({name: this.$route.name, query: {...this.params} })
-      this.getListUser()
+    async handleTableChange(pagination, filters, sorter) {
+      try {
+        await this.$store.dispatch('admin/user/handleTableChange', { pagination, filters, sorter })
+        this.$router.push({name: this.$route.name, query: {...this.params} })
+      } catch (error) {
+        this.handleError(error)
+      }
     },
 
     viewProfile(record) {
@@ -224,33 +172,14 @@ export default {
 
     async confirmDelete(id) {
       try {
-        const response = await this.$axios.delete(`/users/${id}`, {
-          headers: {
-            Authorization: 'Bearer ' + this.user.token,
-          }
-        })
-        console.log(response)
-        this.getListUser()
+        await this.$store.dispatch('admin/user/delete', id)
         this.$notification["success"]({
-          message: 'DELETE USER SUCCESS',
+          message: 'SUCCESS',
           description:
           `Đã xóa thành công!`
         });
-      } catch (e) {
-        if(e.response) {
-          this.$notification["error"]({
-            message: 'DELETE USER ERROR',
-            description:
-              e.response.data.message
-          });
-        }
-        else {
-          this.$notification["error"]({
-            message: 'DELETE USER ERROR',
-            description:
-              e.message
-          });
-        }
+      } catch (error) {
+        this.handleError(error)
       }
     }, 
 
@@ -262,94 +191,70 @@ export default {
       this.visibleDrawerCreate = false;
     },
 
-    confirmContributor(id) {
-      console.log(id)
+    async confirmContributor(id) {
+      try {
+        await this.$store.dispatch('admin/user/identify', id)
+      } catch (error) {
+        this.handleError(error)
+      }
     }, 
 
     async createUser() {
-      try {
-        delete this.formCreate.confirmPassword
-        console.log(this.formCreate)
-        this.loadingCreate = true
-        const response = await this.$axios.post('/users', {
-          roleId: parseInt(this.formCreate.roleId),
-          email: this.formCreate.email, 
-          password: this.formCreate.password,
-        }, {
-          headers: {
-            Authorization: 'Bearer ' + this.user.token,
+      this.$refs.formCreate.validate(async valid => {
+        if(valid) {
+          try {
+            if(this.formCreate.confirmPassword != undefined) {
+              delete this.formCreate.confirmPassword
+              await this.$store.dispatch('admin/user/create', this.formCreate)
+              this.visibleDrawerCreate = false;
+            }
+            else {
+              throw {
+                message: "You must confirm password!"
+              }
+            }
           }
-        })
-        console.log(response)
-        this.params.page = 1
-        this.getListUser()
-        this.loadingCreate = false
-        this.visibleDrawerCreate = false;
-      }
-      catch(e) {
-        this.loadingCreate = false
-        if(e.response) {
-          this.$notification["error"]({
-            message: 'CREATE USERS ERROR',
-            description:
-              e.response.data.message
-          });
+          catch(error) {
+            this.loadingCreate = false
+            this.handleError(error)
+          }
         }
         else {
-          this.$notification["error"]({
-            message: 'CREATE USERS ERROR',
-            description:
-              e.message
-          });
+          return false
         }
-      }
+      });
     }, 
 
     async changeRole(object, value) {
       try {
-        this.loading = true
-        const response = await this.$axios.put(`/users/${object.id}`,{ 
-          roleId: value
-          }, 
-          {
-          headers: {
-            Authorization: 'Bearer ' + this.user.token,
-          }
-        })
-        console.log(response)
-        this.params.page = 1
-        this.getListUser()
+        if(object.roleId != value) {
+          await this.$store.dispatch('admin/user/editRole', {id: object.id, value})
+          this.$router.push({name: this.$route.name, query: {...this.params} })
+        }
       }
-      catch(e) {
-        this.loading = false
-        if(e.response) {
-          this.$notification["error"]({
-            message: 'CHANGE ROLE USER ERROR',
-            description:
-              e.response.data.message
-          });
-        }
-        else {
-          this.$notification["error"]({
-            message: 'CHANGE ROLE USER ERROR',
-            description:
-              e.message
-          });
-        }
+      catch(error) {
+        this.handleError(error)
       }
     },
 
-    onSearch(value) {
-      if(value != '') {
-        this.params.filter = `profile.name||$contL||${value}`
-        this.params.or = `email||$contL||${value}`
+    async onSearch(value) {
+      try {
+        let query = {...this.params}
+        if(value != '') {
+          query.filter = `profile.name||$contL||${value}`
+          query.or = `email||$contL||${value}`
+        }
+        else {
+          query.filter = undefined
+          query.or = undefined
+        }
+        query.page = 1
+        this.$store.commit('admin/user/SET_QUERY', query)
+        await this.$store.dispatch('admin/user/fetchListData')
+        this.$router.push({name: this.$route.name, query: {...this.params} })
+      } catch (error) {
+        this.handleError(error)
       }
-      else {
-        delete this.params.filter
-        delete this.params.or
-      }
-      this.$router.push({name: this.$route.name, query: {...this.params} })
-      this.getListUser()
     }, 
   }
 };

@@ -43,6 +43,24 @@
 <script>
 export default {
   props: ["collapsed"],
+  data() {
+    return {
+      query: {
+        page: "1", 
+        limit: "10", 
+        sort: [
+          'updatedat,DESC'
+        ], 
+        or: undefined, 
+        filter: undefined
+      }, 
+      pagination: {
+        total: 0,
+        current: 1,
+        pageSize: 10,
+      },
+    }
+  },
   computed: {
     getSelectedKey() {
       return this.$route.path
@@ -67,7 +85,11 @@ export default {
   },
   methods: {
     handleClick(e) {
-      this.$router.push({path: e.key })
+      this.$store.commit('admin/user/RESET_PAGINATION', this.pagination)
+      if(e.key.startsWith('/admin/user')) {
+        this.$store.commit('admin/user/RESET_QUERY', this.query)
+      }
+      this.$router.push({path: e.key, query: { ...this.query } })
     }
   }
 }

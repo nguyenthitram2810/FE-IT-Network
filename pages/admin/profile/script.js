@@ -5,7 +5,10 @@ export default {
       form: {
         name: '', 
         email: '',
-      }
+        createdat: '', 
+        updatedat: '',
+      },
+      upload: true, 
     };
   }, 
   created() {

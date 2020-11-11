@@ -1,8 +1,7 @@
 export default () => ({
-  url: null,
   loading: false,
-  loadingCreate: false,
   list: [],
+  listAll: [],
   query: {
     page: 1, 
     limit: 10, 
