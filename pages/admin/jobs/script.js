@@ -47,7 +47,7 @@ export default {
   }, 
   created() {
     this.getQueryParams()
-    this.$store.commit("admin/SET_BREADCRUMB", ["Category", "List"]);
+    this.$store.commit("admin/SET_BREADCRUMB", ["Jobs"]);
     this.getListJobs()
   },
   methods: {
@@ -115,11 +115,10 @@ export default {
         })
 
         //Nếu delete thành công
-        this.$notification.open({
+        this.$notification["success"]({
           message: 'Notification',
           description:
             'Deleted Successfully!',
-          icon: <a-icon type="smile" style="color: #FA41CC" />,
         });
 
         this.getListJobs();

@@ -72,5 +72,19 @@ export default {
     } catch (err) {
       throw err
     }
-	},
+  },
+  
+  async getOneCategory({ rootState, dispatch },id){
+    try {
+      const response  = await this.$axios.patch(`/categories/getone${id}`, 
+      data,
+      {
+        headers: {
+          Authorization: 'Bearer ' + rootState.auth.currentUser.token,
+        }
+      })
+    } catch (err) {
+      throw err
+    }
+  }
 }

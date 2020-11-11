@@ -157,15 +157,14 @@ export default {
       this.formE.parentId = id[id.length-1]
     },
 
-    async handleOkEdit(slug) {
-      console.log(slug);
-      this.visible = false;
+    async handleOkEdit() {
+      this.visible = false
+      var slug = this.slug
       try{
         if(this.formE.parentId == '') {
           delete this.formE.parentId
         }
-        
-        await this.$store.dispatch('admin/category/edit'), {data: this.formE, slug}
+        await this.$store.dispatch(('admin/category/edit'), {data: this.formE, slug})
         this.$notification["success"]({
           message: 'SUCCESS',
           description:
@@ -207,11 +206,10 @@ export default {
         this.getListCategory();
         
         //Nếu create thành công
-        this.$notification.open({
+        this.$notification["success"]({
           message: 'Notification',
           description:
             'Created Successfully!',
-          icon: <a-icon type="smile" style="color: #FA41CC" />,
         });
         
       }catch(e){

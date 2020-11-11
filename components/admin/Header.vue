@@ -55,7 +55,7 @@ export default {
     },
 
     showUser() {
-
+      this.$router.push('/admin/profile')
     }, 
     logOut() {
       localStorage.removeItem("currentUser")
