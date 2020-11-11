@@ -1,6 +1,17 @@
 import moment from 'moment'
+import { mapState } from 'vuex'
+
 export default {
   layout: "admin",
+
+  middleware({store, query}) {
+    store.commit('admin/category/SET_QUERY', query)
+  },
+
+  async fetch() {
+    this.fetchData()
+  },
+
   data() {
     return {
       columns: [
@@ -47,158 +58,99 @@ export default {
             scopedSlots: { customRender: 'action' },
           }
       ],
-      data: [],
-      loading: false,
       visible: false, 
       visibleCreate: false,
       formE: {
         name: '',
         parentId:'',
       },
-      parentOptions: [],
       disabledCreateOK: true,
-      pagination: {
-        total: 0,
-        current: 1,
-        pageSize: 10,
-      },
-      params: {},
       slug: '',
     };
   }, 
-  created() {
-    this.getQueryParams()
-    this.$store.commit("admin/SET_BREADCRUMB", ["Category", "List"]);
-    this.getListCategory()
-  },
-  methods: {
-    async getListCategory() {
-      try {
-        this.loading = true
-        const response  = await this.$axios.get('/categories', {
-          params: this.params,
-          headers: {
-            Authorization: 'Bearer ' + JSON.parse(localStorage.getItem('currentUser')).token,
-          }
-        })
-        
-        this.data = response.data.data.data
-        
 
-        this.loading = false
-        this.pagination.total = response.data.data.total
-        this.pagination.current = response.data.data.page
-        this.pagination.pageSize = parseInt(this.params.limit)
-      } catch (e) {
-        if(e.response) {
-          this.$notification["error"]({ 
-            message: 'GET CATEGORY ERROR',
-            description:
-              e.response.data.message
-          });
-          console.log(response)
-        }
-        else {
-          this.$notification["error"]({
-            message: 'GET CATEGORY ERROR',
-            description:
-              e.message
-          });
-        }
+  computed: {
+    ...mapState({
+      user: (state) => state.auth.currentUser,
+      params: (state) => state.admin.category.query, 
+      data: (state) => state.admin.category.list, 
+      loading: (state) => state.admin.category.loading, 
+      pagination: (state) => state.admin.category.pagination, 
+      parentOptions: (state) => state.admin.category.listAll, 
+    }),
+  },
+
+  created() {
+    this.$store.commit("admin/SET_BREADCRUMB", ["Category", "List"]);
+    this.$router.push({name: this.$route.name, query: {...this.params} })
+  },
+
+  methods: {
+    handleError(err) {
+      if(err.response) {
+        this.$notification["error"]({
+          message: 'ERROR',
+          description:
+            err.response.data.message
+        });
+      }
+      else {
+        this.$notification["error"]({
+          message: 'ERROR',
+          description:
+            err.message
+        });
       }
     },
+
+    async fetchData() {
+      try {
+        await this.$store.dispatch('admin/category/fetchListData')
+      }
+      catch(error) {
+        this.handleError(error)
+      }
+    },
+
     changeStringToTime(valueToChange){
       return moment(String(valueToChange)).format('MM/DD/YYYY hh:mm')
     },
-    handleTableChange(pagination, filters, sorter) { 
-      let temp = {...this.params, page: pagination.current}
-      this.params = {...temp}
-      this.$router.push({name: this.$route.name, query: {...this.params} })
-      this.getListCategory()
+
+    async handleTableChange(pagination, filters, sorter) {
+      try {
+        await this.$store.dispatch('admin/category/handleTableChange', { pagination, filters, sorter })
+        this.$router.push({name: this.$route.name, query: {...this.params} })
+      } catch (error) {
+        this.handleError(error)
+      }
     },
-    getQueryParams() {
-      const query = this.$route.query
-      let queryParams = {...this.$route.query}
-      if(!query.page) {
-        queryParams.page = 1
-      }
-      if(!query.limit) {
-        queryParams.limit = 10
-      }
-      if(!query.sort) {
-        queryParams.sort = "id,ASC"
-      }
-      this.params = {...queryParams}
-      this.$router.push({name: this.$route.name, query: {...this.params} })
-    },
+
     async confirmDelete(slug) {
       try {
-        const response  = await this.$axios.delete(`/categories/${slug}`, {
-          headers: {
-            Authorization: 'Bearer ' + JSON.parse(localStorage.getItem('currentUser')).token,
-          }
-        })
-
-        //Nếu delete thành công
-        this.$notification.open({
-          message: 'Notification',
+        await this.$store.dispatch('admin/category/delete', slug)
+        this.$notification["success"]({
+          message: 'SUCCESS',
           description:
-            'Deleted Successfully!',
-          icon: <a-icon type="smile" style="color: #FA41CC" />,
+          `Delete successfully!`
         });
-
-        this.getListCategory();
-
-      } catch (e) {
-        if(e.response) {
-          this.$notification["error"]({ 
-            message: 'DELETE CATEGORY ERROR',
-            description:
-              e.response.data.message
-          });
-          console.log(response)
-        }
-        else {
-          this.$notification["error"]({
-            message: 'DELETE CATEGORY',
-            description:
-              e.message
-          });
-        }
+      } catch (error) {
+          this.handleError(error)
       }
     },
+
     async showModalEdit(record) {
       this.formE.parentId = record.parentId;
       this.formE.name = record.name;
       this.slug = record.slug
-      //console.log(record.slug)
-      this.getListParent();
-      this.visible = true;
-    },
-    async getListParent(){
-      const response  = await this.$axios.get("/categories/all")
-      const categories = response.data.data;
-      this.parentOptions = this.mappingData(response.data.data)
-      this.parentOptions.unshift({
+      await this.$store.dispatch('admin/category/fetchListAll')
+      let listAll = this.mappingData(this.parentOptions, record.name)
+      listAll.unshift({
         value: '', 
         label: "NULL", 
         children: []
       });
-    },
-    mappingData(data) {
-      var reformattedArray = data.map(obj =>{ 
-        var rObj = {};
-        rObj["value"] = obj.id
-        rObj["label"] = obj.name
-        if(rObj["label"] == this.formE.name){
-          rObj["disabled"] = true
-        }
-        if(obj.children) {
-          rObj["children"] = this.mappingData(obj.children)
-        }
-        return rObj;
-      });
-      return reformattedArray
+      this.$store.commit('admin/category/SET_LIST_ALL', listAll)
+      this.visible = true;
     },
 
     onChooseParentInEdit(id) {
@@ -206,54 +158,21 @@ export default {
     },
 
     async handleOkEdit(slug) {
-      //take du lieu da edit
+      console.log(slug);
       this.visible = false;
-      // console.log(this.slug)
-      // console.log(this.formE)
       try{
-        if(this.formE.parentId != ''){
-          const response  = await this.$axios.patch(`/categories/${this.slug}`, 
-          this.formE,
-          {
-            headers: {
-              Authorization: 'Bearer ' + JSON.parse(localStorage.getItem('currentUser')).token,
-            }
-          })
-        }else{
-          const response  = await this.$axios.patch(`/categories/${this.slug}`, 
-          {name: this.formE.name},
-          {
-            headers: {
-              Authorization: 'Bearer ' + JSON.parse(localStorage.getItem('currentUser')).token,
-            }
-          })
+        if(this.formE.parentId == '') {
+          delete this.formE.parentId
         }
-
-        this.getListCategory();
         
-        //Nếu edit thành công
-        this.$notification.open({
-          message: 'Notification',
+        await this.$store.dispatch('admin/category/edit'), {data: this.formE, slug}
+        this.$notification["success"]({
+          message: 'SUCCESS',
           description:
-            'Edited Successfully!',
-          icon: <a-icon type="smile" style="color: #FA41CC" />,
-        });
-        
-      }catch(e){
-        if(e.response) {
-          this.$notification["error"]({ 
-            message: 'UPDATE CATEGORY ERROR',
-            description:
-              e.response.data.message
-          });
-        }
-        else {
-          this.$notification["error"]({
-            message: 'UPDATE CATEGORY',
-            description:
-              e.message
-          });
-        }
+          'Edited Successfully!'
+        });    
+      }catch(error){
+        this.handleError(error)
       }
     },
 
@@ -324,6 +243,7 @@ export default {
       this.formE.parentId = id[id.length-1]
       this.displayCreateOk()
     },
+
     onSearch(value) {
       if(value != '') {
         this.params.filter = `name||$contL||${value}`
@@ -334,5 +254,21 @@ export default {
       this.$router.push({name: this.$route.name, query: {...this.params} })
       this.getListCategory()
     }, 
+
+    mappingData(data, name) {
+      var reformattedArray = data.map(obj =>{ 
+        var rObj = {};
+        rObj["value"] = obj.id
+        rObj["label"] = obj.name
+        if(rObj["label"] == name){
+          rObj["disabled"] = true
+        }
+        if(obj.children) {
+          rObj["children"] = this.mappingData(obj.children)
+        }
+        return rObj;
+      });
+      return reformattedArray
+    },
   },
 }
