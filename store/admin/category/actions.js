@@ -74,15 +74,15 @@ export default {
     }
   },
   
-  async getOneCategory({ rootState, dispatch },id){
+  async getOneCategory({ commit, rootState },id){
     try {
-      const response  = await this.$axios.patch(`/categories/getone${id}`, 
-      data,
+      const response  = await this.$axios.get(`/categories/getone/${id}`, 
       {
         headers: {
           Authorization: 'Bearer ' + rootState.auth.currentUser.token,
         }
       })
+      commit('SET_ONE_CATEGORY', response.data.data)
     } catch (err) {
       throw err
     }

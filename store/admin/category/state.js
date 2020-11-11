@@ -2,6 +2,7 @@ export default () => ({
   loading: false,
   list: [],
   listAll: [],
+  category: {},
   query: {
     page: 1, 
     limit: 10, 

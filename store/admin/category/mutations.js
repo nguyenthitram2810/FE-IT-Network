@@ -18,4 +18,8 @@ export default {
   SET_QUERY(state, query) {
     state.query = { ...state.query, ...query }
   },
+
+  SET_ONE_CATEGORY(state, data) {
+    state.category = data
+  },
 }
