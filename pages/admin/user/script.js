@@ -11,27 +11,8 @@ export default {
     store.commit('admin/user/SET_QUERY', query)
   },
 
-  async fetch({store}) {
-    try {
-      await store.dispatch('admin/user/fetchListData')
-      await store.dispatch('admin/role/fetchListData')
-    }
-    catch(err) {
-      if(err.response) {
-        this.$notification["error"]({
-          message: 'ERROR',
-          description:
-            err.response.data.message
-        });
-      }
-      else {
-        this.$notification["error"]({
-          message: 'ERROR',
-          description:
-            err.message
-        });
-      }
-    }
+  async fetch() {
+    this.fetchData()
   },
 
   data() {
@@ -158,6 +139,16 @@ export default {
           description:
             err.message
         });
+      }
+    },
+
+    async fetchData() {
+      try {
+        await this.$store.dispatch('admin/user/fetchListData')
+        await this.$store.dispatch('admin/role/fetchListData')
+      }
+      catch(error) {
+        this.handleError(error)
       }
     },
 

@@ -1,8 +1,17 @@
 export default {
     layout: "admin",
+
+    middleware({store, query}) {
+      store.commit('admin/user/SET_URL', '/users/unauthorized?')
+      store.commit('admin/user/SET_QUERY', query)
+    },
+
+    async fetch() {
+      this.fetchData()
+    },
+
     data() {
       return {
-        loading: false,
         columns: [
             {
               title: 'Name',
@@ -36,79 +45,60 @@ export default {
               scopedSlots: { customRender: 'action' },
             },
         ],
-        data: [],
-        pagination: {
-          total: 0,
-          current: 1,
-          pageSize: 10,
-        }, 
-        user: JSON.parse(localStorage.getItem('currentUser')),
-        params: {},
         profile: {},
         visible: false, 
       };
     }, 
+
+    computed: {
+      ...mapState({
+        user: (state) => state.auth.currentUser,
+        params: (state) => state.admin.user.query, 
+        data: (state) => state.admin.user.list, 
+        loading: (state) => state.admin.user.loading,
+        pagination: (state) => state.admin.user.pagination, 
+      }),
+    },
+
     created() {
-      this.getQueryParams()
-      this.$store.commit("admin/SET_BREADCRUMB", ["User", "Deleted List"]);
-      this.getListUser()
+      this.$store.commit("admin/SET_BREADCRUMB", ["User", "Request List"]);
+      this.$router.push({name: this.$route.name, query: {...this.params} })
     }, 
+
     methods: {
-      getQueryParams() {
-        const query = this.$route.query
-        let queryParams = {...this.$route.query}
-        if(!query.page) {
-          queryParams.page = 1
+      handleError(err) {
+        if(err.response) {
+          this.$notification["error"]({
+            message: 'ERROR',
+            description:
+              err.response.data.message
+          });
         }
-        if(!query.limit) {
-          queryParams.limit = 10
+        else {
+          this.$notification["error"]({
+            message: 'ERROR',
+            description:
+              err.message
+          });
         }
-        if(!query.sort) {
-          queryParams.sort = "updatedat,DESC"
-        }
-        this.params = {...queryParams}
-        this.$router.push({name: this.$route.name, query: {...this.params} })
-      }, 
+      },
   
-      async getListUser() {
+      async fetchData() {
         try {
-          this.loading = true
-          const response = await this.$axios.get('/users', {
-            params: this.params,
-            headers: {
-              Authorization: 'Bearer ' + this.user.token,
-            }
-          })
-          this.data = response.data.data.data
-          this.loading = false
-          this.pagination.total = response.data.data.total
-          this.pagination.current = response.data.data.page
-          this.pagination.pageSize = parseInt(this.params.limit)
+          await this.$store.dispatch('admin/user/fetchListData')
         }
-        catch(e) {
-          this.loading = false
-          if(e.response) {
-            this.$notification["error"]({
-              message: 'GET USERS ERROR',
-              description:
-                e.response.data.message
-            });
-          }
-          else {
-            this.$notification["error"]({
-              message: 'GET USERS ERROR',
-              description:
-                e.message
-            });
-          }
+        catch(error) {
+          this.handleError(error)
         }
-      }, 
+      },
   
-      handleTableChange(pagination, filters, sorter) {
-        let temp = {...this.params, page: pagination.current}
-        this.params = {...temp}
-        this.$router.push({name: this.$route.name, query: {...this.params} })
-        this.getListUser()
+      async handleTableChange(pagination, filters, sorter) {
+        try {
+          await this.$store.dispatch('admin/user/handleTableChange', { pagination, filters, sorter })
+          this.$router.push({name: this.$route.name, query: {...this.params} })
+        } catch (error) {
+          this.handleError(error)
+        }
       },
   
       viewProfile(record) {
@@ -118,33 +108,9 @@ export default {
   
       async confirm(id) {
         try {
-          const response = await this.$axios.delete(`/users/${id}`, {
-            headers: {
-              Authorization: 'Bearer ' + this.user.token,
-            }
-          })
-          console.log(response)
-          this.getListUser()
-          this.$notification["success"]({
-            message: 'DELETE USER SUCCESS',
-            description:
-            `Đã xóa thành công!`
-          });
-        } catch (e) {
-          if(e.response) {
-            this.$notification["error"]({
-              message: 'DELETE USER ERROR',
-              description:
-                e.response.data.message
-            });
-          }
-          else {
-            this.$notification["error"]({
-              message: 'DELETE USER ERROR',
-              description:
-                e.message
-            });
-          }
+          await this.$store.dispatch('admin/user/identify', id)
+        } catch (error) {
+          this.handleError(error)
         }
       }, 
   

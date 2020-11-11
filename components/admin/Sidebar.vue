@@ -86,7 +86,9 @@ export default {
   methods: {
     handleClick(e) {
       this.$store.commit('admin/user/RESET_PAGINATION', this.pagination)
-      this.$store.commit('admin/user/RESET_QUERY', this.query)
+      if(e.key.startsWith('/admin/user')) {
+        this.$store.commit('admin/user/RESET_QUERY', this.query)
+      }
       this.$router.push({path: e.key, query: { ...this.query } })
     }
   }
