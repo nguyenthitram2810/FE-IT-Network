@@ -15,6 +15,7 @@ export default {
     SidebarAdmin,
     AdminHeader,
   },
+  middleware: "adminAuth",
   data() {
     return {
       collapsed: false,
