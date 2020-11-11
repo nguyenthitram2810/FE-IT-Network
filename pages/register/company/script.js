@@ -1,41 +1,23 @@
 import {mapActions, mapState} from 'vuex'
 
 export default {
-    layout: 'fullpage',
-    middleware: 'notAuth',
-    
-    async fetch({store}) {
-      try {
-        await store.dispatch('city/getCity')
-      }
-      catch(err) {
-        if(e.response) {
-          this.$notification["error"]({
-            message: 'GET CITY ERROR',
-            description:
-              e.response.data.message
-          });
-        }
-        else {
-          this.$notification["error"]({
-            message: 'GET CITY ERROR',
-            description:
-              e.message
-          });
-        }
-      }
-    },
+  layout: 'fullpage',
+  middleware: 'notAuth',
 
-    data() {
-      let validateName = (rule, value, callback) => {
-        if (value.trim() === '') {
-          callback(new Error('Nhập tên người dùng'));
-        } else {
-          callback();
-        }
-      };
-  
-      return {
+  async fetch() {
+    this.fetchData()
+  },
+
+  data() {
+    let validateName = (rule, value, callback) => {
+      if (value.trim() === '') {
+        callback(new Error('Please input name of company'));
+      } else {
+        callback();
+      }
+    };
+
+    return {
         type: 'company',
         registerForm: {
           name: '',
@@ -49,77 +31,90 @@ export default {
           email:  [
             {
               type: 'email',
-              message: 'Email không hợp lệ',
+              message: 'Invalid email',
             },
             {
               required: true,
-              message: 'Nhập địa chỉ email công ty',
+              message: 'Please input email company',
             },
           ],
           phone: [{
-            required: true, message: 'Nhập số điện thoại công ty'
+            required: true, message: 'Please input phone of company'
           }],
           city: [{
-            required: true, message: 'Chọn thành phố trụ sở công ty'
+            required: true, message: 'Please select company headquarters'
           }]
         }
+    }
+  },
+
+  computed: {
+    ...mapState ({
+      listCity: (state) => state.city.listCity,
+      isDisabled: (state) => state.auth.isDisabled,
+    }),
+  },
+
+  methods: {
+    ...mapActions('auth', ['registerCompany']),
+
+    handleError(err) {
+      if(err.response) {
+        this.$notification["error"]({
+          message: 'ERROR',
+          description:
+            err.response.data.message
+        });
+      }
+      else {
+        this.$notification["error"]({
+          message: 'ERROR',
+          description:
+            err.message
+        });
       }
     },
 
-    computed: {
-      ...mapState ({
-        listCity: (state) => state.city.listCity,
-        isDisabled: (state) => state.auth.isDisabled,
-      }),
+    async fetchData() {
+        try {
+          await this.$store.dispatch('city/getCity')
+        }
+        catch(error) {
+          this.handleError(error)
+        }
     },
 
-    methods: {
-      ...mapActions('auth', ['registerCompany']),
-
-      registerSubmit(event) {
-        this.$refs.registerForm.validate(async valid => {
-          if (valid) {
-            try {
-              if(this.registerForm.city == undefined) {
-                delete this.registerForm.city
-              }
-              await this.registerCompany(this.registerForm)
-              this.$notification["success"]({
-                message: 'REGISTER',
-                description:
-                  "Tài khoản sẽ được tiến hành xác nhận và phản hồi sớm đến quý công ty"
-              });
-              this.$router.push("/")
+    registerSubmit(event) {
+      this.$refs.registerForm.validate(async valid => {
+        if (valid) {
+          try {
+            if(this.registerForm.city == undefined) {
+              delete this.registerForm.city
             }
-            catch(e) {
-              if(e.response) {
-                this.$notification["error"]({
-                  message: 'REGISTER ERROR',
-                  description:
-                    e.response.data.message
-                });
-              }
-              else {
-                this.$notification["error"]({
-                  message: 'REGISTER ERROR',
-                  description:
-                    e.message
-                });
-              }
-            }
-          } else {
-            return false;
+            await this.registerCompany(this.registerForm)
+            this.$notification["success"]({
+              message: 'SUCCESS',
+              description:
+                "The account will be confirmed and responded to the company soon"
+            });
+            this.$router.push("/")
           }
-        });
-      },
-  
-      changeType(e) {
+          catch(error) {
+            this.handleError(error)
+          }
+        } else {
+          return false;
+        }
+      });
+    },
+
+    changeType(e) {
         if(e.target.value == "company") {
           this.$router.push("/register/company");
         }
         if(e.target.value == "employee") {
           this.$router.push("/register");
         }
-      }
-    },
-  }
+    }
+  },
+}

@@ -131,7 +131,7 @@ export default {
         this.$notification["success"]({
           message: 'SUCCESS',
           description:
-          `Delete successfully!`
+          `Deleted successfully!`
         });
       } catch (error) {
           this.handleError(error)

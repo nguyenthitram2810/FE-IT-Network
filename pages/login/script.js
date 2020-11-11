@@ -7,7 +7,7 @@ export default {
     data() {
       let validatePass = (rule, value, callback) => {
         if (value.trim() === '') {
-          callback(new Error('Nhập mật khẩu'));
+          callback(new Error('Please input password'));
         } else {
           callback();
         }
@@ -21,11 +21,11 @@ export default {
           email:  [
             {
               type: 'email',
-              message: 'Email không hợp lệ',
+              message: 'Invalid email',
             },
             {
               required: true,
-              message: 'Nhập địa chỉ email',
+              message: 'Please input email',
             },
           ],
           password: [
@@ -57,14 +57,14 @@ export default {
             catch(e) {
               if(e.response) {
                 this.$notification["error"]({
-                  message: 'LOGIN ERROR',
+                  message: 'ERROR',
                   description:
                     e.response.data.message
                 });
               }
               else {
                 this.$notification["error"]({
-                  message: 'LOGIN ERROR',
+                  message: 'ERROR',
                   description:
                     e.message
                 });

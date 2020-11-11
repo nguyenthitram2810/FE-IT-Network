@@ -60,6 +60,7 @@ export default {
       this.$emit('change', this.value.id);
     },
     editUser() {
+      this.$emit('getRole');
       this.editable = true;
     },
   },
