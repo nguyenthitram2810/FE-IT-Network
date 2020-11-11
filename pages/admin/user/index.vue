@@ -24,14 +24,14 @@
         </span>
 
         <span slot="role" slot-scope="text, record">
-           <editable-cell :text="record.role" @change="changeRole(record, $event)"></editable-cell>
+           <editable-cell :text="record.role" @change="changeRole(record, $event)" @getRole="fetchRole"></editable-cell>
         </span>
 
         <span slot="active" slot-scope="text, record">
           <span v-if="record.roleId == 4 && record.active != true">
             <a-popconfirm
               class="mr-2"
-              title="Are you sure cancel this order?"
+              title="Are you sure accept this company?"
               ok-text="Yes"
               cancel-text="No"
               @confirm="confirmContributor(record.id)"

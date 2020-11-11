@@ -68,14 +68,14 @@ export default {
         catch(e) {
           if(e.response) {
             this.$notification["error"]({
-              message: 'GET LIST PERMISSON ERROR',
+              message: 'ERROR',
               description:
                 e.response.data.message
             });
           }
           else {
             this.$notification["error"]({
-              message: 'GET LIST PERMISSON ERROR',
+              message: 'ERROR',
               description:
                 e.message
             });
