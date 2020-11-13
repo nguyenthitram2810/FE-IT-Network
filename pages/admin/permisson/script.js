@@ -1,5 +1,12 @@
+import { mapState } from 'vuex'
+
 export default {
     layout: "admin",
+
+    middleware({store, query}) {
+      store.commit('admin/permission/SET_QUERY', query)
+    },
+
     data() {
       return {
         listRole: [],
@@ -9,26 +16,27 @@ export default {
         rolePermisson: {}
       }
     }, 
+
+    computed: {
+      ...mapState({
+        user: (state) => state.auth.currentUser,
+        params: (state) => state.admin.permission.query, 
+        listRole: (state) => state.admin.role.list, 
+        data: (state) => state.admin.user.list, 
+        loading: (state) => state.admin.user.loading, 
+        pagination: (state) => state.admin.user.pagination, 
+        loadingCreate: (state) => state.admin.user.loadingCreate
+      }),
+    },
   
     created() {
-      this.getQueryParams()
       this.$store.commit("admin/SET_BREADCRUMB", ["Permisson", "List"]);
+      this.$router.push({name: this.$route.name, query: {...this.params} })
       this.getlistRole()
       this.getlistPermission()
     }, 
   
     methods: {
-      getQueryParams() {
-        const query = this.$route.query
-        let queryParams = {...this.$route.query}
-        if(!query.role) {
-          queryParams.role = 'ADMIN'
-        }
-        
-        this.params = {...queryParams}
-        this.$router.push({name: this.$route.name, query: {...this.params} })
-      }, 
-  
       async getlistRole() {
         try {
           const response = await this.$axios.get('permission/role/all', {

@@ -19,10 +19,10 @@
               <a-col :span="8"> <span>Possession: </span></a-col>
               <a-col :span="8"> 
                 <a-select class="mb-3" default-value="lucy" style="width: 120px" @change="handleChange">
-                  <a-select-option value="jack">
+                  <a-select-option value="any">
                     ANY
                   </a-select-option>
-                  <a-select-option value="lucy">
+                  <a-select-option value="owner">
                     OWNER
                   </a-select-option>
                 </a-select>
