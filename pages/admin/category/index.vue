@@ -40,6 +40,7 @@
 
           <!-- Edit button -->
           <a-button @click="showModalEdit(record)" type="primary"><a-icon type="edit" /></a-button>
+          
         </span><!-- slot action here -->
 
         <span slot="createdat" slot-scope="text, record">
@@ -50,9 +51,9 @@
           {{ changeStringToTime(record.updatedat) }}
         </span><!-- slot createAt is here -->
       </a-table>
-
+      
       <!-- modal edit  -->
-      <a-modal v-model="visible" title="Edit Infomation" @ok="handleOkEdit(record.slug)">
+          <a-modal v-model="visible" title="Edit Infomation" @ok="handleOkEdit()">
             <template>
               <a-form-model :model="formE">      
                 <a-form-model-item label="Name">
@@ -67,6 +68,7 @@
               </a-form-model>
             </template>
           </a-modal>
+      
     </a-layout-content>
   </div>
 </template>
