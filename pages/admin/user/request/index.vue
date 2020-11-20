@@ -8,8 +8,8 @@
           <span >{{ record.profile.name }}</span>
         </span>
 
-        <span slot="role" slot-scope="text, record">
-          <span >{{ record.role.role}}</span>
+        <span v-if="record.profile" slot="phone" slot-scope="text, record">
+          <span >{{ record.profile.phone }}</span>
         </span>
 
         <span slot="createdat" slot-scope="text, record">
@@ -27,14 +27,14 @@
           <a-popconfirm
             v-if="record.roleId != 1"
             class="mr-2"
-            title="Are you sure accept this user?"
+            title="Are you sure accept this company?"
             ok-text="Yes"
             cancel-text="No"
             @confirm="confirm(record.id)"
           >
-            <a-button type="primary">
-              Accept
-            </a-button>
+            <a-button class="cn-btn-success" type="success">
+                Accept
+              </a-button>
           </a-popconfirm>
         </span>
       </a-table>
