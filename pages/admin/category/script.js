@@ -262,7 +262,7 @@ export default {
           rObj["disabled"] = true
         }
         if(obj.children) {
-          rObj["children"] = this.mappingData(obj.children)
+          rObj["children"] = this.mappingData(obj.children, name)
         }
         return rObj;
       });

@@ -1,3 +1,6 @@
+import { mapState } from 'vuex'
+import moment from 'moment'
+
 export default {
     layout: "admin",
 
@@ -15,7 +18,6 @@ export default {
         columns: [
             {
               title: 'Name',
-              key: 'name',
               scopedSlots: { customRender: 'name' },
             },
             {
@@ -24,9 +26,8 @@ export default {
               key: 'email',
             },
             {
-              title: 'Role',
-              key: 'role',
-              scopedSlots: { customRender: 'role' },
+              title: 'Phone',
+              scopedSlots: { customRender: 'phone' },
             },
             {
               title: 'Created At',
@@ -86,6 +87,7 @@ export default {
       async fetchData() {
         try {
           await this.$store.dispatch('admin/user/fetchListData')
+          console.log(this.list);
         }
         catch(error) {
           this.handleError(error)
