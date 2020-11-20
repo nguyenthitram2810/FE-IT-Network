@@ -15,7 +15,7 @@
         <a-form-model :model="formE">
           <a-form-model-item has-feedback label="Parent ID">
             <template>
-              <a-cascader :options="parentOptions" :default-value="[null]" change-on-select @change="onChooseParentInCreate" />
+              <a-cascader v-model="formE.parentId" :options="parentOptions" change-on-select />
             </template>
           </a-form-model-item>
 
