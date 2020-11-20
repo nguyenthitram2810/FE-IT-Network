@@ -1,3 +1,4 @@
+import list from 'ant-design-vue/lib/list'
 import moment from 'moment'
 import { mapState } from 'vuex'
 
@@ -180,33 +181,33 @@ export default {
     },
 
     async showCreateModal() {
-      this.visibleCreate = true;
-      this.formE.parentId = ''
+      this.formE.parentId = []
       this.formE.name = ''  
-      // this.getListParent()
+      await this.$store.dispatch('admin/category/fetchListAll')
+      let listAll = this.mappingData(this.parentOptions, '')
+      listAll.unshift({
+        value: '', 
+        label: "NULL", 
+        children: []
+      });
+      this.$store.commit('admin/category/SET_LIST_ALL', listAll)
+      this.visibleCreate = true;
     },
 
     async handleOkCreate(e) {
       this.visibleCreate = false;
       try{
-        if(this.formE.parentId != ''){
-          const response  = await this.$axios.post('/categories', 
+        if(this.formE.parentId[this.formE.parentId.length -1].value == '') {
+          delete this.formE.parentId
+        }
+
+        const response  = await this.$axios.post('/categories', 
           this.formE,
           {
             headers: {
               Authorization: 'Bearer ' + JSON.parse(localStorage.getItem('currentUser')).token,
             }
           })
-        }else{
-          const response  = await this.$axios.post('/categories', 
-          {name: this.formE.name},
-          {
-            headers: {
-              Authorization: 'Bearer ' + JSON.parse(localStorage.getItem('currentUser')).token,
-            }
-          })
-        }
-
         // this.getListCategory();
         
         //Nếu create thành công
@@ -232,18 +233,6 @@ export default {
           });
         }
       }
-    },
-    displayCreateOk(e){
-      if(this.formE.name != ''){
-        this.disabledCreateOK = false;
-      }else{
-        this.disabledCreateOK = true;
-      }
-    },
-    onChooseParentInCreate(id)
-    {
-      this.formE.parentId = id[id.length-1]
-      this.displayCreateOk()
     },
 
     onSearch(value) {
