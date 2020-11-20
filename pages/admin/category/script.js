@@ -183,7 +183,14 @@ export default {
       this.visibleCreate = true;
       this.formE.parentId = ''
       this.formE.name = ''  
-      // this.getListParent()
+      await this.$store.dispatch('admin/category/fetchListAll')
+      let listAll = this.mappingData(this.parentOptions, "")
+      listAll.unshift({
+        value: '', 
+        label: "NULL", 
+        children: []
+      });
+      this.$store.commit('admin/category/SET_LIST_ALL', listAll)
     },
 
     async handleOkCreate(e) {

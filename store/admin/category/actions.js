@@ -1,4 +1,5 @@
 import qs from "qs"
+import { createCommonHandlers } from "vee-validate/dist/types/components/common"
 
 export default {
   async fetchListData({state, commit, rootState}) {
@@ -44,7 +45,7 @@ export default {
     } catch (err) {
       throw err
     }
-	},
+  },
 	
 	async delete({ rootState, dispatch }, slug) {
     try {
@@ -87,4 +88,5 @@ export default {
       throw err
     }
   }
+
 }
