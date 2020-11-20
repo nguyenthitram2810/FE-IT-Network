@@ -77,6 +77,7 @@ export default {
       loading: (state) => state.admin.category.loading, 
       pagination: (state) => state.admin.category.pagination, 
       parentOptions: (state) => state.admin.category.listAll, 
+      category: (state) => state.admin.category.category,
     }),
   },
 
@@ -139,9 +140,12 @@ export default {
     },
 
     async showModalEdit(record) {
-      this.formE.parentId = record.parentId;
-      this.formE.name = record.name;
-      this.slug = record.slug
+      await this.$store.dispatch('admin/category/getOneCategory', record.id)
+
+      this.formE.parentId = this.category.parentId;
+      this.formE.name = this.category.name;
+      this.slug = this.category.slug;
+
       await this.$store.dispatch('admin/category/fetchListAll')
       let listAll = this.mappingData(this.parentOptions, record.name)
       listAll.unshift({
@@ -178,8 +182,8 @@ export default {
     async showCreateModal() {
       this.visibleCreate = true;
       this.formE.parentId = ''
-      this.formE.name = ''
-      this.getListParent()
+      this.formE.name = ''  
+      // this.getListParent()
     },
 
     async handleOkCreate(e) {
@@ -203,7 +207,7 @@ export default {
           })
         }
 
-        this.getListCategory();
+        // this.getListCategory();
         
         //Nếu create thành công
         this.$notification["success"]({
@@ -250,7 +254,7 @@ export default {
         delete this.params.filter
       }
       this.$router.push({name: this.$route.name, query: {...this.params} })
-      this.getListCategory()
+      // this.getListCategory()
     }, 
 
     mappingData(data, name) {
