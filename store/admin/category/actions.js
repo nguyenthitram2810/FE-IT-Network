@@ -1,4 +1,5 @@
 import qs from "qs"
+import state from "../state"
 
 export default {
   async fetchListData({state, commit, rootState}) {
@@ -24,7 +25,7 @@ export default {
     }
 	}, 
 
-	async fetchListAll({ rootState, commit}) {
+	async fetchListAll({rootState, commit}) {
     try {
       const response = await this.$axios.get('/categories/all', {
         headers: {
@@ -37,14 +38,21 @@ export default {
     }
 	}, 
 	
-	handleTableChange({ commit, dispatch }, { pagination, filters, sorter }) {
+	handleTableChange({ state, commit, dispatch }, { pagination, filters, sorter }) {
+    var sortString = sorter.field + ',';
+    if (sorter.order == 'ascend'){
+      sortString += 'ASC'
+    }else{
+      sortString += 'DESC'
+    }
+    console.log(sorter.order)
     try {
-      commit('SET_QUERY', {page: pagination.current})
+      commit('SET_QUERY', {page: pagination.current, sort: [sortString]})
       dispatch('fetchListData');
     } catch (err) {
       throw err
     }
-	},
+  },
 	
 	async delete({ rootState, dispatch }, slug) {
     try {
@@ -86,5 +94,20 @@ export default {
     } catch (err) {
       throw err
     }
-  }
+  },
+  async createOne({ rootState, dispatch }, form){
+    try {
+      const response  = await this.$axios.post('/categories', 
+      form,
+      {
+        headers: {
+          Authorization: 'Bearer ' + rootState.auth.currentUser.token,
+        }
+      })  
+      dispatch('fetchListData');
+    } catch (error) {
+      throw error
+    }
+    
+  }, 
 }

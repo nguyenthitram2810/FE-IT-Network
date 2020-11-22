@@ -8,17 +8,19 @@
       <a-table class="pt-4 admin-table" @change="handleTableChange" :columns="columns" :data-source="data" :loading="loading" :pagination="pagination" bordered>
       <!-- Slot action -->
         <span slot="action" slot-scope="text, record">
-          <!-- Delete button  -->
-          <a-popconfirm placement="top" ok-text="Yes" cancel-text="No" @confirm="confirmDelete(record.slug)">
-            <template slot="title">
-              <p><b>Are you sure to DELETE this?</b></p>
-            </template>
-            <a-button type="danger"><a-icon type="delete" /></a-button>
-          </a-popconfirm>
-          <!-- detail button -->
-          <a-button @click="viewDetail(record)"  type="primary">
-            View Detail
-          </a-button>
+          <div class="d-flex">
+            <!-- Delete button  -->
+            <a-popconfirm class="mr-2" placement="top" ok-text="Yes" cancel-text="No" @confirm="confirmDelete(record.slug)">
+              <template slot="title">
+                <p><b>Are you sure to DELETE this?</b></p>
+              </template>
+              <a-button type="danger"><a-icon type="delete" /></a-button>
+            </a-popconfirm>
+            <!-- detail button -->
+            <a-button @click="viewDetail(record)"  type="primary">
+              View Detail
+            </a-button>
+          </div>
         </span>
 
         <span slot="createdat" slot-scope="text, record">
@@ -60,12 +62,12 @@
             
             <div v-if="detailInfo.content" class="row">
               <p class="col-4 font--bold">Content:</p>
-              <div class="col-8">{{ detailInfo.content }}</div>
+              <div class="col-8" v-html='detailInfo.content'></div>
             </div>           
 
             <div v-if="detailInfo.description" class="row">
               <p class="col-4 font--bold">Description:</p>
-              <div class="col-8">{{ detailInfo.description }}</div>
+              <div class="col-8" v-html='detailInfo.description'></div>
             </div>
 
             <div v-if="detailInfo.experience" class="row">
