@@ -7,20 +7,20 @@
       <!-- Button Create -->
       <a-button class="create-button" @click="showCreateModal" type="primary"><a-icon type="plus" /> CREATE</a-button>
       <!-- Search infomation   -->
-      <a-input-search placeholder="Search name" style="width: 300px" allow-clear @search="onSearch" :loading="loading" />
+      <a-input-search placeholder="Search name" style="width: 300px" allow-clear @search="onSearch" />
     </div>
 
-    <a-modal v-model="visibleCreate" title="CREATE ONE USER" @ok="handleOkCreate" :ok-button-props="{ props: { disabled: disabledCreateOK } }">
+    <a-modal v-model="visibleCreate" title="CREATE ONE USER" @ok="handleOkCreate">
       <template>
         <a-form-model :model="formE">
           <a-form-model-item has-feedback label="Parent ID">
             <template>
-              <a-cascader :options="parentOptions" :default-value="[null]" change-on-select @change="onChooseParentInCreate" />
+              <a-cascader v-model="formE.parentId" :options="parentOptions" change-on-select />
             </template>
           </a-form-model-item>
 
           <a-form-model-item label="Name">
-            <a-input v-model="formE.name" @change="displayCreateOk"/>
+            <a-input v-model="formE.name"/>
           </a-form-model-item>
         </a-form-model>
       </template>
@@ -31,16 +31,17 @@
         <!-- Slot action -->
         <span slot="action" slot-scope="text, record">
           <!-- Delete button  -->
-          <a-popconfirm placement="top" ok-text="Yes" cancel-text="No" @confirm="confirmDelete(record.slug)">
-            <template slot="title">
-              <p><b>Are you sure to DELETE this?</b></p>
-            </template>
-            <a-button type="danger"><a-icon type="delete" /></a-button>
-          </a-popconfirm>
+          <div class="d-flex">
+            <a-popconfirm class="mr-2" placement="top" ok-text="Yes" cancel-text="No" @confirm="confirmDelete(record.slug)">
+              <template slot="title">
+                <p><b>Are you sure to DELETE this?</b></p>
+              </template>
+              <a-button type="danger"><a-icon type="delete" /></a-button>
+            </a-popconfirm>
 
-          <!-- Edit button -->
-          <a-button @click="showModalEdit(record)" type="primary"><a-icon type="edit" /></a-button>
-          
+            <!-- Edit button -->
+            <a-button @click="showModalEdit(record)" type="primary"><a-icon type="edit" /></a-button>
+          </div>
         </span><!-- slot action here -->
 
         <span slot="createdat" slot-scope="text, record">
