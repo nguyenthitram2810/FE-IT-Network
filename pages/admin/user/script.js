@@ -262,8 +262,8 @@ export default {
         }
         query.page = 1
         this.$store.commit('admin/user/SET_QUERY', query)
-        await this.$store.dispatch('admin/user/fetchListData')
         this.$router.push({name: this.$route.name, query: {...this.params} })
+        await this.$store.dispatch('admin/user/fetchListData')
       } catch (error) {
         this.handleError(error)
       }

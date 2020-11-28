@@ -11,7 +11,6 @@ export default {
           Authorization: 'Bearer ' + rootState.auth.currentUser.token,
         }
       })
-      console.log(response);
       commit('SET_PAGINATION', {
         total: response.data.data.total, 
         current: parseInt(state.query.page), 
@@ -45,7 +44,6 @@ export default {
     }else{
       sortString += 'DESC'
     }
-    console.log(sorter.order)
     try {
       commit('SET_QUERY', {page: pagination.current, sort: [sortString]})
       dispatch('fetchListData');

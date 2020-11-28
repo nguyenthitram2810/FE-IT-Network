@@ -92,7 +92,6 @@ export default {
       }, 
   
       getRole(key) {
-        console.log(key)
       },
   
       onChange(e) {
