@@ -51,7 +51,7 @@
           <span v-else></span>
         </span>
 
-        <span class="d-flex justify-content-between" slot="action" slot-scope="text, record">
+        <span slot="action" slot-scope="text, record">
           <a-popconfirm
             v-if="record.roleId != 1"
             class="mr-2"
