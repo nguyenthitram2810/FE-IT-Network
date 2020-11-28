@@ -35,7 +35,6 @@ export default {
             title: 'Parent ID',
             dataIndex: 'parentId',
             key: 'parentId',
-            sorter: true,
             scopedSlots: { customRender: 'parentId' },
           },
           {
@@ -56,7 +55,8 @@ export default {
             title: 'Action',
             key: 'action',
             scopedSlots: { customRender: 'action' },
-          }
+          },
+
       ],
       visible: false, 
       visibleCreate: false,
@@ -64,7 +64,6 @@ export default {
         name: '',
         parentId:'',
       },
-      disabledCreateOK: true,
       slug: '',
     };
   }, 
@@ -114,7 +113,7 @@ export default {
     },
 
     changeStringToTime(valueToChange){
-      return moment(String(valueToChange)).format('MM/DD/YYYY hh:mm')
+      return moment(String(valueToChange)).format('MM/DD/YYYY HH:mm')
     },
 
     async handleTableChange(pagination, filters, sorter) {
@@ -166,7 +165,7 @@ export default {
       var slug = this.slug
       try{
         if(this.formE.parentId == '') {
-          delete this.formE.parentId
+          this.formE.parentId = null
         }
         await this.$store.dispatch(('admin/category/edit'), {data: this.formE, slug})
         this.$notification["success"]({
@@ -183,7 +182,7 @@ export default {
       this.formE.parentId = []
       this.formE.name = ''  
       await this.$store.dispatch('admin/category/fetchListAll')
-      let listAll = this.mappingData(this.parentOptions, '')
+      let listAll = this.mappingData(this.parentOptions)
       listAll.unshift({
         value: '', 
         label: "NULL", 
@@ -199,50 +198,30 @@ export default {
         if(this.formE.parentId[this.formE.parentId.length -1].value == '') {
           delete this.formE.parentId
         }
-
-        const response  = await this.$axios.post('/categories', 
-          this.formE,
-          {
-            headers: {
-              Authorization: 'Bearer ' + JSON.parse(localStorage.getItem('currentUser')).token,
-            }
-          })
-        // this.getListCategory();
-        
+        await this.$store.dispatch('admin/category/createOne',this.formE)
         //Nếu create thành công
         this.$notification["success"]({
           message: 'Notification',
           description:
             'Created Successfully!',
-        });
-        
-      }catch(e){
-        if(e.response) {
-          this.$notification["error"]({ 
-            message: 'CREATE CATEGORY ERROR',
-            description:
-              e.response.data.message
-          });
-        }
-        else {
-          this.$notification["error"]({
-            message: 'CREATE CATEGORY',
-            description:
-              e.message
-          });
-        }
+        }); 
+      }catch(error){
+        this.handleError(error)
       }
     },
 
-    onSearch(value) {
+    async onSearch(value) {
+      let query = {...this.params}
       if(value != '') {
-        this.params.filter = `name||$contL||${value}`
+        query.filter = `name||$contL||${value}`
       }
       else {
-        delete this.params.filter
+        query.filter = undefined
       }
+      query.page = 1
+      this.$store.commit('admin/category/SET_QUERY', query)
+      await this.$store.dispatch('admin/category/fetchListData')
       this.$router.push({name: this.$route.name, query: {...this.params} })
-      // this.getListCategory()
     }, 
 
     mappingData(data, name) {

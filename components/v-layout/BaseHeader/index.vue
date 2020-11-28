@@ -76,8 +76,6 @@ export default {
       this.$store.commit('auth/SET_CURRENT_USER', null )
     },
     onSearch(value) {
-      //Tìm kiếm nội dung trong này
-      console.log(value);
     },
   }
 }
