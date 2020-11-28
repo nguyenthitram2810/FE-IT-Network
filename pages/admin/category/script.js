@@ -1,4 +1,3 @@
-import list from 'ant-design-vue/lib/list'
 import moment from 'moment'
 import { mapState } from 'vuex'
 
