@@ -10,13 +10,13 @@ export default {
           Authorization: 'Bearer ' + rootState.auth.currentUser.token,
         }
       })
-      console.log(response);
       commit('SET_PAGINATION', {
         total: response.data.data.total, 
         current: parseInt(state.query.page), 
         pageSize: parseInt(state.query.limit)
       })
       commit('SET_LIST', response.data.data.data)
+      
       commit('SET_LOADING', false)
     } catch (err) {
       commit('SET_LOADING', false)
@@ -26,7 +26,17 @@ export default {
 
   handleTableChange({ commit, dispatch }, { pagination, filters, sorter }) {
     try {
-      commit('SET_QUERY', {page: pagination.current})
+      var sortString = ''
+      if(sorter.columnKey == "name") {
+        sortString += 'profile.';
+      }
+      sortString  += sorter.columnKey + ',';
+      if (sorter.order == 'ascend'){
+        sortString += 'ASC'
+      }else{
+        sortString += 'DESC'
+      }
+      commit('SET_QUERY', {page: pagination.current, sort: [sortString]})
       dispatch('fetchListData');
     } catch (err) {
       throw err
@@ -53,7 +63,6 @@ export default {
   },
 
   async create({commit, rootState, dispatch }, data) {
-    console.log(data);
     try {
       commit('SET_LOADING_CREATE', true)
       const response = await this.$axios.post('/users', {

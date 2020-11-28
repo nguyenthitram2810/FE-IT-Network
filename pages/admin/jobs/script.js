@@ -89,7 +89,6 @@ export default {
             description:
               e.response.data.message
           });
-          console.log(response)
         }
         else {
           this.$notification["error"]({
@@ -130,7 +129,6 @@ export default {
             description:
               e.response.data.message
           });
-          console.log(response)
         }
         else {
           this.$notification["error"]({

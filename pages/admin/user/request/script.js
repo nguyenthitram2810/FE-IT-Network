@@ -87,7 +87,6 @@ export default {
       async fetchData() {
         try {
           await this.$store.dispatch('admin/user/fetchListData')
-          console.log(this.list);
         }
         catch(error) {
           this.handleError(error)
