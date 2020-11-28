@@ -3,34 +3,31 @@
     <a-layout-content
       :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '100vh' }"
     >
-      <a-tabs @change="getRole">
-        <a-tab-pane v-for="e in listRole" :key="e.role" :tab="e.role">
-        </a-tab-pane>
-      </a-tabs>
-      <a-row class="mt-3">
-        <a-col style="border-bottom: 0.1px solid gray;" class="mb-3" :span="12" v-for="(e, index) in listPermission" :key="index">
-          <div class="d-flex flex-column">
-            <a-row class="mb-3">
-              <a-col :span="8"> <span> {{ e.scope }}:</span></a-col>
-              <a-col :span="8"> <a-switch @change="onChange(e)" /></a-col>
-            </a-row>
-            
-            <a-row class="mb-3">
-              <a-col :span="8"> <span>Possession: </span></a-col>
-              <a-col :span="8"> 
-                <a-select class="mb-3" default-value="lucy" style="width: 120px" @change="handleChange">
-                  <a-select-option value="any">
-                    ANY
-                  </a-select-option>
-                  <a-select-option value="owner">
-                    OWNER
-                  </a-select-option>
-                </a-select>
-              </a-col>
-            </a-row>
-          </div>
-        </a-col>
-      </a-row>
+      <a-table 
+        class="pt-4 admin-table" 
+        :columns="columns" 
+        :data-source="data" 
+        :loading="loading" 
+        :row-key="record => record.id"
+        bordered
+      >
+        <span slot="action" slot-scope="text, record">
+          <a-button @click="showModalEdit(record)" type="primary"><a-icon type="edit" /></a-button>
+
+          <a-popconfirm
+            v-if="record.roleId != 1"
+            class="mr-2"
+            title="Are you sure delete this permission?"
+            ok-text="Yes"
+            cancel-text="No"
+            @confirm="confirmDelete(record.id)"
+          >
+            <a-button type="danger">
+              <a-icon type="delete" />
+            </a-button>
+          </a-popconfirm>
+        </span>
+      </a-table>
     </a-layout-content>
   </div>
 </template>

@@ -36,39 +36,39 @@ export default {
     };
     return {
       columns: [
-          {
-            title: 'Name',
-            key: 'name',
-            sorter: true,
-            scopedSlots: { customRender: 'name' },
-          },
-          {
-            title: 'Email',
-            dataIndex: 'email',
-            key: 'email',
-            sorter: true,
-          },
-          {
-            title: 'Role',
-            key: 'role',
-            scopedSlots: { customRender: 'role' },
-          },
-          {
-            title: 'Active',
-            dataIndex: 'active',
-            key: 'active',
-            scopedSlots: { customRender: 'active' },
-          },
-          {
-            title: 'Profile',
-            key: 'profile',
-            scopedSlots: { customRender: 'profile' },
-          },
-          {
-            title: 'Action',
-            key: 'action',
-            scopedSlots: { customRender: 'action' },
-          },
+        {
+          title: 'Name',
+          key: 'name',
+          sorter: true,
+          scopedSlots: { customRender: 'name' },
+        },
+        {
+          title: 'Email',
+          dataIndex: 'email',
+          key: 'email',
+          sorter: true,
+        },
+        {
+          title: 'Role',
+          key: 'role',
+          scopedSlots: { customRender: 'role' },
+        },
+        {
+          title: 'Active',
+          dataIndex: 'active',
+          key: 'active',
+          scopedSlots: { customRender: 'active' },
+        },
+        {
+          title: 'Profile',
+          key: 'profile',
+          scopedSlots: { customRender: 'profile' },
+        },
+        {
+          title: 'Action',
+          key: 'action',
+          scopedSlots: { customRender: 'action' },
+        },
       ],
       profile: {},
       visible: false, 
