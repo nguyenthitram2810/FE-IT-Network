@@ -27,6 +27,11 @@
           <span>Category</span>
         </a-menu-item>
 
+        <a-menu-item key="/admin/role">
+          <a-icon type="apartment" />
+          <span>Role</span>
+        </a-menu-item>
+
         <a-menu-item key="/admin/permisson">
           <a-icon type="key" />
           <span>Permisson</span>
@@ -85,8 +90,8 @@ export default {
   },
   methods: {
     handleClick(e) {
-      this.$store.commit('admin/user/RESET_PAGINATION', this.pagination)
       if(e.key.startsWith('/admin/user')) {
+        this.$store.commit('admin/user/RESET_PAGINATION', this.pagination)
         this.$store.commit('admin/user/RESET_QUERY', this.query)
       }
       this.$router.push({path: e.key, query: { ...this.query } })
