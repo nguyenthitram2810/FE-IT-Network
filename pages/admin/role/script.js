@@ -51,7 +51,6 @@ export default {
 
   computed: {
     ...mapState({
-      user: (state) => state.auth.currentUser,
       data: (state) => state.admin.role.list, 
       loading: (state) => state.admin.role.loading, 
     }),

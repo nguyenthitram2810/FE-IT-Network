@@ -39,11 +39,13 @@ export default {
               title: 'Profile',
               key: 'profile',
               scopedSlots: { customRender: 'profile' },
+              align: 'center'
             },
             {
               title: 'Action',
               key: 'action',
               scopedSlots: { customRender: 'action' },
+              align: 'center'
             },
         ],
         profile: {},

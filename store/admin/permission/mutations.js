@@ -6,4 +6,8 @@ export default {
     SET_LOADING(state, status) {
       state.loading = status
     },
+
+    SET_QUERY(state, query) {
+      state.query = { ...query}
+    },
   }

@@ -27,14 +27,18 @@ export default {
   handleTableChange({ commit, dispatch }, { pagination, filters, sorter }) {
     try {
       var sortString = ''
-      if(sorter.columnKey == "name") {
-        sortString += 'profile.';
-      }
-      sortString  += sorter.columnKey + ',';
-      if (sorter.order == 'ascend'){
-        sortString += 'ASC'
-      }else{
-        sortString += 'DESC'
+      if(sorter.columnKey != undefined) {
+        if(sorter.columnKey == "name") {
+          sortString += 'profile.';
+        }
+        sortString  += sorter.columnKey + ',';
+        if (sorter.order == 'ascend'){
+          sortString += 'ASC'
+        }else{
+          sortString += 'DESC'
+        }
+      } else {
+        sortString = 'updatedat,DESC'
       }
       commit('SET_QUERY', {page: pagination.current, sort: [sortString]})
       dispatch('fetchListData');
