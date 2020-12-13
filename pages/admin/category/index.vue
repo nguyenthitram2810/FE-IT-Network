@@ -5,17 +5,25 @@
     >
     <div class="d-flex justify-content-between">
       <!-- Button Create -->
-      <a-button class="create-button" @click="showCreateModal" type="primary"><a-icon type="plus" /> CREATE</a-button>
+      <a-button class="create-button" @click="showCreateModal" type="primary">
+        <a-icon type="plus" /> CREATE</a-button>
       <!-- Search infomation   -->
       <a-input-search placeholder="Search name" style="width: 300px" allow-clear @search="onSearch" />
     </div>
 
+    <!-- Create form -->
     <a-modal v-model="visibleCreate" title="CREATE ONE USER" @ok="handleOkCreate">
       <template>
-        <a-form-model :model="formE">
+        <a-form-model
+        :model="formE"
+        ref="formE"
+        >
           <a-form-model-item has-feedback label="Parent ID">
             <template>
-              <a-cascader v-model="formE.parentId" :options="parentOptions" change-on-select />
+              <a-cascader 
+              :options="parentOptions" 
+              change-on-select 
+              v-model="formE.parentId" />
             </template>
           </a-form-model-item>
 
@@ -27,12 +35,23 @@
     </a-modal>
     
     <!-- Table -->
-      <a-table class="pt-4 admin-table" @change="handleTableChange" :columns="columns" :data-source="data" :loading="loading" :pagination="pagination" bordered>
+      <a-table class="pt-4 admin-table" 
+        @change="handleTableChange" 
+        :columns="columns" 
+        :data-source="data" 
+        :loading="loading" 
+        :pagination="pagination" bordered
+        :row-key="record => record.id"
+        >
         <!-- Slot action -->
         <span slot="action" slot-scope="text, record">
           <!-- Delete button  -->
           <div class="d-flex">
-            <a-popconfirm class="mr-2" placement="top" ok-text="Yes" cancel-text="No" @confirm="confirmDelete(record.slug)">
+            <a-popconfirm class="mr-2" 
+              placement="top" 
+              ok-text="Yes" 
+              cancel-text="No" 
+              @confirm="confirmDelete(record.slug)">
               <template slot="title">
                 <p><b>Are you sure to DELETE this?</b></p>
               </template>
@@ -56,15 +75,15 @@
       <!-- modal edit  -->
           <a-modal v-model="visible" title="Edit Infomation" @ok="handleOkEdit()">
             <template>
-              <a-form-model :model="formE">      
+              <a-form-model 
+                :model="formE"
+                ref="formE">      
                 <a-form-model-item label="Name">
                   <a-input v-model="formE.name"/>
                 </a-form-model-item>
 
-                <a-form-model-item has-feedback label="Parent ID">
-                  <template>
-                    <a-cascader :options="parentOptions" change-on-select @change="onChooseParentInEdit" />
-                  </template>
+                <a-form-model-item label="ParentID">
+                  <a-input disabled=true v-model="formE.parentId[0]"/>
                 </a-form-model-item>
               </a-form-model>
             </template>

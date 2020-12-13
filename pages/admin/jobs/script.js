@@ -1,165 +1,140 @@
 import moment from 'moment'
+import { mapState } from 'vuex'
+
 export default {
-  layout: "admin",
-  data() {
-    return {
-      columns: [
-          {
-            title: 'Name',
-            dataIndex: 'name',
-            key: 'name',
-          },
-          {
-            title: 'User\'s email',
-            dataIndex: 'user.email',
-            key: 'usersEmail',
-            scopedSlots: { customRender: 'parentId' },
-          },
-          {
-            title: 'Created At',
-            dataIndex: 'createdat',
-            key: 'createdat',
-            scopedSlots: { customRender: 'createdat' },
-          }, 
-          {
-            title: 'Updated At',
-            dataIndex: 'updatedat',
-            key: 'updatedat',
-            scopedSlots: { customRender: 'updatedat' },
-          },
-          {
-            title: 'Action',
-            key: 'action',
-            scopedSlots: { customRender: 'action' },
-          }
-      ],
-      data: [],
-      params: {},
-      pagination: {
-        total: 0,
-        current: 1,
-        pageSize: 10,
-      },
-      loading: false,
-      visible: false,
-      detailInfo: {},
-    };
-  }, 
-  created() {
-    this.getQueryParams()
-    this.$store.commit("admin/SET_BREADCRUMB", ["Jobs"]);
-    this.getListJobs()
-  },
-  methods: {
-    getQueryParams(){
-      const query = this.$route.query
-      let queryParams = {...this.$route.query}
-      if(!query.page) {
-        queryParams.page = 1
-      }
-      if(!query.limit) {
-        queryParams.limit = 10
-      }
-      if(!query.sort) {
-        queryParams.sort = "updatedat,DESC"
-      }
-      this.params = {...queryParams}
-      this.$router.push({name: this.$route.name, query: {...this.params} })
-    },
-    async getListJobs(){
-      try {
-        this.loading = true
-        const response  = await this.$axios.get('/jobs', {
-          params: this.params,
-          headers: {
-            Authorization: 'Bearer ' + JSON.parse(localStorage.getItem('currentUser')).token,
-          }
-        })
-        
-        this.data = response.data.data.data
-
-        this.loading = false
-        this.pagination.total = response.data.data.total
-        this.pagination.current = response.data.data.page
-        this.pagination.pageSize = parseInt(this.params.limit)
-      } catch (e) {
-        if(e.response) {
-          this.$notification["error"]({ 
-            message: 'GET JOBS ERROR',
-            description:
-              e.response.data.message
-          });
+    layout: "admin", 
+    middleware({store, query}) {
+        store.commit('admin/jobs/SET_QUERY', query)
+    }, //ok
+    async fetch(){
+        this.fetchData()
+    }, // ok
+    data(){
+        return {
+            columns: [
+              {
+                title: 'ID',
+                dataIndex: 'id',
+                key: 'id',
+              },
+              {
+                title: 'Name',
+                dataIndex: 'name',
+                key: 'name',
+                sorter: true,
+              },
+              {
+                title: 'User\'s email',
+                dataIndex: 'user.email',
+                key: 'usersEmail',
+                sorter: true,
+              },
+              {
+                title: 'Created At',
+                dataIndex: 'createdat',
+                key: 'createdat',
+                scopedSlots: { customRender: 'createdat' },
+                sorter: true,
+              }, 
+              {
+                title: 'Updated At',
+                dataIndex: 'updatedat',
+                key: 'updatedat',
+                scopedSlots: { customRender: 'updatedat' },
+                sorter: true,
+              },
+              {
+                title: 'Action',
+                key: 'action',
+                scopedSlots: { customRender: 'action' },
+              }
+            ],
+            visible: false,
+            detailInfo: {},
         }
-        else {
-          this.$notification["error"]({
-            message: 'GET JOBS ERROR (RESPONE)',
-            description:
-              e.message
-          });
-        }
-      }
-    },
-    handleTableChange(pagination, filters, sorter) { 
-      let temp = {...this.params, page: pagination.current}
-      this.params = {...temp}
-      this.$router.push({name: this.$route.name, query: {...this.params} })
-      this.getListJobs()
-    },
-    async confirmDelete(slug){
-      try {
-        const response  = await this.$axios.delete(`/jobs/${slug}`, {
-          headers: {
-            Authorization: 'Bearer ' + JSON.parse(localStorage.getItem('currentUser')).token,
-          }
-        })
-
-        //Nếu delete thành công
-        this.$notification["success"]({
-          message: 'Notification',
-          description:
-            'Deleted Successfully!',
-        });
-
-        this.getListJobs();
-
-      } catch (e) {
-        if(e.response) {
-          this.$notification["error"]({ 
-            message: 'DELETE JOBS ERROR',
-            description:
-              e.response.data.message
-          });
-        }
-        else {
-          this.$notification["error"]({
-            message: 'DELETE JOBS',
-            description:
-              e.message
-          });
-        }
-      }
-    },
-    changeStringToTime(valueToChange){
-      return moment(String(valueToChange)).format('MM/DD/YYYY hh:mm')
-    },
-    viewDetail(record){
-      this.detailInfo = record
-      this.visible = true
-    },
-    handleCancel(){
-      this.visible = false;
-    },
-    onSearch(value) {
-      if(value != '') {
-        this.params.filter = `name||$contL||${value}`
-        this.params.or = `user.email||$contL||${value}`
-      }
-      else {
-        delete this.params.filter
-        delete this.params.or
-      }
-      this.$router.push({name: this.$route.name, query: {...this.params} })
-      this.getListJobs()
-    }, 
-  },
+    }, //ok
+    computed: {
+      ...mapState({
+        user: (state) => state.auth.currentUser,
+        params: (state) => state.admin.jobs.query, 
+        data: (state) => state.admin.jobs.list, 
+        loading: (state) => state.admin.jobs.loading, 
+        pagination: (state) => state.admin.jobs.pagination, 
+      })
+    }, //ok
+    create(){
+        this.$store.commit("admin/SET_BREADCRUMB", ["Jobs"]);
+        this.$router.push({name: this.$route.name, query: {...this.params} })
+    }, //ok
+    methods: {
+        handleError(err) {
+            if(err.response) {
+              this.$notification["error"]({
+                message: 'ERROR',
+                description:
+                  err.response.data.message
+              });
+            }
+            else {
+              this.$notification["error"]({
+                message: 'ERROR',
+                description:
+                  err.message
+              });
+            }
+        }, //ok
+        async fetchData() {
+            try {
+              await this.$store.dispatch('admin/jobs/fetchListData')
+            }
+            catch(error) {
+              this.handleError(error)
+            }
+        }, //ok
+        changeStringToTime(valueToChange){
+            return moment(String(valueToChange)).format('MM/DD/YYYY HH:mm')
+        }, //ok
+        async handleTableChange(pagination, filters, sorter) {
+            try {
+                await this.$store.dispatch('admin/jobs/handleTableChange', { pagination, filters, sorter })
+                this.$router.push({name: this.$route.name, query: {...this.params} })
+            } catch (error) {
+                this.handleError(error)
+            }
+        }, //ok
+        async confirmDelete(id) {
+            try {
+              await this.$store.dispatch('admin/jobs/delete', id)
+              this.$notification["success"]({
+                message: 'SUCCESS',
+                description:
+                `Deleted successfully!`
+              });
+            } catch (error) {
+                this.handleError(error)
+            }
+          
+        }, //ok
+        viewDetail(record){
+            this.detailInfo = {}
+            this.visible = true
+            this.detailInfo = record
+        }, //ok
+        handleCancel(){
+            this.visible = false;
+        }, //ok
+        async onSearch(value) {
+            let query = {...this.params}
+            if(value != '') {
+              query.filter = `name||$contL||${value}`
+            }
+            else {
+              query.filter = undefined
+            }
+            query.page = 1
+            this.$store.commit('admin/jobs/SET_QUERY', query)
+            await this.$store.dispatch('admin/jobs/fetchListData')
+            this.$router.push({name: this.$route.name, query: {...this.params} })
+        }, //ok
+    }
 }
