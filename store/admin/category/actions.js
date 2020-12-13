@@ -1,5 +1,4 @@
 import qs from "qs"
-import state from "../state"
 
 export default {
   async fetchListData({state, commit, rootState}) {
@@ -39,13 +38,17 @@ export default {
 	}, 
 	
 	handleTableChange({ state, commit, dispatch }, { pagination, filters, sorter }) {
-    var sortString = sorter.field + ',';
-    if (sorter.order == 'ascend'){
-      sortString += 'ASC'
-    }else{
-      sortString += 'DESC'
-    }
-    console.log(sorter.order)
+    var sortString = '';
+        if(sorter.field){
+            sortString = sorter.field + ',';
+            if (sorter.order == 'ascend'){
+                sortString += 'ASC'
+            }else{
+                sortString += 'DESC'
+            }
+        }else{
+            sortString = 'updatedat,DESC';
+        }
     try {
       commit('SET_QUERY', {page: pagination.current, sort: [sortString]})
       dispatch('fetchListData');
@@ -95,6 +98,7 @@ export default {
       throw err
     }
   },
+  
   async createOne({ rootState, dispatch }, form){
     try {
       const response  = await this.$axios.post('/categories', 

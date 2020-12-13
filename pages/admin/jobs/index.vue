@@ -3,14 +3,27 @@
     <a-layout-content
       :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '100vh' }"
     >
-    <a-input-search placeholder="Search name, email" style="width: 300px" allow-clear @search="onSearch" :loading="loading" />
+    <a-input-search placeholder="Search name" 
+      style="width: 300px" 
+      allow-clear 
+      @search="onSearch" 
+      :loading="loading" />
     <!-- Table -->
-      <a-table class="pt-4 admin-table" @change="handleTableChange" :columns="columns" :data-source="data" :loading="loading" :pagination="pagination" bordered>
+      <a-table class="pt-4 admin-table" 
+        @change="handleTableChange" 
+        :columns="columns" 
+        :data-source="data" 
+        :loading="loading" 
+        :pagination="pagination" bordered
+        :row-key="record => record.id">
       <!-- Slot action -->
         <span slot="action" slot-scope="text, record">
           <div class="d-flex">
             <!-- Delete button  -->
-            <a-popconfirm class="mr-2" placement="top" ok-text="Yes" cancel-text="No" @confirm="confirmDelete(record.slug)">
+            <a-popconfirm class="mr-2" placement="top" 
+              ok-text="Yes" 
+              cancel-text="No" 
+              @confirm="confirmDelete(record.id)">
               <template slot="title">
                 <p><b>Are you sure to DELETE this?</b></p>
               </template>
@@ -33,6 +46,7 @@
       </a-table>
       
       <!-- modal detail information-->
+      <!-- Button of detail form -->
       <div>
         <a-modal width="1000px" v-model="visible" title="Detail information">
           <template slot="header" style="background-color: black;">
@@ -47,7 +61,7 @@
             </a-button>
           </template>
 
-          <!-- Entire information of record -->
+          <!-- Entire detail information of a record -->
           <div class="d-flex flex-column mt-3 px-4">
             <div class="row">
               <p class="col-4 font--bold">Name:</p>

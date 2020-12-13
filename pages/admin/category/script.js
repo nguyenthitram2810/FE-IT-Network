@@ -139,21 +139,13 @@ export default {
     },
 
     async showModalEdit(record) {
-      await this.$store.dispatch('admin/category/getOneCategory', record.id)
-
-      this.formE.parentId = this.category.parentId;
-      this.formE.name = this.category.name;
-      this.slug = this.category.slug;
-
-      await this.$store.dispatch('admin/category/fetchListAll')
-      let listAll = this.mappingData(this.parentOptions, record.name)
-      listAll.unshift({
-        value: '', 
-        label: "NULL", 
-        children: []
-      });
-      this.$store.commit('admin/category/SET_LIST_ALL', listAll)
+      this.formE.parentId = []
+      this.formE.name = ''
       this.visible = true;
+      await this.$store.dispatch('admin/category/getOneCategory', record.id)
+      this.formE.parentId[0] = this.category.parentId
+      this.formE.name = this.category.name
+      this.slug = this.category.slug
     },
 
     onChooseParentInEdit(id) {
@@ -161,13 +153,19 @@ export default {
     },
 
     async handleOkEdit() {
-      this.visible = false
-      var slug = this.slug
+      let slug = this.slug
+      let obj = {
+        name: this.formE.name, 
+        parentId: ''
+      }
+      let parentId = this.formE.parentId[this.formE.parentId.length -1]
       try{
-        if(this.formE.parentId == '') {
-          this.formE.parentId = null
+        if(parentId != '') {
+          obj.parentId = parentId
+        }else{
+          obj.parentId = null
         }
-        await this.$store.dispatch(('admin/category/edit'), {data: this.formE, slug})
+        await this.$store.dispatch(('admin/category/edit'), {data: obj, slug})
         this.$notification["success"]({
           message: 'SUCCESS',
           description:
@@ -175,10 +173,13 @@ export default {
         });    
       }catch(error){
         this.handleError(error)
+      }finally{
+        this.visible = false
       }
     },
 
     async showCreateModal() {
+      this.visibleCreate = true;
       this.formE.parentId = []
       this.formE.name = ''  
       await this.$store.dispatch('admin/category/fetchListAll')
@@ -189,16 +190,19 @@ export default {
         children: []
       });
       this.$store.commit('admin/category/SET_LIST_ALL', listAll)
-      this.visibleCreate = true;
     },
 
     async handleOkCreate(e) {
       this.visibleCreate = false;
       try{
-        if(this.formE.parentId[this.formE.parentId.length -1].value == '') {
-          delete this.formE.parentId
+        let obj = {name: this.formE.name}
+        let parentId = this.formE.parentId[this.formE.parentId.length -1]
+        console.log(this.formE)
+        if(parentId != '') {
+          obj.parentId = parentId
         }
-        await this.$store.dispatch('admin/category/createOne',this.formE)
+        console.log(obj)
+        await this.$store.dispatch('admin/category/createOne',obj)
         //Nếu create thành công
         this.$notification["success"]({
           message: 'Notification',
