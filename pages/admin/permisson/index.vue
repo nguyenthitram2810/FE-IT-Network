@@ -3,34 +3,74 @@
     <a-layout-content
       :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '100vh' }"
     >
-      <a-tabs @change="getRole">
-        <a-tab-pane v-for="e in listRole" :key="e.role" :tab="e.role">
-        </a-tab-pane>
-      </a-tabs>
-      <a-row class="mt-3">
-        <a-col style="border-bottom: 0.1px solid gray;" class="mb-3" :span="12" v-for="(e, index) in listPermission" :key="index">
-          <div class="d-flex flex-column">
-            <a-row class="mb-3">
-              <a-col :span="8"> <span> {{ e.scope }}:</span></a-col>
-              <a-col :span="8"> <a-switch @change="onChange(e)" /></a-col>
-            </a-row>
-            
-            <a-row class="mb-3">
-              <a-col :span="8"> <span>Possession: </span></a-col>
-              <a-col :span="8"> 
-                <a-select class="mb-3" default-value="lucy" style="width: 120px" @change="handleChange">
-                  <a-select-option value="any">
-                    ANY
-                  </a-select-option>
-                  <a-select-option value="owner">
-                    OWNER
-                  </a-select-option>
-                </a-select>
-              </a-col>
-            </a-row>
-          </div>
-        </a-col>
-      </a-row>
+      <a-button class="create-button" @click="showDrawerCreate" type="primary"><a-icon type="plus" /> CREATE</a-button>
+      
+      <a-table 
+        class="pt-4 admin-table" 
+        :columns="columns" 
+        :data-source="data" 
+        :loading="loading" 
+        :row-key="record => record.id"
+        bordered
+      >
+        <span slot="edit" slot-scope="text, record">
+          <a-button @click="showModalEdit(record.id)" type="primary"><a-icon type="edit" /></a-button>
+        </span>
+
+        <span slot="delete" slot-scope="text, record">
+          <a-popconfirm
+            v-if="record.roleId != 1"
+            class="mr-2"
+            title="Are you sure delete this permission?"
+            ok-text="Yes"
+            cancel-text="No"
+            @confirm="confirmDelete(record.id)"
+          >
+            <a-button type="danger">
+              <a-icon type="delete" />
+            </a-button>
+          </a-popconfirm>
+        </span>
+      </a-table>
+
+      <a-drawer
+        title="Create new permission"
+        placement="right"
+        :width="360"
+        :visible="visibleDrawerCreate"
+        @close="onCloseCreate"
+      >
+        <a-form-model
+          ref="formCreate"
+          :model="formCreate"
+          :rules="rules"
+        >
+          <a-form-model-item has-feedback prop="scope" class="mb-2 form-validate">
+            <a-input placeholder="Name permission" v-model="formCreate.scope"/>
+          </a-form-model-item>
+        </a-form-model>
+
+        <div
+        :style="{
+          position: 'absolute',
+          right: 0,
+          bottom: 0,
+          width: '100%',
+          borderTop: '1px solid #e9e9e9',
+          padding: '10px 16px',
+          background: '#fff',
+          textAlign: 'right',
+          zIndex: 1,
+        }"
+        >
+          <a-button :style="{ marginRight: '8px' }" @click="onCloseCreate">
+            Cancel
+          </a-button>
+          <a-button  type="primary" @click="createPermission">
+            Submit
+          </a-button>
+        </div>
+      </a-drawer>
     </a-layout-content>
   </div>
 </template>

@@ -1,102 +1,124 @@
 import { mapState } from 'vuex'
 
 export default {
-    layout: "admin",
+  layout: "admin",
 
-    middleware({store, query}) {
-      store.commit('admin/permission/SET_QUERY', query)
-    },
+  middleware({store, query}) {
+    store.commit('admin/permission/SET_QUERY', {})
+  },
 
-    data() {
-      return {
-        listRole: [],
-        listPermission: [],
-        user: JSON.parse(localStorage.getItem('currentUser')),
-        params: {},
-        rolePermisson: {}
-      }
-    }, 
+  async fetch() {
+    this.fetchData()
+  },
 
-    computed: {
-      ...mapState({
-        user: (state) => state.auth.currentUser,
-        params: (state) => state.admin.permission.query, 
-        listRole: (state) => state.admin.role.list, 
-        data: (state) => state.admin.user.list, 
-        loading: (state) => state.admin.user.loading, 
-        pagination: (state) => state.admin.user.pagination, 
-        loadingCreate: (state) => state.admin.user.loadingCreate
-      }),
-    },
-  
-    created() {
-      this.$store.commit("admin/SET_BREADCRUMB", ["Permisson", "List"]);
-      this.$router.push({name: this.$route.name, query: {...this.params} })
-      this.getlistRole()
-      this.getlistPermission()
-    }, 
-  
-    methods: {
-      async getlistRole() {
-        try {
-          const response = await this.$axios.get('permission/role/all', {
-            headers: {
-              Authorization: 'Bearer ' + this.user.token,
-            }
-          })
-          this.listRole = response.data.data
-        }
-        catch(e) {
-          if(e.response) {
-            this.$notification["error"]({
-              message: 'GET LIST ROLE ERROR',
-              description:
-                e.response.data.message
-            });
-          }
-          else {
-            this.$notification["error"]({
-              message: 'GET LIST ROLE ERROR',
-              description:
-                e.message
-            });
-          }
-        }
-      }, 
-  
-      async getlistPermission() {
-        try {
-          const response = await this.$axios.get('permission/all', {
-            headers: {
-              Authorization: 'Bearer ' + this.user.token,
-            }
-          })
-          this.listPermission = response.data.data
-        }
-        catch(e) {
-          if(e.response) {
-            this.$notification["error"]({
-              message: 'ERROR',
-              description:
-                e.response.data.message
-            });
-          }
-          else {
-            this.$notification["error"]({
-              message: 'ERROR',
-              description:
-                e.message
-            });
-          }
-        }
-      }, 
-  
-      getRole(key) {
-        console.log(key)
+  data() {
+    return {
+      columns: [
+        {
+          title: 'ID',
+          dataIndex: 'id',
+          key: 'id',
+        },
+        {
+          title: 'Scope',
+          dataIndex: 'scope',
+          key: 'scope',
+        },
+        {
+          title: 'Edit',
+          key: 'edit',
+          scopedSlots: { customRender: 'edit' },
+          align: 'center'
+        },
+
+        {
+          title: 'Delete',
+          key: 'delete',
+          scopedSlots: { customRender: 'delete' },
+          align: 'center'
+        },
+      ], 
+
+      visibleDrawerCreate: false,
+      formCreate: {
+        scope: '',
       },
-  
-      onChange(e) {
-  
+      rules: {
+        scope: [{ required: true, message: 'Please fill permission name', trigger: 'change'}],
+      },
+    }
+  }, 
+  computed: {
+    ...mapState({
+      data: (state) => state.admin.permission.list,
+      loading: (state) => state.admin.permission.loading,
+      params: (state) => state.admin.permission.query
+    }),
+  },
+
+  created() {
+    this.$store.commit("admin/SET_BREADCRUMB", ["Permission", "List"]);
+    this.$router.push({name: this.$route.name, query: {...this.params} })
+  }, 
+
+  methods: {
+    handleError(err) {
+      if(err.response) {
+        this.$notification["error"]({
+          message: 'ERROR',
+          description:
+            err.response.data.message
+        });
       }
+      else {
+        this.$notification["error"]({
+          message: 'ERROR',
+          description:
+            err.message
+        });
+      }
+    },
+
+    async fetchData() {
+      try {
+        await this.$store.dispatch('admin/permission/fetchListData')
+      }
+      catch(error) {
+        this.handleError(error)
+      }
+    },
+
+    confirmDelete(id) {
+      
+    }, 
+
+    showModalEdit(id) {
+
+    }, 
+
+    showDrawerCreate() {
+      this.visibleDrawerCreate = true;
+    }, 
+
+    onCloseCreate() {
+      this.visibleDrawerCreate = false
+      this.$refs.formCreate.resetFields();
+    }, 
+
+    createPermission() {
+      this.$refs.formCreate.validate(async valid => {
+        if(valid) {
+          try {
+            
+          }
+          catch(error) {
+            this.handleError(error)
+          }
+        }
+        else {
+          return false
+        }
+      });
     }
   }
+}

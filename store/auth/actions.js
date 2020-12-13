@@ -46,7 +46,7 @@ export default {
       }
       else {
         throw {
-          message: "Bạn không có quyền vào trang quản lý!"
+          message: "You do not have permission to access admin!"
         }
       }
       commit('SET_DISABLED', false)

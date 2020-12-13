@@ -39,11 +39,13 @@ export default {
               title: 'Profile',
               key: 'profile',
               scopedSlots: { customRender: 'profile' },
+              align: 'center'
             },
             {
               title: 'Action',
               key: 'action',
               scopedSlots: { customRender: 'action' },
+              align: 'center'
             },
         ],
         profile: {},
@@ -87,7 +89,6 @@ export default {
       async fetchData() {
         try {
           await this.$store.dispatch('admin/user/fetchListData')
-          console.log(this.list);
         }
         catch(error) {
           this.handleError(error)

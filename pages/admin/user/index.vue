@@ -4,9 +4,8 @@
       :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '100vh' }"
     >
       <div class="d-flex justify-content-between">
+        <a-button class="create-button" @click="showDrawerCreate" type="primary"><a-icon type="plus" /> CREATE</a-button>
         <a-input-search placeholder="Search name, email" style="width: 300px" allow-clear @search="onSearch" />
-      
-        <a-button type="primary" @click="showDrawerCreate"> <a-icon type="plus" /> New User </a-button>
       </div>
 
       <a-table 
@@ -49,10 +48,10 @@
           <a-button v-if="record.profile != null" @click="viewProfile(record)"  type="primary">
             View Profile
           </a-button>
-          <span v-else>Null</span>
+          <span v-else></span>
         </span>
 
-        <span class="d-flex justify-content-between" slot="action" slot-scope="text, record">
+        <span slot="action" slot-scope="text, record">
           <a-popconfirm
             v-if="record.roleId != 1"
             class="mr-2"
@@ -62,7 +61,7 @@
             @confirm="confirmDelete(record.id)"
           >
             <a-button type="danger">
-              Delete
+              <a-icon type="delete" />
             </a-button>
           </a-popconfirm>
         </span>

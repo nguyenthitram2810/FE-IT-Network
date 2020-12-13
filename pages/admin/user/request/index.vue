@@ -20,7 +20,7 @@
           <a-button v-if="record.profile != null" @click="viewProfile(record)"  type="primary">
             View Profile
           </a-button>
-          <span v-else>Null</span>
+          <span v-else></span>
         </span>
 
         <span class="d-flex justify-content-between" slot="action" slot-scope="text, record">
