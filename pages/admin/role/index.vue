@@ -42,7 +42,7 @@
             <a-button key="back" @click="handleCancelModal">
               Back
             </a-button>
-            <a-button key="submit" type="primary">
+            <a-button key="submit" type="primary" @click="editUser">
               Edit
             </a-button>
           </template>

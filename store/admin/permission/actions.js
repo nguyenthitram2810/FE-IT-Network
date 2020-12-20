@@ -7,6 +7,7 @@ export default {
           Authorization: 'Bearer ' + rootState.auth.currentUser.token,
         }
       })
+      console.log(response);
       commit('SET_LIST', response.data.data)
       commit('SET_LOADING', false)
     }

@@ -24,5 +24,9 @@ export default {
     
     REMOVE_PERMISSION_ROLE(state, object) {
       state.permissionPosession = state.permissionPosession.filter(e => e.id != object.id)
+    }, 
+
+    RESET_PERMISSION_ROLE(state) {
+      state.permissionPosession = []
     }
   }

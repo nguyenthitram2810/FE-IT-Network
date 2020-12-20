@@ -9,6 +9,10 @@ export default {
     CheckSelect,
   },
 
+  middleware({store}) {
+    store.commit('admin/permission/RESET_PERMISSION_ROLE')
+  },
+
   async fetch() {
     this.fetchData()
   },

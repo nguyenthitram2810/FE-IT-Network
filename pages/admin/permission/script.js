@@ -20,9 +20,14 @@ export default {
           key: 'id',
         },
         {
-          title: 'Scope',
-          dataIndex: 'scope',
-          key: 'scope',
+          title: 'Action',
+          dataIndex: 'action',
+          key: 'action',
+        },
+        {
+          title: 'MODULE',
+          dataIndex: 'module',
+          key: 'module',
         },
         {
           title: 'Edit',
@@ -86,6 +91,7 @@ export default {
 
     async fetchData() {
       try {
+        console.log("hey");
         await this.$store.dispatch('admin/permission/fetchListData')
       }
       catch(error) {
