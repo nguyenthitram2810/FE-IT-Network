@@ -1,5 +1,6 @@
 import { mapState } from 'vuex'
 import moment from 'moment'
+import _ from 'lodash';
 
 export default {
   layout: "admin",
@@ -9,20 +10,6 @@ export default {
   },
 
   data() {
-    const treeData = [
-      {
-        title: 'parent 1',
-        key: '0-0',
-        slots: {
-          icon: 'smile',
-        },
-        children: [
-          { title: 'leaf', key: '0-0-0', slots: { icon: 'meh' } },
-          { title: 'leaf', key: '0-0-1', scopedSlots: { icon: 'custom' } },
-        ],
-      },
-    ]
-
     return {
       columns: [
         {
@@ -62,7 +49,7 @@ export default {
       ],
       modalVisible: false,
       permissionRole: [],
-      treeData,
+      treeData: [],
     };
   }, 
 
@@ -113,8 +100,7 @@ export default {
       this.$router.push({path: "/admin/role/create"})
     },
 
-    confirmDelete(id) {
-      
+    confirmDelete(id) { 
     }, 
 
     async getPermission(record) {
@@ -124,7 +110,7 @@ export default {
             Authorization: 'Bearer ' + this.user.token,
           }
         })
-        console.log(response.data.data);
+        this.mappingData(response.data.data)
         this.modalVisible = true;
       } catch (error) {
         this.handleError(error)
@@ -133,6 +119,31 @@ export default {
 
     handleCancelModal() {
       this.modalVisible = false;
-    }
+    },
+
+    mappingData(data) {
+      let grouped = _.mapValues(_.groupBy(data, 'module'),
+                                    list => list.map(e => _.omit(e, 'module')))
+      this.treeData = Object.keys(grouped);
+      let i = 0;
+      this.treeData = this.treeData.map(e => {
+        let rObj = {};
+        rObj["title"] = e 
+        rObj["key"] = i;
+        rObj["slot"] = { icon: 'key' }
+        if(grouped[e]) {
+          console.log("hey");
+          rObj["children"] = grouped[e].map(p => {
+            let Obj = {};
+            Obj["title"] = p.scope
+            Obj["key"] = `${i}-${p.id}`;
+            Obj["scopedSlots"] = { icon: 'permission' } 
+            return Obj;
+          })
+        }
+        i++;
+        return rObj;
+      });
+    },
   }
 }

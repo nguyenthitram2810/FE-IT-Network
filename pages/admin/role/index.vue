@@ -42,33 +42,16 @@
             <a-button key="back" @click="handleCancelModal">
               Back
             </a-button>
-            <a-button key="submit" type="primary" style="display: none;">
-              Submit
+            <a-button key="submit" type="primary">
+              Edit
             </a-button>
           </template>
 
-          <!-- <a-tree
-            :show-icon="showIcon"
-            :default-expanded-keys="['0-0-0', '0-0-1', '0-0-2']"
-            @select="onSelect"
-          >
-            <a-icon slot="icon" type="carry-out" />
-            <a-tree-node key="0-0">
-              <a-icon slot="icon" type="carry-out" />
-              <span slot="title" style="color: #1890ff">USER</span>
-              <a-tree-node key="0-0-2" title="parent 1-2">
-                <a-icon slot="switcherIcon" type="form" />
-                <a-tree-node key="0-0-2-0" title="leaf">
-                  <a-icon slot="switcherIcon" type="form" />
-                  <a-icon slot="icon" type="carry-out" />
-                </a-tree-node>
-                <a-tree-node key="0-0-2-1" title="leaf">
-                  <a-icon slot="icon" type="carry-out" />
-                  <a-icon slot="switcherIcon" type="form" />
-                </a-tree-node>
-              </a-tree-node>
-            </a-tree-node>
-          </a-tree> -->
+          <a-tree :tree-data="treeData" show-icon default-expand-all>
+            <i style="color: #017B01" slot="permission" class="fas fa-check"></i>
+            <a-icon slot="key" type="key" />
+            <a-icon slot="switcherIcon" type="down" />
+          </a-tree>
         </a-modal>
       </div>
     </a-layout-content>
