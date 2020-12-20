@@ -86,7 +86,7 @@ export default {
 
     mappingData() {
       this.permission = _.mapValues(_.groupBy(this.data, 'module'),
-                          clist => clist.map(car => _.omit(car, 'module')))
+                          list => list.map(e => _.omit(e, 'module')))
       this.module = Object.keys(this.permission)
     }
   }
