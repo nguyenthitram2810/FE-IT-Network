@@ -4,13 +4,14 @@
       :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '100vh' }"
     >
       <div class="text-center font--bold mb-3">
-        
+        UPDATE PERMISSION 
       </div>
 
       <a-form :label-col="{ span: 3 }" :wrapper-col="{ span: 19 }">
         <a-form-item label="Name">
-          <a-input v-model="name" allow-clear/>
+          <a-input v-model="name" disabled/>
         </a-form-item>
+
         <a-form-item label="Permission">
           <a-collapse>
             <a-collapse-panel  v-for="(e, index) in module" :key="index" :header="e">
@@ -23,7 +24,7 @@
       </a-form>
 
       <div class="w-100 text-center">
-        <a-button class="create-button mt-3" type="primary" @click="createRole"> CREATE</a-button>
+        <a-button class="create-button mt-3" type="primary"> UPDATE</a-button>
       </div>
     </a-layout-content>
   </div>

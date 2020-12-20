@@ -25,13 +25,14 @@ export default {
   props: ["permission", "module"],
   data() {
     return {
-      checked: false,
+      checked: this.permission.posession != undefined ? true : false,
       form: {
         permissionId: this.permission.id,
-        possession: "ANY"
+        possession: this.permission.posession != undefined ? this.permission.posession : "ANY"
       }
     }
   },
+
   methods: {
     onChange(e) {
       if(this.checked) {

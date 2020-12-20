@@ -50,6 +50,7 @@ export default {
       modalVisible: false,
       permissionRole: [],
       treeData: [],
+      activeRecord: {}
     };
   }, 
 
@@ -105,6 +106,7 @@ export default {
 
     async getPermission(record) {
       try {
+        this.activeRecord = record
         const response = await this.$axios.get(`/permission/${record.role}`, {
           headers: {
             Authorization: 'Bearer ' + this.user.token,
@@ -115,6 +117,11 @@ export default {
       } catch (error) {
         this.handleError(error)
       }
+    },
+
+    editUser() {
+      console.log(this.activeRecord);
+      this.$router.push(`/admin/role/edit/${this.activeRecord.role}`)
     },
 
     handleCancelModal() {
@@ -132,7 +139,6 @@ export default {
         rObj["key"] = i;
         rObj["slot"] = { icon: 'key' }
         if(grouped[e]) {
-          console.log("hey");
           rObj["children"] = grouped[e].map(p => {
             let Obj = {};
             Obj["title"] = p.scope
