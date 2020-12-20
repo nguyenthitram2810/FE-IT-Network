@@ -9,6 +9,20 @@ export default {
   },
 
   data() {
+    const treeData = [
+      {
+        title: 'parent 1',
+        key: '0-0',
+        slots: {
+          icon: 'smile',
+        },
+        children: [
+          { title: 'leaf', key: '0-0-0', slots: { icon: 'meh' } },
+          { title: 'leaf', key: '0-0-1', scopedSlots: { icon: 'custom' } },
+        ],
+      },
+    ]
+
     return {
       columns: [
         {
@@ -46,11 +60,15 @@ export default {
           className: 'text-center',
         }
       ],
+      modalVisible: false,
+      permissionRole: [],
+      treeData,
     };
   }, 
 
   computed: {
     ...mapState({
+      user: (state) => state.auth.currentUser,
       data: (state) => state.admin.role.list, 
       loading: (state) => state.admin.role.loading, 
     }),
@@ -99,8 +117,22 @@ export default {
       
     }, 
 
-    getPermission(record) {
-      
+    async getPermission(record) {
+      try {
+        const response = await this.$axios.get(`/permission/${record.role}`, {
+          headers: {
+            Authorization: 'Bearer ' + this.user.token,
+          }
+        })
+        console.log(response.data.data);
+        this.modalVisible = true;
+      } catch (error) {
+        this.handleError(error)
+      }
+    },
+
+    handleCancelModal() {
+      this.modalVisible = false;
     }
   }
 }

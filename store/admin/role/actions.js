@@ -1,12 +1,29 @@
 export default {
   async fetchListData({state, commit, rootState}) {
     try {
+      commit('SET_LOADING', true)
       const response = await this.$axios.get('permission/role/all', {
         headers: {
           Authorization: 'Bearer ' + rootState.auth.currentUser.token,
         }
       })
       commit('SET_LIST', response.data.data)
+      commit('SET_LOADING', false)
+    }
+    catch(err) {
+      throw err;
+    }
+  }, 
+
+  async createRole({ state, commit, rootState }, data) {
+    try {
+      commit('SET_LOADING', true)
+      const response = await this.$axios.post('permission/role', data, {
+        headers: {
+          Authorization: 'Bearer ' + rootState.auth.currentUser.token,
+        }
+      })
+      commit('SET_LOADING', false)
     }
     catch(err) {
       throw err;

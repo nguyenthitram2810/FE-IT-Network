@@ -1,7 +1,13 @@
+import CheckSelect from '@/components/form/CheckSelect'
 import { mapState } from 'vuex'
+import _ from 'lodash';
 
 export default {
   layout: "admin",
+
+  components: {
+    CheckSelect,
+  },
 
   async fetch() {
     this.fetchData()
@@ -10,6 +16,17 @@ export default {
   data() {
     return {
       name: '',
+      permission: [],
+      module: [],
+      query: {
+        page: "1", 
+        limit: "10", 
+        sort: [
+          'updatedat,DESC'
+        ], 
+        or: undefined, 
+        filter: undefined
+      },
     };
   }, 
 
@@ -22,6 +39,7 @@ export default {
       user: (state) => state.auth.currentUser,
       data: (state) => state.admin.permission.list, 
       loading: (state) => state.admin.permission.loading, 
+      permissionPosession: (state) => state.admin.permission.permissionPosession
     }),
   },
 
@@ -46,14 +64,30 @@ export default {
     async fetchData() {
       try {
         await this.$store.dispatch('admin/permission/fetchListData')
+        this.mappingData()
+        
       }
       catch(error) {
         this.handleError(error)
       }
     },
 
-    create() {
-      
+    async createRole() {
+      try {
+        await this.$store.dispatch('admin/role/createRole', {
+          role: this.name,
+          permissionPosession: this.permissionPosession
+        })
+        this.$router.push({path: "/admin/role", query: { ...this.query } })
+      } catch (error) {
+        this.handleError(error)
+      }
+    },
+
+    mappingData() {
+      this.permission = _.mapValues(_.groupBy(this.data, 'module'),
+                          clist => clist.map(car => _.omit(car, 'module')))
+      this.module = Object.keys(this.permission)
     }
   }
 }

@@ -14,7 +14,7 @@
         bordered
       >
         <span slot="edit" slot-scope="text, record">
-          <a-button @click="showModalEdit(record.id)" type="primary"><a-icon type="edit" /></a-button>
+          <a-button @click="showModalEdit(record)" type="primary"><a-icon type="edit" /></a-button>
         </span>
 
         <span slot="delete" slot-scope="text, record">
@@ -71,6 +71,20 @@
           </a-button>
         </div>
       </a-drawer>
+
+      <a-modal v-model="visibleModalEdit" title="Edit Infomation" @ok="edit()">
+        <template>
+          <a-form-model 
+            :model="formEdit"
+            ref="formEdit"
+            :rules="rules"
+          >      
+            <a-form-model-item has-feedback prop="scope" label="Scope">
+              <a-input v-model="formEdit.scope"/>
+            </a-form-model-item>
+          </a-form-model>
+        </template>
+      </a-modal>
     </a-layout-content>
   </div>
 </template>
