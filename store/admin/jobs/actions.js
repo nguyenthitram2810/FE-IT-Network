@@ -23,7 +23,7 @@ export default {
       throw err
     }
   },
-    handleTableChange({ commit, dispatch }, { pagination, filters, sorter }) {
+    handleTableChange({ state, commit, dispatch }, { pagination, filters, sorter }) {
         var sortString = '';
         if(sorter.field){
             sortString = sorter.field + ',';

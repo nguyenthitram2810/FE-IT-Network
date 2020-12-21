@@ -6,7 +6,6 @@ export default {
     middleware({store, query}) {
       store.commit('admin/jobs/SET_URL', '/jobs?')
       store.commit('admin/jobs/SET_QUERY', query)
-      store.commit('admin/jobs/SET_LIST', [])
     }, //ok
     async fetch(){
         this.fetchData()
