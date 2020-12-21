@@ -10,6 +10,7 @@
 				</li>
 			</ul>
 		</div>
+
 		<div class="tab-content" id="myTabContent">
 		  <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
 			  <div class="box shadow-sm border rounded bg-white mb-3">
@@ -25,6 +26,7 @@
             </button>
 			  	</div>
 			  </div>
+        
 			  <div class="box shadow-sm border rounded bg-white mb-3">
 			  	<div class="box-title border-bottom p-3">
 			  		<h6 class="m-0">Overview</h6>
@@ -112,8 +114,8 @@
 <style lang="scss" scoped>
 @import url('./style.scss');
 .gray-bg {
-    float: left;
-    width: 100%;
-    background: $colorPurple;
+  float: left;
+  width: 100%;
+  background: $colorPurple;
 }
 </style>

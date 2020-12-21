@@ -1,6 +1,8 @@
 import { mapState } from 'vuex'
 
 export default {
+  layout: 'profile',
+  
   async fetch() {
     this.fetchData()
   },

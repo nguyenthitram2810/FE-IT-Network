@@ -63,7 +63,7 @@
 	            			<p class="mb-0 text-muted">Looking for talent?</p>
 	            		</div>
 	            		<div class="p-3">
-	            			<button type="button" class="btn btn-outline-primary pl-4 pr-4"> POST A JOB </button>
+	            			<nuxt-link :to="'/home/job/create'" class="btn btn-outline-primary pl-4 pr-4"> POST A JOB </nuxt-link>
 	            		</div>
 	            	</div>
 	            </aside>
