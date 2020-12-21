@@ -32,7 +32,7 @@
           <span>Role</span>
         </a-menu-item>
 
-        <a-menu-item key="/admin/permisson">
+        <a-menu-item key="/admin/permission">
           <a-icon type="key" />
           <span>Permisson</span>
         </a-menu-item>

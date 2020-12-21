@@ -20,9 +20,14 @@ export default {
           key: 'id',
         },
         {
-          title: 'Scope',
-          dataIndex: 'scope',
-          key: 'scope',
+          title: 'Action',
+          dataIndex: 'action',
+          key: 'action',
+        },
+        {
+          title: 'MODULE',
+          dataIndex: 'module',
+          key: 'module',
         },
         {
           title: 'Edit',
@@ -40,8 +45,13 @@ export default {
       ], 
 
       visibleDrawerCreate: false,
+      visibleModalEdit: false,
       formCreate: {
         scope: '',
+      },
+      formEdit: {
+        id: null,
+        scope: null
       },
       rules: {
         scope: [{ required: true, message: 'Please fill permission name', trigger: 'change'}],
@@ -81,6 +91,7 @@ export default {
 
     async fetchData() {
       try {
+        console.log("hey");
         await this.$store.dispatch('admin/permission/fetchListData')
       }
       catch(error) {
@@ -92,8 +103,10 @@ export default {
       
     }, 
 
-    showModalEdit(id) {
-
+    showModalEdit(record) {
+      console.log(record);
+      this.formEdit = { ...record }
+      this.visibleModalEdit = true;
     }, 
 
     showDrawerCreate() {
@@ -110,6 +123,22 @@ export default {
         if(valid) {
           try {
             
+          }
+          catch(error) {
+            this.handleError(error)
+          }
+        }
+        else {
+          return false
+        }
+      });
+    },
+
+    edit() {
+      this.$refs.formEdit.validate(async valid => {
+        if(valid) {
+          try {
+            console.log("hey");
           }
           catch(error) {
             this.handleError(error)

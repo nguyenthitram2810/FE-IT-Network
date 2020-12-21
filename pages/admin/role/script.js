@@ -1,5 +1,6 @@
 import { mapState } from 'vuex'
 import moment from 'moment'
+import _ from 'lodash';
 
 export default {
   layout: "admin",
@@ -46,11 +47,16 @@ export default {
           className: 'text-center',
         }
       ],
+      modalVisible: false,
+      permissionRole: [],
+      treeData: [],
+      activeRecord: {}
     };
   }, 
 
   computed: {
     ...mapState({
+      user: (state) => state.auth.currentUser,
       data: (state) => state.admin.role.list, 
       loading: (state) => state.admin.role.loading, 
     }),
@@ -95,12 +101,55 @@ export default {
       this.$router.push({path: "/admin/role/create"})
     },
 
-    confirmDelete(id) {
-      
+    confirmDelete(id) { 
     }, 
 
-    getPermission(record) {
-      
-    }
+    async getPermission(record) {
+      try {
+        this.activeRecord = record
+        const response = await this.$axios.get(`/permission/${record.role}`, {
+          headers: {
+            Authorization: 'Bearer ' + this.user.token,
+          }
+        })
+        this.mappingData(response.data.data)
+        this.modalVisible = true;
+      } catch (error) {
+        this.handleError(error)
+      }
+    },
+
+    editUser() {
+      console.log(this.activeRecord);
+      this.$router.push(`/admin/role/edit/${this.activeRecord.role}`)
+    },
+
+    handleCancelModal() {
+      this.modalVisible = false;
+    },
+
+    mappingData(data) {
+      let grouped = _.mapValues(_.groupBy(data, 'module'),
+                                    list => list.map(e => _.omit(e, 'module')))
+      this.treeData = Object.keys(grouped);
+      let i = 0;
+      this.treeData = this.treeData.map(e => {
+        let rObj = {};
+        rObj["title"] = e 
+        rObj["key"] = i;
+        rObj["slot"] = { icon: 'key' }
+        if(grouped[e]) {
+          rObj["children"] = grouped[e].map(p => {
+            let Obj = {};
+            Obj["title"] = p.scope
+            Obj["key"] = `${i}-${p.id}`;
+            Obj["scopedSlots"] = { icon: 'permission' } 
+            return Obj;
+          })
+        }
+        i++;
+        return rObj;
+      });
+    },
   }
 }

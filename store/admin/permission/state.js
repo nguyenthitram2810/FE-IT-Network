@@ -1,5 +1,6 @@
 export default () => ({
-    loading: false,
-    list: [],
-    query: {}
-  })
+  loading: false,
+  list: [],
+  query: {},
+  permissionPosession: [],
+})
