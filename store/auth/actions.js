@@ -60,5 +60,21 @@ export default {
   setUser({ commit }, data) {
     localStorage.setItem('currentUser', JSON.stringify(data))
     commit('SET_CURRENT_USER', JSON.parse(localStorage.getItem('currentUser')))
+  }, 
+
+  async getFullInfo({commit, rootState}, data) {
+    try {
+      commit('SET_LOADING', true)
+      const response = await this.$axios.get(`/auth/me`, {
+        headers: {
+          Authorization: 'Bearer ' + rootState.auth.currentUser.token,
+        }
+      })
+      commit('SET_USER', response.data.data[0])
+      commit('SET_LOADING', false)
+    } catch (error) {
+      commit('SET_LOADING', false)
+      throw error
+    }
   }
 }

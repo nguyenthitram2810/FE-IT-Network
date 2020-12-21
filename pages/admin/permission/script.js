@@ -4,6 +4,7 @@ export default {
   layout: "admin",
 
   middleware({store, query}) {
+    store.commit('admin/permission/REMOVE_LIST')
     store.commit('admin/permission/SET_QUERY', {})
   },
 
@@ -91,7 +92,6 @@ export default {
 
     async fetchData() {
       try {
-        console.log("hey");
         await this.$store.dispatch('admin/permission/fetchListData')
       }
       catch(error) {

@@ -5,6 +5,10 @@ import _ from 'lodash';
 export default {
   layout: "admin",
 
+  middleware({store}) {
+    store.commit('admin/role/REMOVE_LIST')
+  },
+
   async fetch() {
     this.fetchData()
   },
