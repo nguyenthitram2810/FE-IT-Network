@@ -4,7 +4,7 @@ import { mapState } from 'vuex'
 export default {
     layout: "admin", 
     middleware({store, query}) {
-      store.commit('admin/jobs/SET_URL', '/jobs?')
+      store.commit('admin/jobs/SET_URL', '/jobs/inactive?')
       store.commit('admin/jobs/SET_QUERY', query)
       store.commit('admin/jobs/SET_LIST', [])
     }, //ok
@@ -65,7 +65,7 @@ export default {
       })
     }, //ok
     created(){
-        this.$store.commit("admin/SET_BREADCRUMB", ["Jobs", "List"]);
+        this.$store.commit("admin/SET_BREADCRUMB", ["Jobs", "Request List"]);
         this.$router.push({name: this.$route.name, query: {...this.params} })
     }, //ok
     methods: {
@@ -96,47 +96,10 @@ export default {
         changeStringToTime(valueToChange){
             return moment(String(valueToChange)).format('MM/DD/YYYY HH:mm')
         }, //ok
-        async handleTableChange(pagination, filters, sorter) {
-            try {
-                await this.$store.dispatch('admin/jobs/handleTableChange', { pagination, filters, sorter })
-                this.$router.push({name: this.$route.name, query: {...this.params} })
-            } catch (error) {
-                this.handleError(error)
-            }
-        }, //ok
-        async confirmDelete(id) {
-            try {
-              await this.$store.dispatch('admin/jobs/delete', id)
-              this.$notification["success"]({
-                message: 'SUCCESS',
-                description:
-                `Deleted successfully!`
-              });
-            } catch (error) {
-                this.handleError(error)
-            }
-          
-        }, //ok
         viewDetail(record){
-            this.detailInfo = {}
-            this.visible = true
-            this.detailInfo = record
-        }, //ok
-        handleCancel(){
-            this.visible = false;
-        }, //ok
-        async onSearch(value) {
-            let query = {...this.params}
-            if(value != '') {
-              query.filter = `name||$contL||${value}`
-            }
-            else {
-              query.filter = undefined
-            }
-            query.page = 1
-            this.$store.commit('admin/jobs/SET_QUERY', query)
-            await this.$store.dispatch('admin/jobs/fetchListData')
-            this.$router.push({name: this.$route.name, query: {...this.params} })
-        }, //ok
+          this.detailInfo = {}
+          this.visible = true
+          this.detailInfo = record
+        },
     }
 }

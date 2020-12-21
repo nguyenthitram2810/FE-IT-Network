@@ -37,10 +37,31 @@
           <span>Permisson</span>
         </a-menu-item>
 
-        <a-menu-item key="/admin/jobs">
-          <a-icon type="profile" />
-          <span>Jobs</span>
-        </a-menu-item>
+        <a-sub-menu key="jobs">
+          <span slot="title"><a-icon type="profile" /> <span>Jobs</span></span>
+          <a-menu-item key="/admin/jobs">
+            <span>List Jobs</span>
+          </a-menu-item>
+
+          <a-menu-item key="/admin/jobs/request">
+            <span>Job Request</span>
+          </a-menu-item>
+
+          <a-menu-item key="/admin/jobs/deleted">
+            <span>Deleted Jobs</span>
+          </a-menu-item>
+        </a-sub-menu>
+
+        <!-- <a-sub-menu key="articles">
+          <span slot="title"><a-icon type="file-text" /> <span>Articles</span></span>
+          <a-menu-item key="/admin/articles">
+            <span>List Articles</span>
+          </a-menu-item>
+
+          <a-menu-item key="/admin/articles/deleted">
+            <span>Deleted Articles</span>
+          </a-menu-item>
+        </a-sub-menu> -->
       </a-menu>
     </a-layout-sider>
 </template>
