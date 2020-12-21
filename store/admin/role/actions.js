@@ -11,6 +11,7 @@ export default {
       commit('SET_LOADING', false)
     }
     catch(err) {
+      commit('SET_LOADING', false)
       throw err;
     }
   }, 
@@ -26,6 +27,7 @@ export default {
       commit('SET_LOADING', false)
     }
     catch(err) {
+      commit('SET_LOADING', false)
       throw err;
     }
   }
