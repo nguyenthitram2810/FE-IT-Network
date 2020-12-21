@@ -30,7 +30,7 @@ export default {
           Authorization: 'Bearer ' + rootState.auth.currentUser.token,
         }
 			})
-			commit('SET_LIST_ALL', response.data.data)
+			commit('SET_LIST_ALL', response.data.data)  
     } catch (err) {
       throw err
     }

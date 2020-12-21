@@ -3,12 +3,17 @@
     <a-layout-content
       :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '100vh' }"
     >
+    <!-- Buttons -->
     <div class="d-flex justify-content-between">
       <!-- Button Create -->
       <a-button class="create-button" @click="showCreateModal" type="primary">
         <a-icon type="plus" /> CREATE</a-button>
       <!-- Search infomation   -->
-      <a-input-search placeholder="Search name" style="width: 300px" allow-clear @search="onSearch" />
+      <a-input-search placeholder="Search name" 
+      style="width: 300px" 
+      allow-clear 
+      :loading="loading"
+      @search="onSearch" />
     </div>
 
     <!-- Create form -->
@@ -19,6 +24,8 @@
         ref="formE"
         >
           <a-form-model-item has-feedback label="Parent ID">
+
+
             <template>
               <a-cascader 
               :options="parentOptions" 

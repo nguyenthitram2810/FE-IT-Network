@@ -5,7 +5,7 @@ export default {
   layout: "admin",
 
   middleware({store, query}) {
-    store.commit('admin/user/SET_URL', '/users/inactive?')
+    store.commit('admin/user/SET_URL', '/jobs/softdelete/all?')
     store.commit('admin/user/SET_QUERY', query)
     store.commit('admin/user/SET_LIST', [])
   },
