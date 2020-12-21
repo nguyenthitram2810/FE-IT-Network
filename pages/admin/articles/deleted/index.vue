@@ -62,10 +62,6 @@
           </template>
 
           <!-- Entire detail information of a record -->
-          <div class="d-flex align-items-center justify-content-center avatar-modal">
-            <a-avatar style="border: 2px solid purple;" shape="square" :size="128" :src="detailInfo.introImg" />
-          </div>
-
           <div class="d-flex flex-column mt-3 px-4">
             <div class="row">
               <p class="col-4 font--bold">Name:</p>
