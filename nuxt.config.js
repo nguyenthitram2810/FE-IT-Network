@@ -31,7 +31,11 @@ export default {
   */
   css: [
     'ant-design-vue/dist/antd.css',
-    '@/assets/scss/main.scss'
+    '@/assets/scss/main.scss',
+    'quill/dist/quill.core.css',
+    'quill/dist/quill.snow.css',
+    'quill/dist/quill.bubble.css'
+
   ],
   /*
   ** Plugins to load before mounting the App

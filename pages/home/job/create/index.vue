@@ -46,11 +46,11 @@
 
       <a-form-model-item has-feedback label="Type" prop="type">
         <a-select v-model="form.type" placeholder="Please select type job">
-          <a-select-option value="FULL TIME">
-            FULL TIME
+          <a-select-option value="FULLTIME">
+            FULLTIME
           </a-select-option>
-          <a-select-option value="PART TIME">
-            PART TIME
+          <a-select-option value="PARTTIME">
+            PARTTIME
           </a-select-option>
         </a-select>
       </a-form-model-item>
@@ -108,8 +108,20 @@
         </div>
       </a-form-model-item>
       
-      <a-form-model-item has-feedback label="Requirement" prop="content">
-        <a-input v-model="form.content" type="textarea" />
+      <a-form-model-item class="editor" label="Requirement" prop="content">
+        <quill-editor
+          ref="content"
+          v-model="form.content"
+          :options="editorOption"
+        />
+      </a-form-model-item>
+
+      <a-form-model-item class="editor" label="Description" prop="description">
+        <quill-editor
+          ref="description"
+          v-model="form.description"
+          :options="editorOption"
+        />
       </a-form-model-item>
 
       <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }">
