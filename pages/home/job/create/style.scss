@@ -229,6 +229,10 @@ width:250px;
   cursor: pointer;
 }
 
+.editor >>> .ant-form-item-control {
+  line-height: normal;
+}
+
 @media screen and (max-width: 992px) {
 	.uploadImg, .previewImg {
         height: 100px;

@@ -1,7 +1,12 @@
 import { mapState } from 'vuex'
 import moment from 'moment'
+import { quillEditor } from 'vue-quill-editor'
 
 export default {
+  components: {
+    quillEditor
+  },
+
   async fetch() {
     this.fetchData()
   },
@@ -55,6 +60,7 @@ export default {
         street: null,
         introImg: null,
         content: '',
+        description: '',
       },
       rules: {
         name: [
@@ -73,13 +79,29 @@ export default {
             validator: validateLowestWage, 
           },
         ],
-        type: [{ required: true, message: 'Please select type job', trigger: 'change' }],
-        cateIds: [{ required: true, message: 'Please select category job', trigger: 'change' }],
-        deadline: [{ required: true, message: 'Please pick a date', trigger: 'change' }],
-        city: [{ required: true, message: 'Please select city', trigger: 'change' }],
+        type: [{ required: true, message: 'Please select type job', trigger: 'blur' }],
+        cateIds: [{ required: true, message: 'Please select category job', trigger: 'blur' }],
+        deadline: [{ required: true, message: 'Please pick a date', trigger: 'blur' }],
+        city: [{ required: true, message: 'Please select city', trigger: 'blur' }],
         street: [{ required: true, message: 'Please input street', trigger: 'blur' }],
         introImg: [{ required: true, message: 'Please select image', trigger: 'blur' }],
         content: [{ required: true, message: 'Please input content job', trigger: 'blur' }],
+        description: [{ required: true, message: 'Please input description job', trigger: 'blur' }],
+      },
+
+      editorOption: {
+        theme: 'snow',
+        modules: {
+          toolbar: [
+            ['bold', 'italic', 'underline', 'strike'], // toggled buttons
+            ['blockquote', 'code-block'],
+            [{ list: 'ordered' }, { list: 'bullet' }],
+            [{ script: 'sub' }, { script: 'super' }],
+            [{ indent: '-1' }, { indent: '+1' }], // outdent/indent
+            [{ font: [] }],
+            [{ align: [] }]
+          ]
+        }
       },
     }
   }, 
@@ -117,12 +139,18 @@ export default {
     },
 
     onSubmit() {
-      console.log(this.changeStringToTime(this.form.deadline));
-      this.$refs.ruleForm.validate(valid => {
+      this.$refs.ruleForm.validate(async valid => {
         if (valid) {
-          console.log(this.form);
+          try {
+            this.isDisabled = true;
+            await this.$store.dispatch('job/create', {...this.form, deadline: this.changeStringToTime(this.form.deadline)})
+            this.isDisabled = false;
+            this.$router.push("/home/job")
+          } catch (error) {
+            this.isDisabled = false;
+            this.handleError(error)
+          }
         } else {
-          console.log('error submit!!');
           return false;
         }
       });
@@ -152,7 +180,5 @@ export default {
         this.handleError(error)
       }
     },
-
-
   }
 }
