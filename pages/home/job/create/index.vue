@@ -108,12 +108,12 @@
         </div>
       </a-form-model-item>
       
-      <a-form-model-item has-feedback label="Content" prop="content">
+      <a-form-model-item has-feedback label="Requirement" prop="content">
         <a-input v-model="form.content" type="textarea" />
       </a-form-model-item>
 
       <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }">
-        <a-button type="primary" @click="onSubmit">
+        <a-button :loading="isLoading" :disabled="isDisabled" type="primary" @click="onSubmit">
           Create
         </a-button>
       </a-form-model-item>

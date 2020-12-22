@@ -1,4 +1,5 @@
 import { mapState } from 'vuex'
+import moment from 'moment'
 
 export default {
   layout: 'profile',
@@ -16,6 +17,7 @@ export default {
     ...mapState({
       user: (state) => state.auth.user,
       loading: (state) => state.auth.loading,
+      data: (state) => state.job.list
     }),
   },
 
@@ -40,10 +42,17 @@ export default {
     async fetchData() {
       try {
         await this.$store.dispatch('auth/getFullInfo')
+        this.$store.commit('job/SET_QUERY', { filter: `user.id||$eq||${this.user.id}`})
+        await this.$store.dispatch('job/fetchListData')
+        console.log(this.data);
       }
       catch(error) {
         this.handleError(error)
       }
+    },
+
+    changeStringToTime(valueToChange){
+      return moment(String(valueToChange)).format('MM/DD/YYYY')
     },
   }
 }

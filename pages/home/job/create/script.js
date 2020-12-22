@@ -9,6 +9,7 @@ export default {
   computed: {
     ...mapState({
       user: (state) => state.auth.user,
+      currentUser: (state) => state.auth.currentUser,
       data: (state) => state.category.list, 
       listCity: (state) => state.city.listCity
     }),
@@ -39,8 +40,9 @@ export default {
       listCate: [],
       labelCol: { span: 4 },
       wrapperCol: { span: 18 },
-      other: '',
       upload: true,
+      isLoading: false,
+      isDisabled: false,
       form: {
         name: null,
         lowestWage: '',
@@ -76,7 +78,7 @@ export default {
         deadline: [{ required: true, message: 'Please pick a date', trigger: 'change' }],
         city: [{ required: true, message: 'Please select city', trigger: 'change' }],
         street: [{ required: true, message: 'Please input street', trigger: 'blur' }],
-        introImg: [{ required: true, message: 'Please select image', trigger: 'change' }],
+        introImg: [{ required: true, message: 'Please select image', trigger: 'blur' }],
         content: [{ required: true, message: 'Please input content job', trigger: 'blur' }],
       },
     }
@@ -131,11 +133,26 @@ export default {
     },
 
     removeImage() {
-      
+      this.form.introImg = null
     },
 
-    previewFiles() {
-      console.log("hihi");
-    }
+    async previewFiles(event) {
+      this.isDisabled = true
+      this.upload = false
+      const data = new FormData()
+      try {
+        data.append('file', event.target.files[0]);
+        const response = await this.$axios.post(`/upload`, data)
+        this.form.introImg = response.data.data.url
+        this.isDisabled = false
+        this.upload = true
+      } catch (error) {
+        this.isDisabled = false
+        this.upload = true
+        this.handleError(error)
+      }
+    },
+
+
   }
 }
