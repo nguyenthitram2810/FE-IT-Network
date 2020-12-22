@@ -4,4 +4,5 @@ export default () => ({
     query: { 
       filter: undefined
     }, 
+    oneJob: null,
   })

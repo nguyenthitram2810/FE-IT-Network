@@ -70,6 +70,7 @@ export default {
           Authorization: 'Bearer ' + rootState.auth.currentUser.token,
         }
       })
+      console.log(response);
       commit('SET_USER', response.data.data[0])
       commit('SET_LOADING', false)
     } catch (error) {

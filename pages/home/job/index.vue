@@ -18,6 +18,28 @@
   			    <div v-for="(item, index) in data" :key="index" class="col-12">
   				    <div>
   					    <div class="border job-item mb-3">
+                  <div class="d-flex align-items-center justify-content-between px-3 pt-2">
+                    <a-button shape="round" type="danger" size="small" class="font--13">
+                      {{ item.type }}
+                    </a-button>
+                    <a-dropdown>
+                      <a-icon :style="{ fontSize: '18px', fontWeight: 'bold' }" type="more" />
+                      <a-menu slot="overlay">
+                        <a-menu-item key="0">
+                          <nuxt-link :to="`/home/job/${ item.id }`" class="d-flex align-items-center"><a-icon class="mr-2" type="eye" />View</nuxt-link>
+                        </a-menu-item>
+
+                        <a-menu-item key="1">
+                          <nuxt-link :to="`/home/job/edit/${ item.id }`" class="d-flex align-items-center"><a-icon class="mr-2" type="edit" />Update</nuxt-link>
+                        </a-menu-item>
+
+                        <a-menu-item key="2">
+                          <a @click="showDeleteConfirm(item.id)" class="d-flex align-items-center"><a-icon class="mr-2" type="delete" />Delete</a>
+                        </a-menu-item>
+                      </a-menu>
+                    </a-dropdown>
+                  </div>
+                  
   						    <div class="d-flex align-items-center justify-content-between p-3 job-item-header">
   							    <div class="overflow-hidden mr-2">
   							  	  <nuxt-link :to="`/job/${item.id}`"><h6 class="font-weight-bold text-dark mb-0 text-truncate">{{ item.name }}</h6></nuxt-link>
@@ -25,9 +47,6 @@
   							  		  <i class="feather-map-pin"></i> {{ item.address.description }}
   							  	  </div>
   							    </div>
-  							    <a-button shape="round" type="danger" size="small" class="font--13">
-                      {{ item.type }}
-                    </a-button>
   					  	  </div>
 
                   <div class="w-100 px-3 pb-2 ml-1 row">

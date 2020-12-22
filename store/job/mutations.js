@@ -14,4 +14,8 @@ export default {
     RESET_QUERY(state, query) {
       state.query = { ...query }
     },
+
+    SET_ONE_JOB(state, data) {
+      state.oneJob = data
+    },
   }
