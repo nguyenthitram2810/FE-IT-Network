@@ -21,11 +21,10 @@
       <template>
         <a-form-model
         :model="formE"
+        :rules="rules"
         ref="formE"
         >
-          <a-form-model-item has-feedback label="Parent ID">
-
-
+          <a-form-model-item has-feedback label="Parent ID" prop="parentId" class="form-validate">
             <template>
               <a-cascader 
               :options="parentOptions" 
@@ -34,7 +33,7 @@
             </template>
           </a-form-model-item>
 
-          <a-form-model-item label="Name">
+          <a-form-model-item label="Name" prop="name" class="form-validate">
             <a-input v-model="formE.name"/>
           </a-form-model-item>
         </a-form-model>

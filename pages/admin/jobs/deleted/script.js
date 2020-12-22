@@ -101,17 +101,5 @@ export default {
           this.handleError(error)
       }
     },
-    async confirmDelete(id){
-      try {
-        await this.$store.dispatch('admin/jobs/forceDelete', id)
-        this.$notification["success"]({
-          message: 'SUCCESS',
-          description:
-          `Deleted successfully!`
-        });
-      } catch (error) {
-          this.handleError(error)
-      }
-    }
   }
 }

@@ -10,7 +10,6 @@ export default {
           Authorization: 'Bearer ' + rootState.auth.currentUser.token,
         }
       })
-      console.log(response.data.data)
       commit('SET_PAGINATION', {
         total: response.data.data.total, 
         current: parseInt(state.query.page), 
@@ -68,16 +67,4 @@ export default {
       throw err
     }
   },
-  async forceDelete({ rootState, dispatch }, id){
-    try {
-      await this.$axios.delete(`/jobs/delete/${id}`, {
-        headers: {
-          Authorization: 'Bearer ' + rootState.auth.currentUser.token,
-        }
-      })
-      dispatch('fetchListData');
-    } catch (err) {
-      throw err
-    }
-  }
 }

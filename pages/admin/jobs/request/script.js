@@ -65,37 +65,64 @@ export default {
         this.$router.push({name: this.$route.name, query: {...this.params} })
     }, //ok
     methods: {
-        handleError(err) {
-            if(err.response) {
-              this.$notification["error"]({
-                message: 'ERROR',
-                description:
-                  err.response.data.message
-              });
-            }
-            else {
-              this.$notification["error"]({
-                message: 'ERROR',
-                description:
-                  err.message
-              });
-            }
-        }, //ok
-        async fetchData() {
-            try {
-              await this.$store.dispatch('admin/jobs/fetchListData')
-            }
-            catch(error) {
+      async handleTableChange(pagination, filters, sorter) {
+        try {
+            await this.$store.dispatch('admin/jobs/handleTableChange', { pagination, filters, sorter })
+            this.$router.push({name: this.$route.name, query: {...this.params} })
+        } catch (error) {
+            this.handleError(error)
+        }
+      }, //ok
+      handleCancel(){
+        this.visible = false;
+      }, //ok
+      handleError(err) {
+          if(err.response) {
+            this.$notification["error"]({
+              message: 'ERROR',
+              description:
+                err.response.data.message
+            });
+          }
+          else {
+            this.$notification["error"]({
+              message: 'ERROR',
+              description:
+                err.message
+            });
+          }
+      }, //ok
+      async fetchData() {
+          try {
+            await this.$store.dispatch('admin/jobs/fetchListData')
+          }
+          catch(error) {
+            this.handleError(error)
+          }
+      }, //ok
+      changeStringToTime(valueToChange){
+          return moment(String(valueToChange)).format('MM/DD/YYYY HH:mm')
+      }, //ok
+      viewDetail(record){
+        this.detailInfo = {}
+        this.visible = true
+        this.detailInfo = record
+      },
+      async confirmDelete(id) {
+          try {
+            await this.$store.dispatch('admin/jobs/delete', id)
+            this.$notification["success"]({
+              message: 'SUCCESS',
+              description:
+              `Deleted successfully!`
+            });
+          } catch (error) {
               this.handleError(error)
-            }
-        }, //ok
-        changeStringToTime(valueToChange){
-            return moment(String(valueToChange)).format('MM/DD/YYYY HH:mm')
-        }, //ok
-        viewDetail(record){
-          this.detailInfo = {}
-          this.visible = true
-          this.detailInfo = record
-        },
+          }
+        
+      },
+      acceptAJob(id){
+
+      }
     }
 }

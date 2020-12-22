@@ -14,8 +14,7 @@ export default {
         total: response.data.data.total, 
         current: parseInt(state.query.page), 
         pageSize: parseInt(state.query.limit)
-      })
-      
+      })   
       commit('SET_LIST', response.data.data.data)
       commit('SET_LOADING', false)
     } catch (err) {

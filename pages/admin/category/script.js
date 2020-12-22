@@ -64,6 +64,15 @@ export default {
         name: '',
         parentId:'',
       },
+      rules: {
+        parentId: [{ required: true, message: 'Please select parentId', trigger: 'change'}],
+        name:  [
+          {
+            required: true,
+            message: 'Please input name',
+          },
+        ],
+      },
       slug: '',
     };
   }, 
@@ -193,25 +202,39 @@ export default {
     },
 
     async handleOkCreate(e) {
-      this.visibleCreate = false;
-      try{
-        let obj = {name: this.formE.name}
-        let parentId = this.formE.parentId[this.formE.parentId.length -1]
-        console.log(this.formE)
-        if(parentId != '') {
-          obj.parentId = parentId
+      this.$refs.formE.validate(async valid => {
+        if(valid) {
+          try {
+            if(this.formE.name != "") {
+              let obj = {name: this.formE.name}
+              let parentId = this.formE.parentId[this.formE.parentId.length -1]
+              if(parentId != '') {
+                obj.parentId = parentId
+              }
+              await this.$store.dispatch('admin/category/createOne',obj)
+              this.visibleCreate = false;
+
+              //Nếu create thành công
+              this.$notification["success"]({
+                message: 'Notification',
+                description:
+                  'Created Successfully!',
+              }); 
+            }
+            else {
+              throw {
+                message: "You must type name!"
+              }
+            }
+          }
+          catch(error) {
+            this.handleError(error)
+          }
         }
-        console.log(obj)
-        await this.$store.dispatch('admin/category/createOne',obj)
-        //Nếu create thành công
-        this.$notification["success"]({
-          message: 'Notification',
-          description:
-            'Created Successfully!',
-        }); 
-      }catch(error){
-        this.handleError(error)
-      }
+        else {
+          return false
+        }
+      });
     },
 
     async onSearch(value) {
