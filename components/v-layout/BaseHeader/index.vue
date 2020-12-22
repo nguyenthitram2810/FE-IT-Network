@@ -1,48 +1,41 @@
-/* eslint-disable vue/html-self-closing */
 <template>
-  <header class="d-flex justify-content-between align-items-center py-1 px-2 edit-header">
+  <a-layout-header class="d-flex justify-content-between align-items-center py-1 px-4 edit-header">
+    <div class="d-flex align-items-center">
+      <img src="/images/logo.svg" alt="">
+    </div>
 
     <div class="d-flex align-items-center">
-      <img src="/images/logo_career_network2.png" class="logo" alt="">
-      <span class="brand-title ml-3 mx-3 al-text-color">Career Network</span>
+      <a-menu
+        theme="dark"
+        mode="horizontal"
+        @click="handleClick"
+        :defaultSelectedKeys= [getSelectedKey]
+      >
+        <a-menu-item key="/home">
+          <a-icon type="user" />
+        </a-menu-item>
+        <a-menu-item key="/manage">
+          <a-icon type="appstore" />
+        </a-menu-item>
+        <a-menu-item @click="logOut" key="3">
+          <a-icon type="logout" />
+        </a-menu-item>
+      </a-menu>
 
-      <a-divider type="vertical" style="height: 2rem"/>
-
-      <div class="mx-3">
-        <a-input-search placeholder="Search" style="width: 300px" @search="onSearch" />
-      </div>
-    </div> <!-- logo trang chủ và thanh tìm kiếm -->
-
-    <div v-if="isLogin" class="d-flex justify-content-between align-items-center mr-3">
-      <div class="al-text-color mr-1">
-        <h4>Cô Bé Bán Diêm</h4>
-      </div>
-      <a-divider type="vertical" style="height: 2rem"/>
-      <a-dropdown>
-        <a-menu slot="overlay">
-          <a-menu-item key="2"> <a-icon type="user" />Profile</a-menu-item>
-          <a-menu-item key="1" @click="logOut"> <a-icon type="logout" />Log out </a-menu-item>
-        </a-menu>
-          <div>
-            <a-avatar style="border: 1.5px solid purple;" size="large" src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-            <a-icon type="down" />
-          </div>
-      </a-dropdown>    
-    </div>
-    
-    <div v-else class="d-flex justify-content-between align-items-center">
-      <div>
-        <i class="fas fa-sign-in-alt mx-1" style="color: #513F83;"></i>
-        <nuxt-link to="/login"  class="al-text-color">Sign in</nuxt-link>
-      </div>
-
-      <a-divider type="vertical" style="height: 2rem"/>
-
-      <div>
-        <nuxt-link to="/register"  class="al-text-color">Sign up</nuxt-link>
+      <div class="d-flex justify-content-between align-items-center mr-3">
+        <a-dropdown>
+          <a-menu slot="overlay">
+            <a-menu-item key="2"> <a-icon type="user" /> Profile</a-menu-item>
+            <a-menu-item key="1" @click="logOut"> <a-icon type="logout" />Log out </a-menu-item>
+          </a-menu>
+            <div>
+              <a-avatar style="border: 1.5px solid white;" size="large" src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+              <a-icon type="down" />
+            </div>
+        </a-dropdown>    
       </div>
     </div>
-  </header>
+  </a-layout-header>
 </template>
 
 <style scoped>
@@ -50,33 +43,37 @@
 </style>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: 'BaseHeader',
+
   data() {
     return {
-      isLogin: false,
+      
     }
   },
-  created() {
-    if(localStorage.getItem("currentUser")) {
-      this.isLogin = true
-    }
-  },
-  watch: {
-    '$store.state.auth.currentUser' : function(value) {
-      if(value == null) {
-        this.isLogin = false
-        this.$router.push(this.$route.query.redirect || '/');
-      }
+
+  computed: {
+    ...mapState({
+      user: (state) => state.auth.user,
+    }),
+
+    getSelectedKey() {
+      return this.$route.path
     },
   },
+
   methods: {
     logOut () {
       localStorage.removeItem("currentUser")
       this.$store.commit('auth/SET_CURRENT_USER', null )
+      this.$router.push("/login")
     },
-    onSearch(value) {
-    },
+
+    handleClick(e) {
+      this.$router.push({ path: e.key })
+    }
   }
 }
 </script>

@@ -1,10 +1,10 @@
 <template>
-    <a-layout
+  <a-layout
     :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '100vh' }"
-    >
+  >
 
     <!-- Sider layout -->
-      <a-layout-sider width="200" style="background: #fff">
+    <a-layout-sider width="200" style="background: #fff">
       <div class="al-sidebar">
         <div class="logo d-flex align-items-center al-border-bottom al-border-right">
           <a-avatar :size="50" src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />

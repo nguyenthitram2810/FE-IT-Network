@@ -1,3 +1,104 @@
+<template>
+  <a-spin :spinning="loading">
+    <div class="theme-layout">
+      <BaseHeader />
+      <section class="bg-client">
+        <div class="profile-cover text-center">
+	        <img class="img-fluid" src="/images/company-profile.jpg" alt="">
+	      </div>
+
+        <div class="bg-white shadow-sm border-bottom">
+	      	<div class="container">
+	      		<div class="row">
+	      			<div class="col-md-12">
+	      				<div class="d-flex align-items-center py-3">
+	      					<div class="profile-left">
+	      						<h5 class="font-weight-bold text-dark mb-1 mt-0">{{ (user != null && user.profile != null && user.profile.name != null) ? user.profile.name : ""}} 
+	      							<span class="text-info">
+	      								<i data-toggle="tooltip" data-placement="top" title="Verified" class="feather-check-circle"></i>
+	      							</span>
+	      						</h5>
+	      						<p class="mb-0 text-muted"> Internet | Mountain View, CA | 14,128,005 followers</p>
+	      					</div>
+	      					<div class="profile-right ml-auto">
+	      						<a target="_blank" :href="(user != null && user.profile != null && user.profile.pageURL != null) ? user.profile.pageURL : ''" type="button" class="btn btn-light mr-2">
+	      							<i class="feather-external-link"></i> Visit website 
+	      						</a>
+	      					</div>
+	      				</div>
+	      			</div>
+	      		</div>
+	      	</div>
+	      </div>
+        
+        <div class="pb-4 pt-3">
+		      <div class="container">
+			      <div class="row">
+              <nuxt />
+              <aside class="col col-xl-3 order-xl-1 col-lg-6 order-lg-2 col-md-6 col-sm-6 col-12">
+	            	<div class="box mb-3 shadow-sm border rounded bg-white profile-box text-center">
+	            		<div class="p-5">
+	            			<template v-if="user != null && user.profile != null && user.profile.profileUrl != null">
+                      <img :src="user.profile.profileUrl" class="img-fluid" alt="Responsive image">
+                    </template>
+                    <template v-else>
+                      <img src="/images/clogo.png" class="img-fluid" alt="Responsive image">
+                    </template>
+	            		</div>
+	            		<div class="p-3 border-top border-bottom">
+	            			<h6 class="font-weight-bold text-dark mb-1 mt-0">Overview</h6>
+	            			<p class="mb-0 text-muted">Google’s mission is to organize the world‘s information and make it universally accessible and useful.</p>
+	            		</div>
+	            	</div>
+	            </aside>
+
+	            <aside class="col col-xl-3 order-xl-3 col-lg-6 order-lg-3 col-md-6 col-sm-6 col-12">
+	            	<div class="box shadow-sm border rounded bg-white mb-3">
+	            		<div class="box-title border-bottom p-3">
+	            			<h6 class="m-0">POST</h6>
+	            		</div>
+                  <img src="/images/job1.png" class="img-fluid" alt="Responsive image">
+	            		<div class="p-3 border-bottom">
+	            			<h6 class="font-weight-bold text-dark">Osahan Solutions</h6>
+	            			<p class="mb-0 text-muted">Looking for talent?</p>
+	            		</div>
+	            		<div class="p-3">
+	            			<nuxt-link :to="'/home/job/create'" class="btn btn-outline-primary pl-4 pr-4"> POST A JOB </nuxt-link>
+	            		</div>
+	            	</div>
+	            </aside>
+            </div>
+          </div>
+        </div>
+      </section>
+      <BaseFooter />
+    </div>
+  </a-spin>
+</template>
+
+<script>
+import BaseHeader from '~/components/v-layout/BaseHeader'
+import BaseFooter from '~/components/v-layout/BaseFooter'
+import { mapState } from 'vuex'
+
+export default {
+  name: 'ProfileLayout',
+  middleware: 'updateState',
+  components: {
+    BaseHeader,
+    BaseFooter
+  },
+
+  computed: {
+    ...mapState({
+      user: (state) => state.auth.user,
+      loading: (state) => state.auth.loading,
+    }),
+  },
+}
+</script>
+
+<style lang="scss" scoped>
 .header {
     box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
     background-color: #ffffff;
@@ -33,14 +134,12 @@
   background-color: #132028;
 }
 
-@import url('https://fonts.googleapis.com/css?family=Ubuntu:300,300i,400,400i,500,500i,700,700i&amp;display=swap');
 /* body */
- body {
-     background: #edf2f6;
+.bg-client {
+     background: #edf2f6!important;
      font-size: 13px;
-     font-family: 'Ubuntu', sans-serif;
 }
- p{
+p{
      color: #888da8
 }
 /* End body */
@@ -618,3 +717,5 @@ ul.sidebar-card-list {
 	}
 }
 /* End Mobile Media */
+
+</style>
