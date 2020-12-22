@@ -50,10 +50,10 @@ export default {
     }
   }, 
 
-  async delete({ rootState }, data) {
+  async delete({ rootState }, {id}) {
     try {
       commit('auth/SET_LOADING', true, { root: true })
-      const response = await this.$axios.delete(`/jobs`, {
+      const response = await this.$axios.delete(`/jobs${id}`, {
         headers: {
           Authorization: 'Bearer ' + rootState.auth.currentUser.token,
         }

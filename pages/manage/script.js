@@ -1,9 +1,8 @@
 import { mapState } from 'vuex'
-import moment from 'moment'
 
 export default {
-  layout: 'profile',
-  
+  layout: 'manage',
+
   async fetch() {
     this.fetchData()
   },
@@ -17,7 +16,8 @@ export default {
     ...mapState({
       user: (state) => state.auth.user,
       loading: (state) => state.auth.loading,
-      data: (state) => state.job.list
+      data: (state) => state.application.list,
+      listJob: (state) => state.job.list
     }),
   },
 
@@ -42,7 +42,7 @@ export default {
     async fetchData() {
       try {
         await this.$store.dispatch('auth/getFullInfo')
-        console.log(this.user);
+        await this.$store.dispatch('application/fetchListData')
         this.$store.commit('job/SET_QUERY', { filter: `user.id||$eq||${this.user.id}`})
         await this.$store.dispatch('job/fetchListData')
       }
@@ -51,31 +51,51 @@ export default {
       }
     },
 
-    changeStringToTime(valueToChange){
-      return moment(String(valueToChange)).format('MM/DD/YYYY')
-    },
-
-    showDeleteConfirm(id) {
+    acceptApplication() {
       try {
         this.$confirm({
-          title: 'Are you sure delete this job?',
-          content: 'Employee can not see this job if you delete it!',
+          title: 'Do you want to accept this application?',
+          onOk() {
+            this.$notification["success"]({
+              message: 'SUCCESS',
+              description:
+              `Accepted successfully!`
+            });
+          },
+          onCancel() {
+          },
+        });
+      } catch (error) {
+        this.handleError(error)
+      }
+    },
+
+    rejectApplication() {
+      try {
+        this.$confirm({
+          title: 'Are you sure reject this application?',
           okText: 'Yes',
           okType: 'danger',
           cancelText: 'No',
           async onOk() {
-            await this.$store.dispatch('job/delete', {id: id})
-            await this.$store.dispatch('job/fetchListData')
             this.$notification["success"]({
               message: 'SUCCESS',
               description:
-              `Deleted successfully!`
+              `Rejected successfully!`
             });
           },
           onCancel() {
             
           },
         });
+      } catch (error) {
+        this.handleError(error)
+      }
+    },
+
+    changeJob(value) {
+      try {
+        console.log(value);
       } catch (error) {
         this.handleError(error)
       }

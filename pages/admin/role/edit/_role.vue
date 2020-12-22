@@ -8,7 +8,7 @@
       </div>
 
       <a-form :label-col="{ span: 3 }" :wrapper-col="{ span: 19 }">
-        <a-form-item label="Name">
+        <a-form-item label="ID">
           <a-input v-model="name" disabled/>
         </a-form-item>
 

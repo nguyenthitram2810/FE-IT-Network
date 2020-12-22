@@ -111,9 +111,9 @@
               <p class="col-8"> {{ profile.experience }}</p>
             </div>
 
-            <div v-if="profile.quantity" class="row">
-              <p class="col-4 font--bold">Quantity:</p>
-              <p class="col-8"> {{ profile.quantity }}</p>
+            <div v-if="profile.salaryRange" class="row">
+              <p class="col-4 font--bold">Salary Range:</p>
+              <p class="col-8"> {{ profile.salaryRange }}</p>
             </div>
 
             <div v-if="profile.introduction" class="row">
