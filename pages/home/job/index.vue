@@ -42,7 +42,7 @@
                   
   						    <div class="d-flex align-items-center justify-content-between p-3 job-item-header">
   							    <div class="overflow-hidden mr-2">
-  							  	  <nuxt-link :to="`/job/${item.id}`"><h6 class="font-weight-bold text-dark mb-0 text-truncate">{{ item.name }}</h6></nuxt-link>
+  							  	  <nuxt-link :to="`/home/job/${item.id}`"><h6 class="font-weight-bold text-dark mb-0 text-truncate">{{ item.name }}</h6></nuxt-link>
   							  	  <div class="small text-gray-500">
   							  		  <i class="feather-map-pin"></i> {{ item.address.description }}
   							  	  </div>

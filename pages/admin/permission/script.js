@@ -109,30 +109,10 @@ export default {
       this.visibleModalEdit = true;
     }, 
 
-    showDrawerCreate() {
-      this.visibleDrawerCreate = true;
-    }, 
-
     onCloseCreate() {
       this.visibleDrawerCreate = false
       this.$refs.formCreate.resetFields();
     }, 
-
-    createPermission() {
-      this.$refs.formCreate.validate(async valid => {
-        if(valid) {
-          try {
-            
-          }
-          catch(error) {
-            this.handleError(error)
-          }
-        }
-        else {
-          return false
-        }
-      });
-    },
 
     edit() {
       this.$refs.formEdit.validate(async valid => {
