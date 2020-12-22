@@ -25,7 +25,7 @@
               <a-button type="danger"><a-icon type="delete" /></a-button>
             </a-popconfirm>
             <!-- Restore button -->
-            <a-button @click="confirmRestore(record)"  type="primary">
+            <a-button @click="confirmRestore(record.id)"  type="primary">
               <a-icon type="rollback" />
             </a-button>
           </div>

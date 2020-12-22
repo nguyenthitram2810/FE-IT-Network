@@ -23,36 +23,61 @@ export default {
       throw err
     }
   },
-    handleTableChange({ state, commit, dispatch }, { pagination, filters, sorter }) {
-        var sortString = '';
-        if(sorter.field){
-            sortString = sorter.field + ',';
-            if (sorter.order == 'ascend'){
-                sortString += 'ASC'
-            }else{
-                sortString += 'DESC'
-            }
-        }else{
-            sortString = 'updatedat,DESC';
+  handleTableChange({ state, commit, dispatch }, { pagination, filters, sorter }) {
+      var sortString = '';
+      if(sorter.field){
+          sortString = sorter.field + ',';
+          if (sorter.order == 'ascend'){
+              sortString += 'ASC'
+          }else{
+              sortString += 'DESC'
+          }
+      }else{
+          sortString = 'updatedat,DESC';
+      }
+      
+      try {
+        commit('SET_QUERY', {page: pagination.current, sort: [sortString]})
+        dispatch('fetchListData');
+      } catch (err) {
+        throw err
+      }
+  },
+  async delete({ rootState, dispatch }, id) {
+      try {
+        await this.$axios.delete(`/jobs/${id}`, {
+          headers: {
+            Authorization: 'Bearer ' + rootState.auth.currentUser.token,
+          }
+        })
+        dispatch('fetchListData');
+      } catch (err) {
+        throw err
+      }
+  },
+  async restore({ rootState, dispatch }, id){
+    try {
+      await this.$axios.patch(`/jobs/${id}`,
+      {
+        headers: {
+          Authorization: 'Bearer ' + rootState.auth.currentUser.token,
         }
-        
-        try {
-          commit('SET_QUERY', {page: pagination.current, sort: [sortString]})
-          dispatch('fetchListData');
-        } catch (err) {
-          throw err
+      })
+      dispatch('fetchListData');
+    } catch (err) {
+      throw err
+    }
+  },
+  async forceDelete({ rootState, dispatch }, id){
+    try {
+      await this.$axios.delete(`/jobs/delete/${id}`, {
+        headers: {
+          Authorization: 'Bearer ' + rootState.auth.currentUser.token,
         }
-    },
-    async delete({ rootState, dispatch }, id) {
-        try {
-          const response = await this.$axios.delete(`/jobs/${id}`, {
-            headers: {
-              Authorization: 'Bearer ' + rootState.auth.currentUser.token,
-            }
-          })
-          dispatch('fetchListData');
-        } catch (err) {
-          throw err
-        }
-    },
+      })
+      dispatch('fetchListData');
+    } catch (err) {
+      throw err
+    }
+  }
 }
