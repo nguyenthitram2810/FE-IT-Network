@@ -4,7 +4,7 @@ import { mapState } from 'vuex'
 export default {
     layout: "admin", 
     middleware({store, query}) {
-      store.commit('admin/jobs/SET_URL', '/jobs/inactive?')
+      store.commit('admin/jobs/SET_URL', '/jobs/inactive/all?')
       store.commit('admin/jobs/SET_QUERY', query)
       store.commit('admin/jobs/SET_LIST', [])
     }, //ok
@@ -23,27 +23,23 @@ export default {
                 title: 'Name',
                 dataIndex: 'name',
                 key: 'name',
-                sorter: true,
               },
               {
                 title: 'User\'s email',
                 dataIndex: 'user.email',
                 key: 'usersEmail',
-                sorter: true,
               },
               {
                 title: 'Created At',
                 dataIndex: 'createdat',
                 key: 'createdat',
                 scopedSlots: { customRender: 'createdat' },
-                sorter: true,
               }, 
               {
                 title: 'Updated At',
                 dataIndex: 'updatedat',
                 key: 'updatedat',
                 scopedSlots: { customRender: 'updatedat' },
-                sorter: true,
               },
               {
                 title: 'Action',

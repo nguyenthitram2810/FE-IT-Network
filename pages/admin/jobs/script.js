@@ -6,6 +6,7 @@ export default {
     middleware({store, query}) {
       store.commit('admin/jobs/SET_URL', '/jobs?')
       store.commit('admin/jobs/SET_QUERY', query)
+      store.commit('admin/jobs/SET_LIST', [])
     }, //ok
     async fetch(){
         this.fetchData()
@@ -128,14 +129,16 @@ export default {
             let query = {...this.params}
             if(value != '') {
               query.filter = `name||$contL||${value}`
+              query.or = `user.email||$contL||${value}`
             }
             else {
               query.filter = undefined
+              query.or = undefined
             }
             query.page = 1
             this.$store.commit('admin/jobs/SET_QUERY', query)
-            await this.$store.dispatch('admin/jobs/fetchListData')
             this.$router.push({name: this.$route.name, query: {...this.params} })
-        }, //ok
+            await this.$store.dispatch('admin/jobs/fetchListData')
+        }, //ok 
     }
 }

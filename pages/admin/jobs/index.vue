@@ -3,7 +3,7 @@
     <a-layout-content
       :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '100vh' }"
     >
-    <a-input-search placeholder="Search name" 
+    <a-input-search placeholder="Search name, user's email" 
       style="width: 300px" 
       allow-clear 
       @search="onSearch" 
