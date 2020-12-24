@@ -3,6 +3,8 @@ export default {
     commit('SET_DISABLED', true)
     try {
       const response = await this.$axios.post('/auth', data)
+      if(response.data.data.roleId != 4) 
+        throw { message: "This page spend for company! You can not login" }
       dispatch('setUser', response.data.data)
       commit('SET_DISABLED', false)
     }
@@ -16,6 +18,8 @@ export default {
     commit('SET_DISABLED', true)
     try {
       const response = await this.$axios.post('/auth/register', data)
+      if(response.data.data.roleId != 4) 
+        throw { message: "This page spend for company! Please open app to login!" }
       dispatch('setUser', response.data.data)
       commit('SET_DISABLED', false)
     }
@@ -70,7 +74,6 @@ export default {
           Authorization: 'Bearer ' + rootState.auth.currentUser.token,
         }
       })
-      console.log(response);
       commit('SET_USER', response.data.data[0])
       commit('SET_LOADING', false)
     } catch (error) {

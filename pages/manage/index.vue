@@ -9,12 +9,12 @@
       </a-select-option>
     </a-select>
 
-	  <div class="box shadow-sm border rounded bg-white mb-3">
+	  <div  v-if="application.length > 0" class="box shadow-sm border rounded bg-white mb-3">
 		  <div class="box-title border-bottom p-3">
 		  	<h6 class="m-0">List Application</h6>
 		  </div>
 
-		  <div class="box-body p-0">
+		  <div v-for="(item, index) in application" :key="index" class="box-body p-0">
 			  <div class="p-3 d-flex align-items-center border-bottom osahan-post-header">
 				  <div class="dropdown-list-image mr-3 d-flex align-items-center bg-danger justify-content-center rounded-circle text-white">DRM</div>
 
@@ -44,6 +44,18 @@
 				</div>
 			</div>
 		</div>
+
+    <div v-else class="box shadow-sm border rounded bg-white mb-3">
+      <div class="box-title border-bottom p-3">
+		  	<h6 class="m-0">List Application</h6>
+		  </div>
+
+      <div class="box-body p-0">
+        <div class="p-3 d-flex align-items-center border-bottom osahan-post-header">
+          No application
+        </div>
+      </div>
+    </div>
 	</main>
 </template>
 

@@ -43,7 +43,6 @@ export default {
       try {
         await this.$store.dispatch('auth/getFullInfo')
         await this.$store.dispatch('job/getOne', {id : this.$route.params.id})
-        console.log(this.job);
       }
       catch(error) {
         this.handleError(error)

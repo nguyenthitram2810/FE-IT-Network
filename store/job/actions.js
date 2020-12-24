@@ -6,7 +6,6 @@ export default {
       commit('auth/SET_LOADING', true, { root: true })
       const queryString = qs.stringify(state.query, {arrayFormat: 'repeat', encode: false})
       const response = await this.$axios.get(`/jobs?${queryString}`)
-      console.log(response);
       commit('SET_LIST', response.data.data)
       commit('auth/SET_LOADING', false, { root: true })
     } catch (err) {
@@ -22,7 +21,6 @@ export default {
       data.city = parseInt(data.city)
       data.lowestWage = String(data.lowestWage)
       data.highestWage = String(data.highestWage)
-      console.log(data);
       const response = await this.$axios.post(`/jobs`, data, {
         headers: {
           Authorization: 'Bearer ' + rootState.auth.currentUser.token,
@@ -50,15 +48,15 @@ export default {
     }
   }, 
 
-  async delete({ rootState }, {id}) {
+  async delete({ rootState, commit, dispatch }, {id}) {
     try {
       commit('auth/SET_LOADING', true, { root: true })
-      const response = await this.$axios.delete(`/jobs${id}`, {
+      await this.$axios.delete(`/jobs/${id}`, {
         headers: {
           Authorization: 'Bearer ' + rootState.auth.currentUser.token,
         }
       })
-      commit('auth/SET_LOADING', false, { root: true })
+      dispatch('fetchListData');
     } catch (err) {
       commit('auth/SET_LOADING', false, { root: true })
       throw err
@@ -72,7 +70,6 @@ export default {
           Authorization: 'Bearer ' + rootState.auth.currentUser.token,
         }
       })
-      console.log(response);
       commit('SET_ONE_JOB', response.data.data)
     } catch (err) {
       throw err

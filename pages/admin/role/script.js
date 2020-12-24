@@ -110,7 +110,6 @@ export default {
             Authorization: 'Bearer ' + this.user.token,
           }
         })
-        console.log(response);
         this.mappingData(response.data.data)
         this.modalVisible = true;
       } catch (error) {
@@ -119,7 +118,6 @@ export default {
     },
 
     editUser() {
-      console.log(this.activeRecord);
       this.$router.push(`/admin/role/edit/${this.activeRecord.id}`)
     },
 

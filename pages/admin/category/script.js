@@ -197,11 +197,9 @@ export default {
       try{
         let obj = {name: this.formE.name}
         let parentId = this.formE.parentId[this.formE.parentId.length -1]
-        console.log(this.formE)
         if(parentId != '') {
           obj.parentId = parentId
         }
-        console.log(obj)
         await this.$store.dispatch('admin/category/createOne',obj)
         //Nếu create thành công
         this.$notification["success"]({
