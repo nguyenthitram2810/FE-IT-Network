@@ -15,19 +15,23 @@ export default {
       state.query = { ...query}
     },
 
+    SET_PERMISSION(state, data) {
+      state.permissionPosession = data
+    },
+
     PUSH_PERMISSION_ROLE(state, data) {
       state.permissionPosession.push(data)
     },
 
     SET_PERMISSION_ROLE(state, object) {
-      let element = state.permissionPosession.find(e => e.id == object.id)
+      let element = state.permissionPosession.find(e => e.permissionId == object.permissionId)
       if(element) {
         element.possession = object.possession
       }
     }, 
     
     REMOVE_PERMISSION_ROLE(state, object) {
-      state.permissionPosession = state.permissionPosession.filter(e => e.id != object.id)
+      state.permissionPosession = state.permissionPosession.filter(e => e.permissionId != object.permissionId)
     }, 
 
     RESET_PERMISSION_ROLE(state) {

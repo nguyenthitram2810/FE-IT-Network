@@ -37,18 +37,18 @@
                 </a-form-model-item>
 
                 <a-form-model-item  has-feedback prop="name" class="m-0 form-validate">
-                  <a-input :disabled="isDisabled" v-model="registerForm.name" autocomplete="off" placeholder="Name"/>
+                  <a-input :disabled="isDisabled" v-model="registerForm.name" autocomplete="off" placeholder="Name" @pressEnter="registerSubmit"/>
                 </a-form-model-item>
 
                 <a-form-model-item has-feedback prop="email"  class="m-0 form-validate">
-                  <a-input :disabled="isDisabled" v-model="registerForm.email" autocomplete="off" placeholder="Email"/>
+                  <a-input :disabled="isDisabled" v-model="registerForm.email" autocomplete="off" placeholder="Email" @pressEnter="registerSubmit"/>
                 </a-form-model-item>
 
                 <a-form-model-item has-feedback prop="password" class="m-0 form-validate" >
-                  <a-input :disabled="isDisabled" type="password" v-model="registerForm.password" autocomplete="off" placeholder="Password"/>
+                  <a-input :disabled="isDisabled" type="password" v-model="registerForm.password" autocomplete="off" placeholder="Password" @pressEnter="registerSubmit"/>
                 </a-form-model-item>
                 <a-form-model-item has-feedback prop="confirmPassword" class="m-0 form-validate" >
-                  <a-input :disabled="isDisabled" type="password" v-model="registerForm.confirmPassword" autocomplete="off" placeholder="Confirm password"/>
+                  <a-input :disabled="isDisabled" type="password" v-model="registerForm.confirmPassword" autocomplete="off" placeholder="Confirm password" @pressEnter="registerSubmit"/>
                 </a-form-model-item>
 
                 <a-form-model-item  class="form-button mb-0 mt-2">

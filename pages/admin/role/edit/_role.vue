@@ -24,7 +24,7 @@
       </a-form>
 
       <div class="w-100 text-center">
-        <a-button class="create-button mt-3" type="primary"> UPDATE</a-button>
+        <a-button @click="updateRole" class="create-button mt-3" type="primary"> UPDATE</a-button>
       </div>
     </a-layout-content>
   </div>

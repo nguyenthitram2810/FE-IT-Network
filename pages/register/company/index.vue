@@ -37,15 +37,15 @@
                 </a-form-model-item>
 
                 <a-form-model-item  has-feedback prop="name" class="m-0 form-validate">
-                  <a-input :disabled="isDisabled" v-model="registerForm.name" autocomplete="off" placeholder="Name"/>
+                  <a-input :disabled="isDisabled" v-model="registerForm.name" autocomplete="off" placeholder="Name" @pressEnter="registerSubmit"/>
                 </a-form-model-item>
 
                 <a-form-model-item has-feedback prop="email"  class="m-0 form-validate">
-                  <a-input :disabled="isDisabled" v-model="registerForm.email" autocomplete="off" placeholder="Email"/>
+                  <a-input :disabled="isDisabled" v-model="registerForm.email" autocomplete="off" placeholder="Email" @pressEnter="registerSubmit"/>
                 </a-form-model-item>
 
                 <a-form-model-item has-feedback prop="phone"  class="m-0 form-validate">
-                  <a-input :disabled="isDisabled" v-model="registerForm.phone" autocomplete="off" placeholder="Phone"/>
+                  <a-input :disabled="isDisabled" v-model="registerForm.phone" autocomplete="off" placeholder="Phone" @pressEnter="registerSubmit"/>
                 </a-form-model-item>
 
                 <a-form-model-item has-feedback prop="city" class="m-0 form-validate">
@@ -57,7 +57,7 @@
                 </a-form-model-item>
 
                 <a-form-model-item has-feedback prop="website"  class="m-0 form-validate">
-                  <a-input :disabled="isDisabled" v-model="registerForm.website" autocomplete="off" placeholder="Website"/>
+                  <a-input :disabled="isDisabled" v-model="registerForm.website" autocomplete="off" placeholder="Website" @pressEnter="registerSubmit"/>
                 </a-form-model-item>
 
                 <a-form-model-item  class="form-button mb-0 mt-2">

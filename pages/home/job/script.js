@@ -1,5 +1,6 @@
 import { mapState } from 'vuex'
 import moment from 'moment'
+import _ from 'lodash';
 
 export default {
   layout: 'profile',
@@ -42,7 +43,6 @@ export default {
     async fetchData() {
       try {
         await this.$store.dispatch('auth/getFullInfo')
-        console.log(this.user);
         this.$store.commit('job/SET_QUERY', { filter: `user.id||$eq||${this.user.id}`})
         await this.$store.dispatch('job/fetchListData')
       }
@@ -63,9 +63,8 @@ export default {
           okText: 'Yes',
           okType: 'danger',
           cancelText: 'No',
-          async onOk() {
+          onOk: async() => {
             await this.$store.dispatch('job/delete', {id: id})
-            await this.$store.dispatch('job/fetchListData')
             this.$notification["success"]({
               message: 'SUCCESS',
               description:

@@ -138,7 +138,6 @@ export default {
     },
 
     mappingData() {
-      console.log(this.job);
       this.form = {
         name: this.job.name,
         lowestWage: this.job.lowestWage,
@@ -156,7 +155,6 @@ export default {
     },
 
     getCateJob(data) {
-      console.log(data);
       let arr = []
       data.forEach(e => {
         arr.push(e.id)
