@@ -8,7 +8,7 @@
       </div>
 
       <a-form :label-col="{ span: 3 }" :wrapper-col="{ span: 19 }">
-        <a-form-item label="Name">
+        <a-form-item label="ID">
           <a-input v-model="name" disabled/>
         </a-form-item>
 
@@ -24,7 +24,7 @@
       </a-form>
 
       <div class="w-100 text-center">
-        <a-button class="create-button mt-3" type="primary"> UPDATE</a-button>
+        <a-button @click="updateRole" class="create-button mt-3" type="primary"> UPDATE</a-button>
       </div>
     </a-layout-content>
   </div>
