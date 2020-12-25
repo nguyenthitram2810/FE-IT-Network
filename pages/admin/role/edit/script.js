@@ -90,7 +90,6 @@ export default {
           }
           return p
         })
-        console.log(arr)
         let params = { ...this.$route.params}
         const response = await this.$axios.put(`permission/${params.role}`, arr, {
           headers: {
