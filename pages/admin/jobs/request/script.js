@@ -121,8 +121,12 @@ export default {
           }
         
       },
-      acceptAJob(id){
-
+      async acceptAJob(id){
+        try {
+          await this.$store.dispatch('admin/jobs/acceptAJob', id)
+        } catch (error) {
+          this.handleError(error)
+        }
       }
     }
 }

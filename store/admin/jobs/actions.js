@@ -67,4 +67,17 @@ export default {
       throw err
     }
   },
+  async acceptAJob({ rootState, dispatch },id) {
+    try {
+      await this.$axios.put(`/jobs/active/${id}`, {id}, 
+      {
+        headers: {
+          Authorization: 'Bearer ' + rootState.auth.currentUser.token,
+        }
+      })
+      dispatch('fetchListData');
+    } catch (err) {
+      throw err
+    }
+  }, 
 }
