@@ -80,5 +80,22 @@ export default {
       commit('SET_LOADING', false)
       throw error
     }
-  }
+  }, 
+
+  async changePass({ commit, rootState }, data) {
+    commit('SET_LOADING', true)
+    try {
+      const response = await this.$axios.put('/auth/me/password', data, {
+        headers: {
+          Authorization: 'Bearer ' + rootState.auth.currentUser.token,
+        }
+      })
+      console.log(response);
+      commit('SET_LOADING', false)
+    }
+    catch(err) {
+      commit('SET_LOADING', false)
+      throw err;
+    }
+  },
 }

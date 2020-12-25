@@ -34,6 +34,12 @@
 			  	<div class="box-body">
 			  		<table class="table table-borderless mb-0">
 			  			<tbody>
+                <tr class="border-bottom">
+                  <th class="p-3">Email</th>
+                  <td v-if="user != null && user.email != null" class="p-3">
+                    {{ user.email }}
+                  </td>
+                </tr>
 			  				<tr class="border-bottom">
 			  					<th class="p-3">Website</th>
 			  					<td  class="p-3">
@@ -87,6 +93,54 @@
                     </button>
                   </td>
 			  				</tr>
+                <tr>
+                  <th class="p-3">Password</th>
+                  <td class="p-3">
+                    <button v-if="!isEditPass" type="button" @click="editPass" class="btn btn-light w-100 d-flex align-items-center">
+                      Change Password
+                    </button>
+                    <a-form-model
+                      v-else
+                      ref="ruleForm"
+                      :model="form"
+                      :rules="rules"
+                    >
+                      <a-form-model-item class="mb-1" ref="oldPassword" prop="oldPassword">
+                        <a-input-password  v-model="form.oldPassword" placeholder="Old password"/>
+                      </a-form-model-item>
+
+                      <a-form-model-item class="mb-1" ref="password" prop="password">
+                        <a-input-password  v-model="form.password" placeholder="New password"/>
+                      </a-form-model-item>
+
+                      <a-form-model-item class="mb-1" ref="confirmPassword" prop="confirmPassword">
+                        <a-input-password  v-model="form.confirmPassword" placeholder="Confirm new password"/>
+                      </a-form-model-item>
+                      <a-form-model-item>
+                        <a-button type="primary" @click="submitPass">
+                          Change
+                        </a-button>
+                        <a-button style="margin-left: 10px;" @click="cancelPass">
+                          Cancel
+                        </a-button>
+                      </a-form-model-item>
+                    </a-form-model>
+                    <!-- <div v-else>
+                      <a-input-password class="mb-2" v-model="form.oldPassword" placeholder="Old password" />
+                      <a-input-password class="mb-2" v-model="form.password" placeholder="New password" />
+                      <a-input-password v-model="form.confirmPassword" placeholder="Confirm new password" />
+                      <div class="d-flex">
+						            <a-button class="mt-2 mr-2" @click="cancelPass">
+  					              Cancel
+  					            </a-button>
+
+						          	<a-button class="mt-2" type="primary" @click="submitPass">
+  					              Change
+  					            </a-button>
+						          </div>
+                    </div> -->
+                  </td>
+                </tr>
 			  			</tbody>
 			  		</table>
 			  	</div>
