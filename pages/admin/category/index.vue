@@ -17,7 +17,7 @@
     </div>
 
     <!-- Create form -->
-    <a-modal v-model="visibleCreate" title="CREATE ONE USER" @ok="handleOkCreate">
+    <a-modal v-model="visibleCreate" title="CREATE ONE CATEGORY" @ok="handleOkCreate">
       <template>
         <a-form-model
         :model="formE"
