@@ -14,16 +14,6 @@
       <!-- Slot action -->
         <span slot="action" slot-scope="text, record">
           <div class="d-flex">
-            <!-- Delete button  -->
-            <a-popconfirm class="mr-2" placement="top" 
-              ok-text="Yes" 
-              cancel-text="No" 
-              @confirm="confirmDelete(record.id)">
-              <template slot="title">
-                <p><b>Are you sure to Delete this?</b></p>
-              </template>
-              <a-button type="danger"><a-icon type="delete" /></a-button>
-            </a-popconfirm>
             <!-- Restore button -->
             <a-button @click="confirmRestore(record.id)"  type="primary">
               <a-icon type="rollback" />

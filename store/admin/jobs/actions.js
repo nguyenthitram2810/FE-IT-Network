@@ -67,9 +67,10 @@ export default {
       throw err
     }
   },
-  async forceDelete({ rootState, dispatch }, id){
+  async acceptAJob({ rootState, dispatch },id) {
     try {
-      await this.$axios.delete(`/jobs/delete/${id}`, {
+      await this.$axios.put(`/jobs/active/${id}`, {id}, 
+      {
         headers: {
           Authorization: 'Bearer ' + rootState.auth.currentUser.token,
         }
@@ -78,5 +79,5 @@ export default {
     } catch (err) {
       throw err
     }
-  }
+  }, 
 }

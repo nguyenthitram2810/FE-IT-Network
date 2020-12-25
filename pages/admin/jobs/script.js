@@ -126,6 +126,7 @@ export default {
             this.visible = false;
         }, //ok
         async onSearch(value) {
+          try{
             let query = {...this.params}
             if(value != '') {
               query.filter = `name||$contL||${value}`
@@ -139,6 +140,10 @@ export default {
             this.$store.commit('admin/jobs/SET_QUERY', query)
             this.$router.push({name: this.$route.name, query: {...this.params} })
             await this.$store.dispatch('admin/jobs/fetchListData')
+          }
+          catch (error) {
+            this.handleError(error)
+          }
         }, //ok 
     }
 }
