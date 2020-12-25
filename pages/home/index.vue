@@ -49,11 +49,31 @@
 			  					<th class="p-3">Phone</th>
 			  					<td class="p-3">
                     <template v-if="user != null && user.profile != null && user.profile.phone != null">
-                      {{ user.profile.phone }}
+                      <div v-if="!editPhone" class="d-flex align-items-center justify-content-between">
+						  <span>{{ user.profile.phone }}</span>
+						  <a-button style="border:none" @click="editPhoneClick">
+							<a-icon type="edit" />
+						  </a-button>
+					  </div>
                     </template>
-                    <button v-else type="button" class="btn btn-light w-100 d-flex align-items-center">
-                      <a-icon class="mr-2" type="plus" /> Add Phone
-                    </button>
+
+					<template v-else>
+                    	<button v-if="!editPhone" type="button" @click="addPhone" class="btn btn-light w-100 d-flex align-items-center">
+                    	  <a-icon class="mr-2" type="plus" /> Add Phone
+                    	</button>
+					</template>
+
+					<div v-if="editPhone">
+						<a-input v-model="phone"/>
+						<div class="d-flex">
+							<a-button class="mt-2 mr-2" @click="cancelPhone">
+  					      		Cancel
+  					    	</a-button>
+							<a-button class="mt-2" type="primary" @click="submitPhone">
+  					      		Add
+  					    	</a-button>
+						</div>
+					</div>
                   </td>
 			  				</tr>
                 <tr class="border-bottom">

@@ -9,43 +9,38 @@
       </a-select-option>
     </a-select>
 
-	  <div  v-if="application.length > 0" class="box shadow-sm border rounded bg-white mb-3">
+	  <div  class="box shadow-sm border rounded bg-white mb-3">
 		  <div class="box-title border-bottom p-3">
 		  	<h6 class="m-0">List Application</h6>
 		  </div>
 
 		  <div v-for="(item, index) in application" :key="index" class="box-body p-0">
-			  <div class="p-3 d-flex align-items-center border-bottom osahan-post-header">
-				  <div class="dropdown-list-image mr-3 d-flex align-items-center bg-danger justify-content-center rounded-circle text-white">DRM</div>
+			  <div v-if="item.profile != null" class="p-3 d-flex align-items-center border-bottom osahan-post-header row">
+				  <div class="col-8 d-flex">
+            <a-avatar class="mr-3" size="large" :src="item.profile.profileUrl" />
+				    <div class="font-weight-bold mr-3">
+					    <div class="text-truncate">{{ item.profile.name }}</div>
+					    <div class="small">{{ item.email }}</div>
+				    </div>
+          </div>
 
-				  <div class="font-weight-bold mr-3">
-					  <div class="text-truncate">DAILY RUNDOWN: MONDAY</div>
-					  <div class="small">Nunc purus metus, aliquam vitae venenatis sit amet, porta non est. </div>
-				  </div>
+				  <div class="col-4 text-left d-flex flex-column">
+				    <div class="d-flex justify-content-end">
+              <a-button @click="accept(item)" style="background-color: #30AB4A" class="text-white mr-2">
+                <a-icon type="check" />
+              </a-button>
 
-				  <span class="ml-auto mb-auto">
-				    <a-dropdown>
-              <a-icon :style="{ fontSize: '18px', fontWeight: 'bold' }" type="more" />
-              <a-menu slot="overlay">
-                <a-menu-item key="0">
-                  <nuxt-link :to="`/home/job`" class="d-flex align-items-center"><a-icon class="mr-2" type="eye" />View</nuxt-link>
-                </a-menu-item>
-                <a-menu-item key="1">
-                  <a @click="acceptApplication()" class="d-flex align-items-center"><a-icon class="mr-2" type="edit" />Accept</a>
-                </a-menu-item>
-                <a-menu-item key="2">
-                  <a @click="rejectApplication()" class="d-flex align-items-center"><a-icon class="mr-2" type="delete" />Reject</a>
-                </a-menu-item>
-              </a-menu>
-            </a-dropdown>
-					  <br>
-						<div class="text-right text-muted pt-1">3d</div>
-					</span>
+              <a-button @click="reject(item)" class="" type="danger">
+                <a-icon type="close" />
+              </a-button>
+            </div>
+					  <div class="text-right">3d</div>
+          </div>
 				</div>
 			</div>
 		</div>
-
-    <div v-else class="box shadow-sm border rounded bg-white mb-3">
+ <!-- v-if="application.length > 0" -->
+    <!-- <div v-else class="box shadow-sm border rounded bg-white mb-3">
       <div class="box-title border-bottom p-3">
 		  	<h6 class="m-0">List Application</h6>
 		  </div>
@@ -55,7 +50,7 @@
           No application
         </div>
       </div>
-    </div>
+    </div> -->
 	</main>
 </template>
 

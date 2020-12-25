@@ -9,7 +9,6 @@ export default {
 
   data() {
     return {
-      application: [],
     }
   },
 
@@ -19,7 +18,7 @@ export default {
       loading: (state) => state.auth.loading,
       data: (state) => state.application.list,
       listJob: (state) => state.job.list,
-      allApplication: (state) => state.application.list
+      application: (state) => state.application.list
     }),
   },
 
@@ -47,15 +46,13 @@ export default {
         await this.$store.dispatch('application/fetchListData')
         this.$store.commit('job/SET_QUERY', { filter: `user.id||$eq||${this.user.id}`})
         await this.$store.dispatch('job/fetchListData')
-        await this.$store.dispatch('application/fetchListData')
-        this.mappingData();
       }
       catch(error) {
         this.handleError(error)
       }
     },
 
-    acceptApplication() {
+    accep(item) {
       try {
         this.$confirm({
           title: 'Do you want to accept this application?',
@@ -74,7 +71,7 @@ export default {
       }
     },
 
-    rejectApplication() {
+    reject(item) {
       try {
         this.$confirm({
           title: 'Are you sure reject this application?',
@@ -100,18 +97,10 @@ export default {
     async changeJob(value) {
       try {
         if(value == "all") await this.$store.dispatch('application/fetchListData')
-        else await this.$store.dispatch('application/fetchByJob', { id: parent(value)})
+        else await this.$store.dispatch('application/fetchByJob', { id: value})
       } catch (error) {
         this.handleError(error)
       }
     }, 
-
-    mappingData() {
-      this.allApplication.forEach(e => {
-        if(e.appliedBy.length > 0) {
-          application.add(e.appliedBy);
-        }
-      });
-    }
   }
 }
