@@ -8,9 +8,40 @@ export default {
   },
 
   data() {
+    let validatePassConfirm = (rule, value, callback) => {
+      if (value.trim() === '') {
+        callback(new Error('Please confirm password'));
+      } else if (value !== (this.form.password)) {
+        callback(new Error("Invalid confirm password"));
+      } else {
+        callback();
+      }
+    };
     return {
       editPhone: false,
-      phone: ''
+      phone: '',
+      isEditPass: false, 
+      form: {
+        oldPassword: "",
+        password: "",
+        confirmPassword: ""
+      }, 
+      rules: {
+        oldPassword: [
+          { required: true, message: 'Please input old password', trigger: 'blur' },
+        ],
+
+        password: [
+          { required: true, message: 'Please input new password', trigger: 'blur' },
+        ],
+
+        confirmPassword: [
+          {
+            required: true,
+            validator: validatePassConfirm
+          }
+        ],
+      },
     }
   },
 
@@ -73,6 +104,11 @@ export default {
           })
           this.fetchData()
           this.editPhone = false
+          this.$notification["success"]({
+            message: 'SUCCESS',
+            description:
+            `Successful!`
+          });
         }
         else {
           throw {
@@ -83,6 +119,41 @@ export default {
         this.handleError(error)
       }
     }, 
+
+    editPass() {
+      this.isEditPass = true
+    },
+
+    cancelPass() {
+      this.isEditPass = false
+      this.form = {
+        oldPassword: "",
+        password: "",
+        confirmPassword: ""
+      }
+    },
+
+    submitPass() {
+      this.$refs.ruleForm.validate(async valid => {
+        if(valid) {
+          try {
+            await this.$store.dispatch('auth/changePass', this.form)
+            this.$notification["success"]({
+              message: 'SUCCESS',
+              description:
+              `Successful!`
+            });
+            this.isEditPass = false
+          } catch (error) {
+            this.handleError(error)
+          }
+        }
+        else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
+    },
 
     validatePhone(value) {
       let regexPhone = /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/

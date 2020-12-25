@@ -4,7 +4,9 @@ export default function ({ store, redirect }) {
     }
 
     if (store.state.auth.currentUser == null) {
-      return redirect('/login');
+      if(store.state.auth.currentUser.role !== "CONTRIBUTOR") {
+        return redirect('/login');
+      }
     }
   }
   
