@@ -9,11 +9,14 @@ export default {
 
   data() {
     return {
+      editPhone: false,
+      phone: ''
     }
   },
 
   computed: {
     ...mapState({
+      currentUser: (state) => state.auth.currentUser,
       user: (state) => state.auth.user,
       loading: (state) => state.auth.loading,
     }),
@@ -45,5 +48,46 @@ export default {
         this.handleError(error)
       }
     },
+
+    editPhoneClick() {
+      this.phone = this.user.profile.phone
+      this.editPhone = true
+    },
+
+    addPhone() {
+      this.editPhone = true
+    },
+
+    cancelPhone() {
+      this.editPhone = false
+      this.phone = ''
+    }, 
+
+    async submitPhone() {
+      try {
+        if(this.validatePhone(this.phone)) {
+          const response = await this.$axios.patch('/auth/me/phone', {  phone: this.phone }, {
+            headers: {
+              Authorization: 'Bearer ' + this.currentUser.token,
+            }
+          })
+          this.fetchData()
+          this.editPhone = false
+        }
+        else {
+          throw {
+            message: "Phone number is invalid"
+          }
+        }
+      } catch (error) {
+        this.handleError(error)
+      }
+    }, 
+
+    validatePhone(value) {
+      let regexPhone = /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/
+      if(regexPhone.test(value)) return true
+      else return false
+    }
   }
 }
