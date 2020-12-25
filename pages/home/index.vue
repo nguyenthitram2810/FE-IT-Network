@@ -87,6 +87,11 @@
                     </button>
                   </td>
 			  				</tr>
+                <tr>
+                  <button type="button" @click="changePassword" class="btn btn-light w-100 d-flex align-items-center">
+                    <a-icon class="mr-2" type="plus" /> Change password
+                  </button>
+                </tr>
 			  			</tbody>
 			  		</table>
 			  	</div>
