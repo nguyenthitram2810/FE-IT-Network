@@ -14,8 +14,18 @@
       <!-- Slot action -->
         <span slot="action" slot-scope="text, record">
           <div class="d-flex">
+             <a-popconfirm class="mr-2" 
+              placement="top" 
+              ok-text="Yes" 
+              cancel-text="No" 
+              @confirm="confirmDelete(record.id)">
+              <template slot="title">
+                <p><b>Are you sure to DELETE this?</b></p>
+              </template>
+              <a-button type="danger"><a-icon type="delete" /></a-button>
+            </a-popconfirm>
             <!-- accpet button -->
-            <a-button @click="acceptAJob(record)"  type="primary">
+            <a-button @click="acceptAJob(record.id)" class="mr-2" type="primary">
               Accept
             </a-button>
 
@@ -55,6 +65,11 @@
           </template>
 
           <!-- Entire detail information of a record -->
+
+          <div class="d-flex align-items-center justify-content-center avatar-modal">
+            <a-avatar style="border: 2px solid purple;" shape="square" :size="128" :src="detailInfo.introImg" />
+          </div>
+          
           <div class="d-flex flex-column mt-3 px-4">
             <div class="row">
               <p class="col-4 font--bold">Name:</p>

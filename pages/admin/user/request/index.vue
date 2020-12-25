@@ -33,8 +33,8 @@
             @confirm="confirm(record.id)"
           >
             <a-button class="cn-btn-success" type="success">
-                Accept
-              </a-button>
+              Accept
+            </a-button>
           </a-popconfirm>
         </span>
       </a-table>
