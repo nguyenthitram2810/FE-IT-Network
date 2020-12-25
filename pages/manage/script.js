@@ -9,6 +9,7 @@ export default {
 
   data() {
     return {
+      jobType: "all"
     }
   },
 
@@ -52,42 +53,20 @@ export default {
       }
     },
 
-    accep(item) {
+    async accept(item) {
       try {
-        this.$confirm({
-          title: 'Do you want to accept this application?',
-          onOk() {
-            this.$notification["success"]({
-              message: 'SUCCESS',
-              description:
-              `Accepted successfully!`
-            });
-          },
-          onCancel() {
-          },
-        });
-      } catch (error) {
-        this.handleError(error)
-      }
-    },
-
-    reject(item) {
-      try {
-        this.$confirm({
-          title: 'Are you sure reject this application?',
-          okText: 'Yes',
-          okType: 'danger',
-          cancelText: 'No',
-          async onOk() {
-            this.$notification["success"]({
-              message: 'SUCCESS',
-              description:
-              `Rejected successfully!`
-            });
-          },
-          onCancel() {
-            
-          },
+        let jobID = ''
+        if(item.job != undefined) {
+          jobID = item.job.id
+        }
+        else {
+          jobID = this.jobType
+        }
+        await this.$store.dispatch('application/accept', {userId: item.id, id: jobID})
+        this.$notification["success"]({
+          message: 'SUCCESS',
+          description:
+          `Accepted successfully!`
         });
       } catch (error) {
         this.handleError(error)
