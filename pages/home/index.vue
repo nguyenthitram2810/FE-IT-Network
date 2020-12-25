@@ -49,7 +49,7 @@
 			  					<th class="p-3">Phone</th>
 			  					<td class="p-3">
                     <template v-if="user != null && user.profile != null && user.profile.phone != null">
-                      <div v-if="!editPhone" class="d-flex align-items-center justify-content-between">
+                      <div  class="d-flex align-items-center justify-content-between">
 						  <span>{{ user.profile.phone }}</span>
 						  <a-button style="border:none" @click="editPhoneClick">
 							<a-icon type="edit" />
@@ -91,7 +91,7 @@
 			  		</table>
 			  	</div>
 			  </div>
-			  <div class="box shadow-sm border rounded bg-white mb-3">
+			  <!-- <div class="box shadow-sm border rounded bg-white mb-3">
 			  	<div class="box-title border-bottom p-3">
 			  		<h6 class="m-0">Locations</h6>
 			  	</div>
@@ -123,7 +123,7 @@
 			  			</div>
 			  		</div>
 			  	</div>
-			  </div>
+			  </div> -->
 		  </div>
 		</div>
 	</main>

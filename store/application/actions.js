@@ -12,9 +12,13 @@ export default {
       let arr = []
       console.log(response);
       response.data.data.forEach(e => {
+        let job = {
+          name: e.name, 
+          id: e.id
+        }
         if(e.appliedBy.length > 0) {
           e.appliedBy.forEach(p => {
-            arr.push(p.user)
+            arr.push({...p.user, job})
           })
         }
       });
@@ -47,30 +51,16 @@ export default {
   async accept({state, commit, rootState}, data) {
     try {
       commit('auth/SET_LOADING', true, { root: true })
-      const response = await this.$axios.post(`/jobs`, data, {
+      const response = await this.$axios.put(`/jobs/accept/${data.id}`, {userId: data.userId}, {
         headers: {
           Authorization: 'Bearer ' + rootState.auth.currentUser.token,
         }
       })
+      console.log(response);
       commit('auth/SET_LOADING', false, { root: true })
     } catch (err) {
       commit('auth/SET_LOADING', false, { root: true })
       throw err
     }
   },  
-
-  async reject({ rootState }, data) {
-    try {
-      commit('auth/SET_LOADING', true, { root: true })
-      const response = await this.$axios.delete(`/jobs`, {
-        headers: {
-          Authorization: 'Bearer ' + rootState.auth.currentUser.token,
-        }
-      })
-      commit('auth/SET_LOADING', false, { root: true })
-    } catch (err) {
-      commit('auth/SET_LOADING', false, { root: true })
-      throw err
-    }
-  }, 
 }
