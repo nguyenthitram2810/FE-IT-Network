@@ -1,6 +1,5 @@
 export default {
   SET_BREADCRUMB (state, breadcrumb) {
-    console.log("test")
     state.breadcrumb = breadcrumb
   },
 

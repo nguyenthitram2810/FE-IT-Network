@@ -10,7 +10,6 @@ export default {
           Authorization: 'Bearer ' + rootState.auth.currentUser.token,
         }
       })
-      console.log(response.data.data)
       commit('SET_PAGINATION', {
         total: response.data.data.total, 
         current: parseInt(state.query.page), 

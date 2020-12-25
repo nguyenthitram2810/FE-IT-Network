@@ -11,8 +11,8 @@
         <a-select-option value="ANY">
           ANY
         </a-select-option>
-        <a-select-option value="OWNER">
-          OWNER
+        <a-select-option value="OWN">
+          OWN
         </a-select-option>
       </a-select>
     </div>

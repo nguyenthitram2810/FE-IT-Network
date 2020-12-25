@@ -43,12 +43,6 @@ export default {
           key: 'permission',
           scopedSlots: { customRender: 'permission' },
           className: 'text-center',
-        },
-        {
-          title: 'Action',
-          key: 'action',
-          scopedSlots: { customRender: 'action' },
-          className: 'text-center',
         }
       ],
       modalVisible: false,
@@ -111,7 +105,7 @@ export default {
     async getPermission(record) {
       try {
         this.activeRecord = record
-        const response = await this.$axios.get(`/permission/${record.role}`, {
+        const response = await this.$axios.get(`/permission/${record.id}`, {
           headers: {
             Authorization: 'Bearer ' + this.user.token,
           }
@@ -124,8 +118,7 @@ export default {
     },
 
     editUser() {
-      console.log(this.activeRecord);
-      this.$router.push(`/admin/role/edit/${this.activeRecord.role}`)
+      this.$router.push(`/admin/role/edit/${this.activeRecord.id}`)
     },
 
     handleCancelModal() {

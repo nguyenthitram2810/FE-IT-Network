@@ -19,21 +19,6 @@
             <a-icon type="eye" /> Permission
           </a-button>
         </span>
-
-        <span slot="action" slot-scope="text, record">
-          <a-popconfirm
-            v-if="record.id != 1"
-            class="mr-2"
-            title="Are you sure delete this role?"
-            ok-text="Yes"
-            cancel-text="No"
-            @confirm="confirmDelete(record.id)"
-          >
-            <a-button type="danger">
-              <a-icon type="delete" />
-            </a-button>
-          </a-popconfirm>
-        </span>
       </a-table>
 
       <div>

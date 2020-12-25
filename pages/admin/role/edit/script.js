@@ -75,7 +75,6 @@ export default {
         })
         this.activePermissionRole = this.mappingData(response.data.data, "id")
         this.joinData();
-        console.log(this.permission);
       }
       catch(error) {
         this.handleError(error)
@@ -84,11 +83,22 @@ export default {
 
     async updateRole() {
       try {
-        // await this.$store.dispatch('admin/role/createRole', {
-        //   role: this.name,
-        //   permissionPosession: this.permissionPosession
-        // })
-        // this.$router.push({path: "/admin/role", query: { ...this.query } })
+        let arr = this.permissionPosession.map(p => {
+          p = {
+            permissionId: p.permissionId,
+            posession: p.possession
+          }
+          return p
+        })
+        console.log(arr)
+        let params = { ...this.$route.params}
+        const response = await this.$axios.put(`permission/${params.role}`, arr, {
+          headers: {
+            Authorization: 'Bearer ' + this.user.token,
+          }
+        })
+        this.$router.push("/admin/role")
+        
       } catch (error) {
         this.handleError(error)
       }
@@ -103,6 +113,7 @@ export default {
     },
 
     joinData() {
+      let array = []
       this.module.forEach(e => {
         this.permission[e] = this.permission[e].map(p => {
           if(this.activePermissionRole[`${p.id}`]) {
@@ -111,10 +122,16 @@ export default {
               action: this.activePermissionRole[`${p.id}`][0].action,
               posession: this.activePermissionRole[`${p.id}`][0].posession
             }
+
+            array.push({
+              permissionId: p.id,
+              possession: this.activePermissionRole[`${p.id}`][0].posession
+            })
           }
           return p;
         })
       });
-    }
+      this.$store.commit("admin/permission/SET_PERMISSION", array)
+    }, 
   }
 }
