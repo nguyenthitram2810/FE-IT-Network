@@ -63,6 +63,7 @@ export default {
           jobID = this.jobType
         }
         await this.$store.dispatch('application/accept', {userId: item.id, id: jobID})
+        await this.$store.dispatch('application/fetchListData')
         this.$notification["success"]({
           message: 'SUCCESS',
           description:
