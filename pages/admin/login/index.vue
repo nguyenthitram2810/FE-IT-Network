@@ -16,25 +16,25 @@
         <div class="form-holder">
           <div class="form-content">
             <div class="form-items">
-              <h3>Đăng nhập với Career Network</h3>
-              <p>Đăng nhập vào trang quản lý</p>
+              <h3>Sign in with Career Network</h3>
+              <p>Looking for job opportunities</p>
 
               <div class="page-links">
-                  <nuxt-link to="/admin/login" class="active">Đăng nhập</nuxt-link>
+                  <nuxt-link to="/admin/login" class="active">Sign in</nuxt-link>
               </div>
 
               <a-form-model ref="loginForm" :model="loginForm" :rules="rules">
                 <a-form-model-item has-feedback prop="email"  class="m-0 form-validate">
-                  <a-input :disabled="isDisabled" v-model="loginForm.email" autocomplete="off" placeholder="Địa chỉ Email"/>
+                  <a-input :disabled="isDisabled" v-model="loginForm.email" autocomplete="off" placeholder="Email"/>
                 </a-form-model-item>
 
                 <a-form-model-item has-feedback prop="password" class="m-0 form-validate" >
-                  <a-input :disabled="isDisabled" type="password" v-model="loginForm.password" autocomplete="off" placeholder="Mật khẩu"/>
+                  <a-input :disabled="isDisabled" type="password" v-model="loginForm.password" autocomplete="off" placeholder="Password" @pressEnter="loginSubmit"/>
                 </a-form-model-item>
 
                 <a-form-model-item  class="form-button mb-0 mt-2">
                   <a-button  :loading="isDisabled" class="ibtn" @click="loginSubmit">
-                   Đăng nhập
+                   Sign in
                   </a-button>
                 </a-form-model-item>
               </a-form-model>
@@ -45,95 +45,7 @@
   </div>
 </template>
 
-<script>
-import axios from "axios";
-
-export default {
-  layout: 'fullpage',
-  middleware: 'adminNotAuth',
-  data() {
-    let validatePass = (rule, value, callback) => {
-      if (value.trim() === '') {
-        callback(new Error('Nhập mật khẩu'));
-      } else {
-        callback();
-      }
-    };
-    return {
-      isDisabled: false,
-      error: '',
-      loginForm: {
-        email: '',
-        password: '',
-      },
-      rules: {
-        email:  [
-          {
-            type: 'email',
-            message: 'Email không hợp lệ',
-          },
-          {
-            required: true,
-            message: 'Nhập địa chỉ email',
-          },
-        ],
-        password: [
-          { 
-            required: true,
-            validator: validatePass, 
-          }
-        ],
-      }
-    }
-  },
-  methods: {
-    async loginSubmit(event) {
-      this.$refs.loginForm.validate(async valid => {
-        if (valid) {
-          this.isDisabled = true
-          try {
-            const response = await this.$axios.post('/auth', this.loginForm)
-            console.log(response)
-            //chỗ này đáng phải có status trả về là thành công hay lỗi nhưng hiện tại thấy k có status bọc kèm nếu lỗi hoặc thành công á
-            //nên làm tiếp theo kiểu thành công
-            if(response.data.data.role == "Admin" || response.data.data.role == "Moderator") {
-              localStorage.setItem('currentUser', JSON.stringify(response.data.data))
-              this.$store.commit('auth/SET_CURRENT_USER', JSON.parse(localStorage.getItem('currentUser')))
-              this.$router.push('/admin/user')
-            }
-            else {
-                this.$notification["error"]({
-                message: 'LOGIN ERROR',
-                description:
-                  "Bạn không có quyền vào trang quản lý!"
-              });
-            }
-          }
-          catch(e) {
-            this.isDisabled = false
-            if(e.response) {
-              this.$notification["error"]({
-                message: 'LOGIN ERROR',
-                description:
-                  e.response.data.message
-              });
-            }
-            else {
-              this.$notification["error"]({
-                message: 'LOGIN ERROR',
-                description:
-                  e.message
-              });
-            }
-          }
-        } else {
-          return false;
-        }
-      });
-    }
-  },
-}
-</script>
+<script src="./script.js"></script>
 
 <style lang='scss' scoped>
 @import url("./style.scss");

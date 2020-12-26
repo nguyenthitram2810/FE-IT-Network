@@ -14,8 +14,8 @@ body {
 	min-height: 100vh;
 	display: flex;
 	flex-direction: column;
-	font-family: $fontRoboto;
-	background-color: rgb(248, 248, 248);
+	// font-family: $fontRoboto;
+	background-color: #fff;
 }
 
 html {
@@ -376,4 +376,13 @@ label {
 
 .main-content {
   min-height: calc(100vh - 140px);
+}
+
+.cn-btn-success {
+	background: #52c41a;
+	color: white;
+}
+
+.cn-w-100 {
+	width: 100%;
 }

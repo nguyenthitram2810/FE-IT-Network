@@ -17,6 +17,7 @@ export default {
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       { rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.0/css/bootstrap-grid.css' },
+      { rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css' },
       { rel: 'stylesheet', href: 'https://use.fontawesome.com/releases/v5.0.6/css/all.css' },
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto:wght@300;400&display=swap' }
     ]
@@ -30,7 +31,11 @@ export default {
   */
   css: [
     'ant-design-vue/dist/antd.css',
-    '@/assets/scss/main.scss'
+    '@/assets/scss/main.scss',
+    'quill/dist/quill.core.css',
+    'quill/dist/quill.snow.css',
+    'quill/dist/quill.bubble.css'
+
   ],
   /*
   ** Plugins to load before mounting the App
@@ -85,7 +90,7 @@ export default {
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
-    baseURL:'http://careernetwork.ml/api/v1/'
+    baseURL:'http://35.222.61.214/api/v1/'
   },
 
   // env: {

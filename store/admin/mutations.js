@@ -1,9 +1,4 @@
-export const state = () => ({
-  breadcrumb: [], 
-  activeMenu: null, 
-})
-    
-export const mutations = {
+export default {
   SET_BREADCRUMB (state, breadcrumb) {
     state.breadcrumb = breadcrumb
   },
@@ -12,7 +7,3 @@ export const mutations = {
     state.activeMenu = activeMenu
   },
 }
-
-export const actions = {
-}
-  

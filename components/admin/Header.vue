@@ -19,12 +19,13 @@
         </a-col>
 
         <!-- User dropdown -->
-        <a-col class="pr-3">
+
+        <a-col>
           <template>
             <a-dropdown>
-              <a-menu slot="overlay" @click="handleMenuClick">
-                <a-menu-item key="2"> <a-icon type="user" />Trang cá nhân</a-menu-item>
-                <a-menu-item key="1"> <a-icon type="logout" />Đăng xuất </a-menu-item>
+              <a-menu slot="overlay">
+                <a-menu-item key="2" @click="showUser"> <a-icon type="user" />Profile</a-menu-item>
+                <a-menu-item key="1" @click="logOut"> <a-icon type="logout" />Log out </a-menu-item>
               </a-menu>
                <div>
                  <a-avatar style="border: 1.5px solid purple;" size="large" src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
@@ -33,6 +34,7 @@
             </a-dropdown>
           </template>
         </a-col>
+
       </a-row>
     </a-layout-header>
     <nuxt/>
@@ -51,14 +53,14 @@ export default {
     toggleSidebar() {
       this.$emit('toggleSidebar')
     },
-    search() {
 
-    },
-    change() {
-
-    },
-    handleMenuClick() {
-      
+    showUser() {
+      this.$router.push('/admin/profile')
+    }, 
+    logOut() {
+      localStorage.removeItem("currentUser")
+      this.$store.commit('auth/SET_CURRENT_USER', null )
+      this.$router.push("/admin/login")
     }
   },
 }

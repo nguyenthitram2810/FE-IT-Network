@@ -12,6 +12,7 @@ import BaseFooter from '~/components/v-layout/BaseFooter'
 
 export default {
   name: 'DefaultLayout',
+  middleware: 'updateState',
   components: {
     BaseHeader,
     BaseFooter

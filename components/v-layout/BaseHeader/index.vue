@@ -1,31 +1,41 @@
-/* eslint-disable vue/html-self-closing */
 <template>
-  <header class="d-flex justify-content-between align-items-center my-2 mx-3">
+  <a-layout-header class="d-flex justify-content-between align-items-center py-1 px-4 edit-header">
     <div class="d-flex align-items-center">
-      <img src="/images/logo.png" class="logo" alt="">
-      <a-icon type="thunderbolt" style="font-size: 24px" theme="twoTone" twoToneColor="red" />
-      <img src="/images/ant-design.svg" class="logo" alt="">
-      <span class="brand-title ml-2">NuxtJS Boilerplate</span>
+      <img src="/images/logo.svg" alt="">
     </div>
-    <div class="user-preference">
-      <!-- Ant Design dropdown, search for more components -->
-      <a-dropdown :trigger="['click']">
-        <a class="ant-dropdown-link user-dropdown" @click="e => e.preventDefault()">Username<a-icon type="down" /> </a>
-        <a-menu slot="overlay">
-          <a-menu-item key="0">
-            <nuxt-link to="#">Profile</nuxt-link>
-          </a-menu-item>
-          <a-menu-item key="1">
-            <nuxt-link to="#">My blogs</nuxt-link>
-          </a-menu-item>
-          <a-menu-divider />
-          <a-menu-item key="3">Settings</a-menu-item>
-        </a-menu>
-      </a-dropdown>
-      <!-- Ant Design tag, search for more components -->
-      <a-tag color="green">Online</a-tag>
+
+    <div class="d-flex align-items-center">
+      <a-menu
+        theme="dark"
+        mode="horizontal"
+        @click="handleClick"
+        :defaultSelectedKeys= [getSelectedKey]
+      >
+        <a-menu-item key="/home">
+          <a-icon type="user" />
+        </a-menu-item>
+        <a-menu-item key="/manage">
+          <a-icon type="appstore" />
+        </a-menu-item>
+        <a-menu-item @click="logOut" key="3">
+          <a-icon type="logout" />
+        </a-menu-item>
+      </a-menu>
+
+      <div class="d-flex justify-content-between align-items-center mr-3">
+        <a-dropdown>
+          <a-menu slot="overlay">
+            <a-menu-item key="2"> <a-icon type="user" /> Profile</a-menu-item>
+            <a-menu-item key="1" @click="logOut"> <a-icon type="logout" />Log out </a-menu-item>
+          </a-menu>
+            <div>
+              <a-avatar style="border: 1.5px solid white;" size="large" src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+              <a-icon type="down" />
+            </div>
+        </a-dropdown>    
+      </div>
     </div>
-  </header>
+  </a-layout-header>
 </template>
 
 <style scoped>
@@ -33,13 +43,36 @@
 </style>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: 'BaseHeader',
-  props: {},
+
+  data() {
+    return {
+      
+    }
+  },
+
+  computed: {
+    ...mapState({
+      user: (state) => state.auth.user,
+    }),
+
+    getSelectedKey() {
+      return this.$route.path
+    },
+  },
 
   methods: {
-    loggOut () {
-      this.$store.dispatch('auth/signOut', {vue: this})
+    logOut () {
+      localStorage.removeItem("currentUser")
+      this.$store.commit('auth/SET_CURRENT_USER', null )
+      this.$router.push("/login")
+    },
+
+    handleClick(e) {
+      this.$router.push({ path: e.key })
     }
   }
 }
