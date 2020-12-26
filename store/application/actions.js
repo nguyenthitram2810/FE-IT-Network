@@ -18,7 +18,7 @@ export default {
         }
         if(e.appliedBy.length > 0) {
           e.appliedBy.forEach(p => {
-            arr.push({...p.user, job})
+            arr.push({...p.user, job, status: p.status})
           })
         }
       });
@@ -39,8 +39,12 @@ export default {
           Authorization: 'Bearer ' + rootState.auth.currentUser.token,
         }
       })
-      console.log(response);
-      commit('SET_LIST', response.data.data)
+      let arr = []
+      response.data.data.forEach(e => {
+        arr.push({...e, status: e.applied.status})
+      })
+      console.log(arr)
+      commit('SET_LIST', arr)
       commit('auth/SET_LOADING', false, { root: true })
     } catch (err) {
       commit('auth/SET_LOADING', false, { root: true })
