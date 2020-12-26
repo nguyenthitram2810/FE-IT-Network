@@ -55,14 +55,6 @@
         </a-select>
       </a-form-model-item>
 
-      <a-form-model-item has-feedback label="Category" prop="cateIds">
-        <a-select v-model="form.cateIds" mode="multiple" placeholder="Please select category job">
-          <a-select-option v-for="(item, index) in data" :key="index" :value="item.id">
-            {{ item.name }}
-          </a-select-option>
-        </a-select>
-      </a-form-model-item>
-
       <a-form-model-item ref="experience" label="Experience" prop="experience">
         <a-input-number :min="1" class="w-100" v-model="form.experience"/>
       </a-form-model-item>
@@ -122,6 +114,14 @@
           v-model="form.description"
           :options="editorOption"
         />
+      </a-form-model-item>
+
+      <a-form-model-item has-feedback label="Category" prop="cateIds">
+        <a-select v-model="form.cateIds" mode="multiple" placeholder="Please select category job">
+          <a-select-option v-for="(item, index) in data" :key="index" :value="item.id">
+            {{ item.name }}
+          </a-select-option>
+        </a-select>
       </a-form-model-item>
 
       <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }">
