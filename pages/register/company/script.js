@@ -97,7 +97,7 @@ export default {
               description:
                 "The account will be confirmed and responded to the company soon"
             });
-            this.$router.push("/")
+            this.$router.push("/login")
           }
           catch(error) {
             this.handleError(error)
